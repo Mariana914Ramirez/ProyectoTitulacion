@@ -1,0 +1,122 @@
+@extends ('layouts.admin')
+@extends ('Formularios')
+
+@section ('librerias')
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker3.css" rel="stylesheet" id="bootstrap-css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+@stop
+
+@section ('contenido')
+    <section class="contenedor">
+        <div class="col-md-12 container" >
+            <div id="banner" class="carousel slide" data-ride="carousel">
+              <ol class="carousel-indicators">
+                <li data-target="#banner" data-slide-to="0" class="active"></li>
+                <li data-target="#banner" data-slide-to="1"></li>
+                <li data-target="#banner" data-slide-to="2"></li>
+              </ol>
+
+              <center>
+                @if($errors->any())
+                    <div class="alert alert-danger" style="width: 70%;">
+                        <ul>
+                            @foreach($errors->all() as $error)
+                                <li style="display: unset; font-size: 25px;">{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+              <div class="carousel-inner imagenes" role="listbox">
+                <div class="carousel-item active" data-interval="10000">
+                  <img class="d-block w-100" src="img/Anuncios/Foto1.png" alt="First slide">
+                </div>
+                <div class="carousel-item" data-interval="10000">
+                  <img class="d-block w-100" src="img/Anuncios/Foto2.png" alt="Second slide">
+                </div>
+                <div class="carousel-item" data-interval="10000">
+                  <img class="d-block w-100" src="img/Anuncios/Foto3.png" alt="Third slide">
+                </div>
+              </div>
+              </center>
+
+              <a class="carousel-control-prev" href="#banner" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+              </a>
+              <a class="carousel-control-next" href="#banner" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+              </a>
+            </div>
+        </div>
+        
+    </section>
+
+
+
+    <section class="Bienvenida">
+        <center>
+            <p class="TextoDelBanner">¿Tienes un consultorio? Regístralo <a href="formulario"><button class="btn btn-success">Aquí</button></a></p>
+
+            <section class="FondoParallax">
+                <section class="parallax" style="background-image: url(img/ciudad.jpeg);">
+                    <!--<div class="row w-100">
+                        <div class="col-md-12 align-self-center"></div>
+                    </div>-->
+                    <div class="row align-items-center">
+                        <button class="btn btn-success Botones col-md-2 offset-md-2  col-sm-12 col-sm-12" ><p class="icon-user-md" style="font-size: 50px;"></p><p style="font-weight: bolder;">Consultorios<p></button>
+                        <button class="btn btn-success Botones col-md-2 offset-md-1 col-sm-12 col-sm-12" ><p class="icon-stethoscope" style="font-size: 50px;"></p><p style="font-weight: bolder;">Especialidades<p></button>
+                        <button class="btn btn-success Botones col-md-2 offset-md-1 col-sm-12 col-sm-12" ><p class="icon-phone" style="font-size: 50px;"></p><p style="font-weight: bolder; ">Contacto<p></button>
+                    </div>
+
+                </section>
+            </section>
+
+
+            <div class="card text-black bg-info mb-3" style="max-width: 70%;">
+                  <div class="card-header" style="font-size: 25px;">!Bienvenido a ...........</div>
+                  <div class="card-body" style="font-size: 20px;">
+                        <p class="card-text">Esta página ha sido creada con el propósito de ayudarle a encontrar un consultorio que logre adecuarse a sus necesidades. <br> Después de cada consulta que usted programe, podrá calificar cada uno de los aspectos del consultorio (Limpieza, Puntualidad, Trato al cliente y Precio) Para así ayudar a otros pacientes a conocer de antemano el servicio que ofrece el consultorio. <br> Si usted tiene un consultorio puede registrarlo en la página para que más personas puedan conocerlo y su negocio pueda crecer más rápido.<br></p>
+                        <p class="Frase">¡Nosotros nos preocupamos por usted! <br><br></p>
+                  </div>
+            </div>
+
+
+
+            <section id="Comentarios">
+              <table class="table table-dark" style="width: 80%;">
+                <tr>
+                  <form action="/" method="post">
+                    <td>
+                      <img src="img/ciudad.jpeg" style="width: 150px; height: 150px;">
+                    </td>
+                    <td style="width: 70%;">
+                      <textarea name="Comentarios" rows="4" placeholder="Deja un comentario" style="font-size: 20px;" id="Comentarios" class="form-control" required></textarea>
+                    </td>
+                    <td style="width: 13%; align-content: center;">
+                      <button type="submit" class="btn btn-success" >Comentar</button>
+                    </td>
+                  </form>
+                </tr>
+                <tr>
+                  
+                </tr>
+              </table>
+            </section>
+
+        </center>
+    </section>
+    
+@stop
+
+
+@section ('modal')
+
+    
+
+@stop
+
+
+
+

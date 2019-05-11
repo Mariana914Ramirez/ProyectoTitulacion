@@ -1,0 +1,43 @@
+#Bienvenidos{
+  text-align: center;
+   background: #85B1FF;
+   	padding-top: 30px;
+}
+
+#Bienvenidos .Introduccion{
+	margin-left: 15%;
+	margin-right: 15%;
+	font-size: 20px;
+	margin-top: 20px;
+	color: #000;
+}
+
+h2{
+	font-size: 30px;
+	color: #000;
+}
+
+#Bienvenidos .Frase{
+	margin-left: 10%;
+	margin-right: 10%;
+	font-size: 25px;
+	margin-top: 20px;
+	font-weight: bolder;
+	color: #000;
+}
+
+.FondoBienvenidos{
+	width: 80%;
+	background: #00415E;
+	border-radius: 20px;
+	padding-top: 30px;
+	padding-bottom: 30px;
+}
+
+.FondoTransparente{
+	border-radius: 20px;
+	width: 80%;
+	background: #D8D8D8;
+	opacity: 0.8
+}
+

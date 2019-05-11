@@ -1,0 +1,70 @@
+#informacion{
+	text-align: center;
+	/*background: -webkit-linear-gradient(#088A85, #04B4AE);
+         background: -moz-linear-gradient(#088A85, #04B4AE);
+         background: linear-gradient(#088A85, #04B4AE);*/
+    background: #85B1FF;
+    padding: 20px; 
+}
+
+#informacion .contenedor{
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+
+h3{
+	font-size: 35px;
+}
+
+#consultorioB{
+	display: none;
+}
+#ParaConsultorios{
+	font-size: 200px;
+	color: #DF7401;
+}
+#ParaConsultorios:hover{
+	cursor: pointer;
+	color: #1C1C1C;
+}
+
+
+#contactoB{
+	display: none;
+}
+#ParaContacto{
+	font-size: 200px;
+	color: #298A08;
+}
+#ParaContacto:hover{
+	cursor: pointer;
+	color: #1C1C1C;
+}
+
+
+#especialidadB{
+	display: none;
+}
+#ParaEspecialidad{
+	font-size: 200px;
+	color: #FF0057;
+}
+#ParaEspecialidad:hover{
+	cursor: pointer;
+	color: #1C1C1C;
+}
+
+
+.TextoInformativo{
+	font-size: 25px;
+	font-weight: bolder;
+}
+
+.separador{
+	background: #000;
+	padding: 5px;
+	width: 60%;
+	opacity: 0.3;
+}
+
