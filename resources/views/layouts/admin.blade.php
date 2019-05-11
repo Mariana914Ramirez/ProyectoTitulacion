@@ -190,6 +190,13 @@
     <script type="text/javascript" src="js/jquery.js"></script>
     <script src="js/bootstrap.min.js"></script>
 
+    <script type="text/javascript">
+        function cambiar(){
+        var pdrs = document.getElementById('file-upload').files[0].name;
+        document.getElementById('info').innerHTML = pdrs;
+    }
+    </script>
+
     
         @yield('script')
 

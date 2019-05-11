@@ -112,6 +112,7 @@ class ConsultorioController extends Controller
             $doctor->CorreoRecuperacion=$id_datos->CorreoRecuperacion;
             $doctor->FechaNacimiento=$id_datos->FechaNacimiento;
             $doctor->CorreoAsistente=$Asistente[$i];
+            $doctor->Imagen=$id_datos->Imagen;
             $doctor->save();
 
 

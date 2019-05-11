@@ -33,6 +33,7 @@ class CreateDoctoresTable extends Migration
             $table->string('CorreoRecuperacion', 50);
             $table->date('FechaNacimiento');
             $table->string('CorreoAsistente', 50)->nullable();
+            $table->string('Imagen', 256);
         });
     }
 

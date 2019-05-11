@@ -29,6 +29,23 @@ class UsuariosController extends Controller
     public function store(Request $request)
     {
         $usuario = new Usuario();
+        if($request->file('SubirFoto')==null)
+        {
+            if($request->input('Sexo')=='f')
+            {
+                $imagen='mujer.png';
+            }
+            else
+            {
+                $imagen='hombre.jpg';
+            }
+        }
+        else
+        {
+            $file = $request->file('SubirFoto');
+            $imagen = time().$file->getClientOriginalName();
+            $file->move(public_path().'/avatar/', $imagen);
+        }
         $usuario->Correo=$request->input('Correo');
         $usuario->Nombre=$request->input('Nombre');
         $usuario->Apellidos=$request->input('Apellidos');
@@ -39,8 +56,9 @@ class UsuariosController extends Controller
         $partes = explode('/', $request->input('FechaNacimiento'));
         $fecha = $partes[2].'-'.$partes[1].'-'.$partes[0];
         $usuario->FechaNacimiento=$fecha;
+        $usuario->Imagen=$imagen;
         $usuario->save();
-    	return view('welcome');
+    	return redirect('/');
     }
 
     public function show()

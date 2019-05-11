@@ -31,7 +31,7 @@ class CreateUsuariosTable extends Migration
             $table->string('Password', 256);
             $table->string('CorreoRecuperacion', 50);
             $table->date('FechaNacimiento');
-
+            $table->string('Imagen', 256);
         });
     }
 

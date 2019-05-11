@@ -16,4 +16,5 @@ class ComentarioPrincipal extends Model
     ];
 
     public $timestamps=false;
+
 }

@@ -19,7 +19,7 @@
 
               <center>
                 @if($errors->any())
-                    <div class="alert alert-danger" style="width: 70%;">
+                    <div class="alert alert-danger" style="width: 80%; padding-bottom: 0px; margin-bottom: 0px;">
                         <ul>
                             @foreach($errors->all() as $error)
                                 <li style="display: unset; font-size: 25px;">{{ $error }}</li>
@@ -83,13 +83,18 @@
             </div>
 
 
-
+            
             <section id="Comentarios">
               <table class="table table-dark" style="width: 80%;">
+                <thead style="font-size: 30px;">
+                    <th colspan="3" style="padding-left: 20px;">Comentarios</th>
+                </thead>
+                @if ((!(Session::exists('administradorSession')))&&((Session::exists('doctorSession'))||(Session::exists('usuarioSession'))||(Session::exists('consultorioSession'))||(Session::exists('asistenteSession')))) 
                 <tr>
                   <form action="/" method="post">
-                    <td>
-                      <img src="img/ciudad.jpeg" style="width: 150px; height: 150px;">
+                    @csrf
+                    <td style="text-align: center;">
+                      <p class="icon-heartbeat" style="width: 150px; height: 150px; font-size: 8vw;"></p>
                     </td>
                     <td style="width: 70%;">
                       <textarea name="Comentarios" rows="4" placeholder="Deja un comentario" style="font-size: 20px;" id="Comentarios" class="form-control" required></textarea>
@@ -99,11 +104,22 @@
                     </td>
                   </form>
                 </tr>
+                @endif
+                @foreach($mandados as $mandar)
                 <tr>
-                  
+                  <td style="width: 17%;">
+                    <img src="/avatar/{{ $mandar->Imagen }}" style="width: 150px; height: 150px;">
+                  </td>
+                  <td colspan="2">
+                    <p><b style="font-size: 20px;">{{$mandar->Nombre}} {{$mandar->Apellidos}}</b></p>
+                    <p>{{$mandar->Comentario}}</p><br>
+                    <i style="font-size: 13px;">Publicado: {{$mandar->Hora}}</i>
+                  </td>
                 </tr>
+                @endforeach
               </table>
             </section>
+            
 
         </center>
     </section>

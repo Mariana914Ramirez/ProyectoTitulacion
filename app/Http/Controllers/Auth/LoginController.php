@@ -121,7 +121,7 @@ class LoginController extends Controller
                 $sessionRegistrada=Usuario::select('Correo')->where('Correo', '=', $correo)->get();
                 if($_POST)
                 {
-                    $request->session()->put('consultorioSession', $sessionRegistrada);
+                    $request->session()->put('usuarioSession', $sessionRegistrada);
                     return redirect('/');
                 }
             }

@@ -2,7 +2,7 @@
 @section ('registro')
 
 
-<form action="usuario" method="post" id="HolaFormulario">
+<form action="usuario" method="post" enctype="multipart/form-data">
     @csrf
     <div class="modal-body">
 
@@ -33,6 +33,15 @@
             <input type="radio" name="Sexo" value="m" id="Sexo" required>Masculino&nbsp;&nbsp;
             <input type="radio" name="Sexo" value="f" id="Sexo" required>Femenino</p></p>
         </div>
+
+        <div class="form-group" align="center">
+            <label for="file-upload" class="btn btn-success">
+                <i class="fas fa-cloud-upload-alt icon-camera"></i> Foto (Opcional)
+            </label>
+            <input id="file-upload" onchange='cambiar()' type="file" style='display: none; font-size: 25px;' id="SubirFoto" name="SubirFoto"/>
+            <b id="info"></b>
+        </div>
+
         <div class="form-group" style="text-align: center;">
             <div class='input-group date' id='datepicker' style="display:inline-block; margin:0 auto;">
                 <input type='text' placeholder="Fecha de nacimiento" style="text-align: center; align-content: center;" id="FechaNacimiento" name="FechaNacimiento" required />
@@ -47,5 +56,6 @@
         <button type="submit" class="btn btn-success">Registrar</button>
     </div>
 </form>
+
 
 @stop
