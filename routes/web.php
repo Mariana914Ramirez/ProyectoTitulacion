@@ -15,6 +15,19 @@
     return view('welcome');
 });*/
 Route::resource('/', 'ComentarioPrincipalController');
+Route::post('sugerencias', 'ComentarioPrincipalController@saveSugerencias')->name('saveSugerencias');
+
+
+Route::resource('administrador', 'AdministradorController');
+
+
+
+Route::get('cuentaConsultorio', 'ConsultorioController@cuenta')->name('cuenta');
+
+
+
+Route::resource('doctor', 'DoctorController');
+
 
 
 Route::get('/hola', function () {

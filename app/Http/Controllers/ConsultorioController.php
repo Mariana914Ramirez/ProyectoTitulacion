@@ -182,4 +182,10 @@ class ConsultorioController extends Controller
         return view('listadoConsultorios', compact('consultorios', $consultorios));
        
     }
+
+
+    public function cuenta()
+    {
+       return view('paginaConsultorio');
+    }
 }

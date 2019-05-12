@@ -83,13 +83,12 @@
             </div>
 
 
-            
             <section id="Comentarios">
               <table class="table table-dark" style="width: 80%;">
                 <thead style="font-size: 30px;">
                     <th colspan="3" style="padding-left: 20px;">Comentarios</th>
                 </thead>
-                @if ((!(Session::exists('administradorSession')))&&((Session::exists('doctorSession'))||(Session::exists('usuarioSession'))||(Session::exists('consultorioSession'))||(Session::exists('asistenteSession')))) 
+                @if (((Session::exists('doctorSession'))||(Session::exists('usuarioSession'))||(Session::exists('asistenteSession')))) 
                 <tr>
                   <form action="/" method="post">
                     @csrf
@@ -119,6 +118,30 @@
                 @endforeach
               </table>
             </section>
+
+
+            @if (((Session::exists('doctorSession'))||(Session::exists('usuarioSession'))||(Session::exists('asistenteSession')))) 
+            <table class="table table-dark" style="width: 80%;">
+                <thead style="font-size: 30px;">
+                    <th colspan="3" style="padding-left: 20px;">Sugerencias</th>
+                </thead>
+                
+                <tr>
+                  <form action="sugerencias" method="post">
+                    @csrf
+                    <td style="text-align: center;">
+                      <p class="icon-heartbeat" style="font-size: 3vw;"></p>
+                    </td>
+                    <td style="width: 70%;">
+                      <textarea name="Comentarios" rows="1" placeholder="¿No encontraste la especialidad que buscabas? Escríbela aquí" style="font-size: 20px;" id="Comentarios" class="form-control" required></textarea>
+                    </td>
+                    <td style="width: 13%; align-content: center;">
+                      <button type="submit" class="btn btn-success" >Enviar</button>
+                    </td>
+                  </form>
+                </tr>
+              </table>
+              @endif
             
 
         </center>

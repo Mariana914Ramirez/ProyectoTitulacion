@@ -9,6 +9,7 @@ use App\ComentarioPrincipal;
 use App\Consultorio;
 use App\Doctor;
 use App\Usuario;
+use App\Sugerencia;
 use Illuminate\Support\Carbon;
 use DB;
 
@@ -28,18 +29,16 @@ class ComentarioPrincipalController extends Controller
 
     public function store(Request $request)
     {
-        if ($request->session()->has('consultorioSession')) {
-            $sesion=$request->session()->get('consultorioSession');
-            $usuario=$sesion[0]->Correo;
-            $usuario=Consultorio::select('Nombre')->where('Correo', '=', $usuario)->get();
-            $usuario=$usuario[0]->Nombre;
-        }
-        else if ($request->session()->has('doctorSession')) {
+        if ($request->session()->has('doctorSession')) {
             $sesion=$request->session()->get('doctorSession');
             $usuario=$sesion[0]->Correo;
         }
         else if ($request->session()->has('usuarioSession')) {
             $sesion=$request->session()->get('usuarioSession');
+            $usuario=$sesion[0]->Correo;
+        }
+        else if ($request->session()->has('asistenteSession')) {
+            $sesion=$request->session()->get('asistenteSession');
             $usuario=$sesion[0]->Correo;
         }
         else{
@@ -48,17 +47,8 @@ class ComentarioPrincipalController extends Controller
 
         $usuario=Usuario::select('Nombre', 'Apellidos', 'Registro')->where('Correo', '=', $usuario)->get();
         $usuarioRegistro=$usuario[0]->Registro;
-        $usuarioNombre=$usuario[0]->Nombre;
-        $usuarioApellidos=$usuario[0]->Apellidos;
-        $usuario=$usuarioNombre.' '.$usuarioApellidos;
 
          $hora = Carbon::now();
-         //return $dt->format('H:i');
-         //return $dt->format('Y-m-d');
-
-         /*return $usuarioRegistro;
-         return $request->input('Comentarios');
-         return $hora;*/
 
         $comentario_principal = new ComentarioPrincipal();
         $comentario_principal->Usuario=$usuarioRegistro;
@@ -83,5 +73,33 @@ class ComentarioPrincipalController extends Controller
     public function destroy()
     {
 
+    }
+
+    public function saveSugerencias(Request $request)
+    {
+        $comentario=$request->input('Comentarios');
+
+        if ($request->session()->has('doctorSession')) {
+            $sesion=$request->session()->get('doctorSession');
+            $usuario=$sesion[0]->Correo;
+        }
+        else if ($request->session()->has('usuarioSession')) {
+            $sesion=$request->session()->get('usuarioSession');
+            $usuario=$sesion[0]->Correo;
+        }
+        else if ($request->session()->has('asistenteSession')) {
+            $sesion=$request->session()->get('asistenteSession');
+            $usuario=$sesion[0]->Correo;
+        }
+
+
+        $usuario=Usuario::select('Nombre', 'Apellidos', 'Registro')->where('Correo', '=', $usuario)->get();
+        $usuarioRegistro=$usuario[0]->Registro;
+
+        $sugerencias = new Sugerencia();
+        $sugerencias->Usuario=$usuarioRegistro;
+        $sugerencias->Sugerencia=$comentario;
+        $sugerencias->save();
+        return redirect('/');
     }
 }

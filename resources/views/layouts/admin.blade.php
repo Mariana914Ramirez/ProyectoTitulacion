@@ -64,19 +64,56 @@
               @endif
 
 
-              @if ((Session::exists('consultorioSession'))||(Session::exists('administradorSession'))||(Session::exists('usuarioSession'))||(Session::exists('asistenteSession'))||(Session::exists('doctorSession'))) 
+              @if (Session::exists('administradorSession'))
                 <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <b class="icon-cog-alt">Configuraciones</b>
+                  <a class="nav-link dropdown-toggle" href="administrador" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <b class="icon-cog-alt">Mi cuenta</b>
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="#">Action</a>
-                    <a class="dropdown-item" href="#">Another action</a>
+                    <a class="dropdown-item" href="administrador">Ir a mi cuenta</a>
+                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#administradorRegistroModal">Agregar administrador</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Something else here</a>
+                    <a class="dropdown-item" href="#">Eliminar cuenta</a>
+                  </div>
+                </li>
+                @elseif (Session::exists('consultorioSession'))
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <b class="icon-cog-alt">Mi cuenta</b>
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="cuentaConsultorio">Ir a mi cuenta</a>
+                    <a class="dropdown-item" href="#">Modificar información</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">Eliminar cuenta</a>
+                  </div>
+                </li>
+                @elseif ((Session::exists('asistenteSession'))||(Session::exists('doctorSession'))) 
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <b class="icon-cog-alt">Mi cuenta</b>
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="doctor">Ir a mi cuenta</a>
+                    <a class="dropdown-item" href="#">Modificar información</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">Eliminar cuenta</a>
+                  </div>
+                </li>
+                @elseif (Session::exists('usuarioSession'))
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="administrador" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <b class="icon-cog-alt">Mi cuenta</b>
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="doctor">Ir a mi cuenta</a>
+                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#administradorRegistroModal">Agregar administrador</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">Eliminar cuenta</a>
                   </div>
                 </li>
               @endif
+                
 
               @if ((Session::exists('consultorioSession'))||(Session::exists('administradorSession'))||(Session::exists('usuarioSession'))||(Session::exists('asistenteSession'))||(Session::exists('doctorSession'))) 
                   <li class="nav-item">
@@ -183,6 +220,35 @@
     </div>
 
 
+    <div class="modal fade" role="dialog" id="administradorRegistroModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Registro de aministrador</h3>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <form action="administrador" method="post" >
+                   @csrf
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <input type="text" name="Correo" class="form-control" placeholder="Correo" id="Correo">
+                        </div>
+                        <div class="form-group">
+                            <input type="password" name="Password" class="form-control" placeholder="Contraseña" id="Password">
+                        </div>
+
+                    </div>
+                    <div class="modal-final" style="text-align: center; margin-bottom: 10px;">
+                        <button type="submit" class="btn btn-success">Registrar</button>
+                    </div>
+                  </form>
+                
+            </div>
+        </div>
+    </div>
+
+
 
         @yield('modal')
 
@@ -195,6 +261,36 @@
         var pdrs = document.getElementById('file-upload').files[0].name;
         document.getElementById('info').innerHTML = pdrs;
     }
+    </script>
+
+
+    <script type="text/javascript" src="js/calendario.js"></script>
+    <script >
+        $(function () {
+            $('#datepicker').datepicker({
+                format: "dd/mm/yyyy",
+                autoclose: true,
+                todayHighlight: true,
+                showOtherMonths: true,
+                selectOtherMonths: true,
+                autoclose: true,
+                changeMonth: true,
+                changeYear: true,
+                orientation: "button"
+            });
+
+            $('#datepickes').datepicker({
+                format: "dd/mm/yyyy",
+                autoclose: true,
+                todayHighlight: true,
+                showOtherMonths: true,
+                selectOtherMonths: true,
+                autoclose: true,
+                changeMonth: true,
+                changeYear: true,
+                orientation: "button"
+            });
+        });
     </script>
 
     
