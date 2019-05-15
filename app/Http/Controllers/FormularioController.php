@@ -14,7 +14,7 @@ class FormularioController extends Controller
 	public function index(Request $request)
     {
     	$estados = Estado::all();
-        $especialidades = Especialidad::all();
+        $especialidades = Especialidad::select('*')->orderBy('Nombre', 'asc')->get();
     	return view('formularioConsultorio', compact('estados', $estados, 'especialidades', $especialidades));
     }
     public function getMunicipio(Request $request, $Registro)

@@ -24,7 +24,8 @@ class CreateHorarioTable extends Migration
             $table->engine = 'InnoDB';
             $table->bigIncrements('Registro');
             $table->bigInteger('DoctorConsultorio')->unsigned();
-            $table->time('Hora');
+            $table->time('Hora_inicio');
+            $table->time('Hora_termino');
             $table->char('Dia', 1);
 
             $table->index(["DoctorConsultorio"], 'fk_Horario_DoctorConsultorio_idx');

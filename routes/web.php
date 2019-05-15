@@ -27,6 +27,11 @@ Route::get('cuentaConsultorio', 'ConsultorioController@cuenta')->name('cuenta');
 
 
 Route::resource('doctor', 'DoctorController');
+Route::get('modificarHorarios', 'DoctorController@horario')->name('horario');
+
+
+
+Route::get('modificarUsuario', 'UsuariosController@edit');
 
 
 

@@ -158,7 +158,7 @@ class ConsultorioController extends Controller
             
         }
 
-        return view('welcome');
+        return redirect('/');
     }
     public function show()
     {

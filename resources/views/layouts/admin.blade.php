@@ -96,6 +96,8 @@
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="doctor">Ir a mi cuenta</a>
                     <a class="dropdown-item" href="#">Modificar información</a>
+                    <a class="dropdown-item" href="modificarHorarios">Modificar horarios</a>
+                    <a class="dropdown-item" href="#">Agenda</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#">Eliminar cuenta</a>
                   </div>
@@ -106,8 +108,7 @@
                     <b class="icon-cog-alt">Mi cuenta</b>
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="doctor">Ir a mi cuenta</a>
-                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#administradorRegistroModal">Agregar administrador</a>
+                    <a class="dropdown-item" href="modificarUsuario">Modificar información</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#">Eliminar cuenta</a>
                   </div>

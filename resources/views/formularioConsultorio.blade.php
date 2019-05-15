@@ -1,5 +1,5 @@
 @extends ('layouts.admin')
-@extends ('Formularios')
+
 
 @section ('contenido')
 
@@ -24,13 +24,13 @@
             <div style="width: 70%; ">
             
                 <div class="form-group" >
-                    <input type="text" name="Nombre" placeholder="Nombre del Consultorio" class="form-control" id="Nombre"  style="font-size: 25px;" required pattern="^(?=\w*\d)(?=\w*[A-Z])(?=\w*[a-z])\S{8,20}$" title="Al menos una mayúscula, una minúscula y un número. Mínimo 8 caracteres y máximo 20">
+                    <input type="text" name="Nombre" placeholder="Nombre del Consultorio" class="form-control" id="Nombre"  style="font-size: 25px;" required >
                 </div>
                 <div class="form-group">
                     <input type="email" name="Correo" class="form-control" placeholder="Correo Principal" id="Correo" style="font-size: 25px;" required>
                 </div>
                 <div class="form-group">
-                    <input type="password" name="Password" class="form-control" placeholder="Contraseña" id="Password" style="font-size: 25px;" required>
+                    <input type="password" name="Password" class="form-control" placeholder="Contraseña" id="Password" style="font-size: 25px;" required pattern="^(?=\w*\d)(?=\w*[A-Z])(?=\w*[a-z])\S{8,20}$" title="Al menos una mayúscula, una minúscula y un número. Mínimo 8 caracteres y máximo 20">
                 </div>
                 <!--<div class="form-group">
                     <input type="password" name="PasswordRepetir" class="form-control" placeholder="Repetir contraseña">
@@ -145,7 +145,7 @@
 
 
             var i=1, j=1; 
-          $('#add').click(function(){  
+         $('#add').click(function(){  
                $('#dynamic_field').append('<tr id="row'+i+'">  <td><p id="IconosDelRegistroLista"><input type="text" name="CorreoDoctor[]" placeholder="Correo del doctor" class="form-control" required/></td> <td style="width: 1%;"><p id="IconosDelRegistroLista"><input type="text" name="Edad[]" placeholder="Años experiencia" class="form-control" required/></td><td><p id="IconosDelRegistroLista"><input type="text" name="Secretaria[]" placeholder="Correo secretaria" class="form-control" /></td> <td><select class="form-control" input type="text" name="Especialidad[]" placeholder="Especialidad" required><option>Especialidades</option>@foreach($especialidades as $especialidad)<option value="{{$especialidad->Registro}}">{{$especialidad->Nombre}}</option> @endforeach</select></td><td><select class="form-control" input type="text" name="Especialidad[]" placeholder="Especialidad"><option>Especialidades</option>@foreach($especialidades as $especialidad)<option value="{{$especialidad->Registro}}">{{$especialidad->Nombre}}</option>@endforeach</select></td><td> <select class="form-control" input type="text" name="Especialidad[]" placeholder="Especialidad"><option>Especialidades</option> @foreach($especialidades as $especialidad)<option value="{{$especialidad->Registro}}">{{$especialidad->Nombre}}</option>@endforeach</select></td><td><button type="button" name="remove" id="'+i+'" class="btn btn-danger btn_remove">X</button></td></tr>   ');  
                i++;
           });  

@@ -67,7 +67,7 @@ class UsuariosController extends Controller
     }
     public function edit()
     {
-
+        dd('Hola cx');
     }
     public function update()
     {
