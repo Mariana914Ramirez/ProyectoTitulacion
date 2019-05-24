@@ -65,9 +65,9 @@
                         <div class="col-md-12 align-self-center"></div>
                     </div>-->
                     <div class="row align-items-center">
-                        <button class="btn btn-success Botones col-md-2 offset-md-2  col-sm-12 col-sm-12" ><p class="icon-user-md" style="font-size: 50px;"></p><p style="font-weight: bolder;">Consultorios<p></button>
-                        <button class="btn btn-success Botones col-md-2 offset-md-1 col-sm-12 col-sm-12" ><p class="icon-stethoscope" style="font-size: 50px;"></p><p style="font-weight: bolder;">Especialidades<p></button>
-                        <button class="btn btn-success Botones col-md-2 offset-md-1 col-sm-12 col-sm-12" ><p class="icon-phone" style="font-size: 50px;"></p><p style="font-weight: bolder; ">Contacto<p></button>
+                        <button class="btn btn-success Botones col-md-2 offset-md-2  col-sm-12 col-sm-12" ><p class="icon-user-md" style="font-size: 50px;"></p><p style="font-weight: bolder;">Consultorios</p></button>
+                        <button class="btn btn-success Botones col-md-2 offset-md-1 col-sm-12 col-sm-12" ><p class="icon-stethoscope" style="font-size: 50px;"></p><p style="font-weight: bolder;">Especialidades</p></button>
+                        <button class="btn btn-success Botones col-md-2 offset-md-1 col-sm-12 col-sm-12" ><p class="icon-phone" style="font-size: 50px;"></p><p style="font-weight: bolder; ">Contacto</p></button>
                     </div>
 
                 </section>

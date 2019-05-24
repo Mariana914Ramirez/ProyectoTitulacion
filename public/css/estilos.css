@@ -90,3 +90,11 @@ main{
 	min-height: 80vh;
    	position: relative;
 }
+
+.B{
+	background: #edb687;
+	border: none;
+}
+.B:hover{
+	background: #77c172;
+}

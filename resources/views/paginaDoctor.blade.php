@@ -49,19 +49,143 @@ use Illuminate\Support\Carbon;
     <section style="background: #CFA986; height: auto; padding: 20px; width: 100%;">
         <div class="container">
             @if ((Session::exists('asistenteSession'))||(Session::exists('doctorSession'))) 
+                @if (!$lunesHorarios->isEmpty())
                 <table style=" width: 90%;" class="table table-bordered table-dark formular" id="dynamic_field">
                     <thead style="font-size: 30px; text-align: center;">
-                        <th colspan="7">Lunes</th>
+                        <th colspan="2">Lunes</th>
                     </thead>
                     <tr style="font-size: 25px; text-align: center;">
-                        <th colspan="2">Hora de inicio</th>
-                        <th colspan="2">Hora de término</th>
+                        <th style="background: #5DBA4E;">Hora de inicio</th>
+                        <th style="background: #6E69FF;">Hora de término</th>
                     </tr>
+                    @foreach($lunesHorarios as $luneshorario)
                     <tr style="font-size: 15px; text-align: center;">  
-                        
+                        <td>{{$luneshorario->Hora_inicio}}</td>
+                        <td>{{$luneshorario->Hora_termino}}</td>
                     </tr> 
+                    @endforeach
                       
                 </table>
+                @endif
+
+
+                @if (!$martesHorarios->isEmpty())
+                <table style=" width: 90%; margin-top: 60px;" class="table table-bordered table-dark formular" id="dynamic_field">
+                    <thead style="font-size: 30px; text-align: center;">
+                        <th colspan="2">Martes</th>
+                    </thead>
+                    <tr style="font-size: 25px; text-align: center;">
+                        <th style="background: #5DBA4E;">Hora de inicio</th>
+                        <th style="background: #6E69FF;">Hora de término</th>
+                    </tr>
+                    @foreach($martesHorarios as $marteshorario)
+                    <tr style="font-size: 15px; text-align: center;">  
+                        <td>{{$marteshorario->Hora_inicio}}</td>
+                        <td>{{$marteshorario->Hora_termino}}</td>
+                    </tr> 
+                    @endforeach
+                      
+                </table>
+                @endif
+
+
+                @if (!$miercolesHorarios->isEmpty())
+                <table style=" width: 90%; margin-top: 60px;" class="table table-bordered table-dark formular" id="dynamic_field">
+                    <thead style="font-size: 30px; text-align: center;">
+                        <th colspan="2">Miércoles</th>
+                    </thead>
+                    <tr style="font-size: 25px; text-align: center;">
+                        <th style="background: #5DBA4E;">Hora de inicio</th>
+                        <th style="background: #6E69FF;">Hora de término</th>
+                    </tr>
+                    @foreach($miercolesHorarios as $miercoleshorario)
+                    <tr style="font-size: 15px; text-align: center;">  
+                        <td>{{$miercoleshorario->Hora_inicio}}</td>
+                        <td>{{$miercoleshorario->Hora_termino}}</td>
+                    </tr> 
+                    @endforeach
+                      
+                </table>
+                @endif
+
+
+                @if (!$juevesHorarios->isEmpty())
+                <table style=" width: 90%; margin-top: 60px;" class="table table-bordered table-dark formular" id="dynamic_field">
+                    <thead style="font-size: 30px; text-align: center;">
+                        <th colspan="2">Jueves</th>
+                    </thead>
+                    <tr style="font-size: 25px; text-align: center;">
+                        <th style="background: #5DBA4E;">Hora de inicio</th>
+                        <th style="background: #6E69FF;">Hora de término</th>
+                    </tr>
+                    @foreach($juevesHorarios as $jueveshorario)
+                    <tr style="font-size: 15px; text-align: center;">  
+                        <td>{{$jueveshorario->Hora_inicio}}</td>
+                        <td>{{$jueveshorario->Hora_termino}}</td>
+                    </tr> 
+                    @endforeach
+                      
+                </table>
+                @endif
+
+                @if (!$viernesHorarios->isEmpty())
+                <table style=" width: 90%; margin-top: 60px;" class="table table-bordered table-dark formular" id="dynamic_field">
+                    <thead style="font-size: 30px; text-align: center;">
+                        <th colspan="2">Viernes</th>
+                    </thead>
+                    <tr style="font-size: 25px; text-align: center;">
+                        <th style="background: #5DBA4E;">Hora de inicio</th>
+                        <th style="background: #6E69FF;">Hora de término</th>
+                    </tr>
+                    @foreach($viernesHorarios as $vierneshorario)
+                    <tr style="font-size: 15px; text-align: center;">  
+                        <td>{{$vierneshorario->Hora_inicio}}</td>
+                        <td>{{$vierneshorario->Hora_termino}}</td>
+                    </tr> 
+                    @endforeach
+                      
+                </table>
+                @endif
+
+
+                @if (!$sabadoHorarios->isEmpty())
+                <table style=" width: 90%; margin-top: 60px;" class="table table-bordered table-dark formular" id="dynamic_field">
+                    <thead style="font-size: 30px; text-align: center;">
+                        <th colspan="2">Sabado</th>
+                    </thead>
+                    <tr style="font-size: 25px; text-align: center;">
+                        <th style="background: #5DBA4E;">Hora de inicio</th>
+                        <th style="background: #6E69FF;">Hora de término</th>
+                    </tr>
+                    @foreach($sabadoHorarios as $sabadohorario)
+                    <tr style="font-size: 15px; text-align: center;">  
+                        <td>{{$sabadohorario->Hora_inicio}}</td>
+                        <td>{{$sabadohorario->Hora_termino}}</td>
+                    </tr> 
+                    @endforeach
+                      
+                </table>
+                @endif
+
+
+                @if (!$domingoHorarios->isEmpty())
+                <table style=" width: 90%; margin-top: 60px;" class="table table-bordered table-dark formular" id="dynamic_field">
+                    <thead style="font-size: 30px; text-align: center;">
+                        <th colspan="2">Domingo</th>
+                    </thead>
+                    <tr style="font-size: 25px; text-align: center;">
+                        <th style="background: #5DBA4E;">Hora de inicio</th>
+                        <th style="background: #6E69FF;">Hora de término</th>
+                    </tr>
+                    @foreach($domingoHorarios as $domingohorario)
+                    <tr style="font-size: 15px; text-align: center;">  
+                        <td>{{$domingohorario->Hora_inicio}}</td>
+                        <td>{{$domingohorario->Hora_termino}}</td>
+                    </tr> 
+                    @endforeach
+                      
+                </table>
+                @endif
             @else
             <form style="align-content: center;">
                 <div class="form-group" style="text-align: center;">

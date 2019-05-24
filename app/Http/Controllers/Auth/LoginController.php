@@ -7,11 +7,13 @@ use App\Consultorio;
 use App\Doctor;
 use App\Usuario;
 use App\Administrador;
+use App\DoctorConsultorio;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\EloquentUserProvider;
 use Illuminate\Contracts\Auth\Authenticatable;
+use DB;
 
 class LoginController extends Controller
 {
@@ -72,12 +74,8 @@ class LoginController extends Controller
             $verificar=$comparar[0]->Password;
             if(Hash::check($password, $verificar))
             {
-                $sessionRegistrada=Doctor::select('Correo')->where('Correo', '=', $correo)->get();
-                if($_POST)
-                {
-                    $request->session()->put('doctorSession', $sessionRegistrada);
-                    return redirect('/');
-                }
+                $hola=$correo;
+                return redirect('accede/'.$correo);
             }
             else
             {
@@ -160,6 +158,56 @@ class LoginController extends Controller
         }
 
         
+        return redirect('/');
+    }
+
+
+
+
+    public function accederComo($Correo){
+        $hola=$Correo;
+
+        $correos=Usuario::select('Correo')->where('Correo', '=', $hola)->get();
+        return view('opcionesIngreso')->with('correos', $correos);
+    }
+
+
+    public function accederDoctor($Correo, Request $request){
+
+        $cont=Doctor::where('Correo', '=', $Correo)->count();
+        if($cont < 2)
+        {
+            $sessionRegistrada=DB::table('doctores')
+            ->join('doctor_consultorio', 'doctores.Registro', '=', 'doctor_consultorio.Doctor')
+            ->select('doctor_consultorio.Consultorio', 'doctores.Correo', 'doctores.Registro')
+            ->where('doctores.Correo', '=', $Correo)->get();
+            $request->session()->put('doctorSession', $sessionRegistrada);
+            return redirect('/');
+        }
+        else
+        {
+            $contarConsultorios=DB::table('elegirconsultorio')->select('*')->where('Correo', '=', $Correo)->get();
+            return view('opcionesConsultorios')->with('contarConsultorios', $contarConsultorios);
+        }
+    }
+
+
+    public function accederUsuario($Correo, Request $request){
+
+        $sessionRegistrada=Usuario::select('Correo')->where('Correo', '=', $Correo)->get();
+        $request->session()->put('usuarioSession', $sessionRegistrada);
+        return redirect('/');
+    }
+
+
+    public function volverAccederDoctor($Correo, $Registro, Request $request){
+
+        $sessionRegistrada=DB::table('doctores')
+        ->join('doctor_consultorio', 'doctores.Registro', '=', 'doctor_consultorio.Doctor')
+        ->select('doctor_consultorio.Consultorio', 'doctores.Correo', 'doctores.Registro')
+        ->where('doctores.Correo', '=', $Correo)
+        ->where('doctor_consultorio.Consultorio', '=', $Registro)->get();
+        $request->session()->put('doctorSession', $sessionRegistrada);
         return redirect('/');
     }
 }

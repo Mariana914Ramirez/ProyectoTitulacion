@@ -48,6 +48,11 @@ Route::resource('consultorios', 'ConsultorioController');
 Route::get('especialidad/{Registro}', 'ConsultorioController@getEspecialidad')->name('getEspecialidad');
 
 Route::post('usuario/login','Auth\LoginController@login')->name('login');
+Route::any('accede/{Correo}','Auth\LoginController@accederComo')->name('accederComo');
+Route::any('accedeDoctor/{Correo}','Auth\LoginController@accederDoctor')->name('accederDoctor');
+Route::any('accedeDoctorConsultorio/{Correo}/{Registro}/{Id}','Auth\LoginController@volverAccederDoctor')->name('volverAccederDoctor');
+Route::any('accedeUsuario/{Correo}','Auth\LoginController@accederUsuario')->name('accederUsuario');
+
 Route::any('salir','Auth\LoginController@logout')->name('logout');
 
 
