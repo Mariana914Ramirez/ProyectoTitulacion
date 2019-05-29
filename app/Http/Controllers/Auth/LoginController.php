@@ -74,7 +74,6 @@ class LoginController extends Controller
             $verificar=$comparar[0]->Password;
             if(Hash::check($password, $verificar))
             {
-                $hola=$correo;
                 return redirect('accede/'.$correo);
             }
             else
@@ -92,12 +91,14 @@ class LoginController extends Controller
             $verificar=$comparar[0]->Password;
             if(Hash::check($password, $verificar))
             {
-                $sessionRegistrada=Doctor::select('Correo')->where('CorreoAsistente', '=', $correo)->take(1)->get();
+                return redirect('accedeA/'.$correo);
+
+                /*$sessionRegistrada=Doctor::select('Correo')->where('CorreoAsistente', '=', $correo)->take(1)->get();
                 if($_POST)
                 {
                     $request->session()->put('asistenteSession', $sessionRegistrada);
                     return redirect('/');
-                }
+                }*/
             }
             else
             {
@@ -172,6 +173,14 @@ class LoginController extends Controller
     }
 
 
+    public function accederComoA($Correo){
+        $hola=$Correo;
+
+        $correos=Usuario::select('Correo')->where('Correo', '=', $hola)->get();
+        return view('opcionesIngresoAsistente')->with('correos', $correos);
+    }
+
+
     public function accederDoctor($Correo, Request $request){
 
         $cont=Doctor::where('Correo', '=', $Correo)->count();
@@ -192,6 +201,30 @@ class LoginController extends Controller
     }
 
 
+     public function accederAsistente($Correo, Request $request){
+        $cont=Doctor::where('CorreoAsistente', '=', $Correo)->count();
+        if($cont < 2)
+        {
+            $sessionRegistrada=DB::table('doctores')
+            ->join('doctor_consultorio', 'doctores.Registro', '=', 'doctor_consultorio.Doctor')
+            ->select('doctor_consultorio.Consultorio', 'doctores.Correo', 'doctores.Registro', 'doctores.CorreoAsistente')
+            ->where('doctores.CorreoAsistente', '=', $Correo)->get();
+            $request->session()->put('asistenteSession', $sessionRegistrada);
+            return redirect('/');
+        }
+        else
+        {
+            $correos=DB::table('doctor_consultorio')
+            ->join('doctores', 'doctor_consultorio.Doctor', '=', 'doctores.Registro')
+            ->join('consultorios', 'doctor_consultorio.Consultorio', '=', 'consultorios.Registro')
+            ->select('doctores.*', 'consultorios.Nombre as Consultorio')
+            ->where('doctores.CorreoAsistente', '=', $Correo)->get();
+            return view('opcionesIngresoElegirDoctor')->with('correos', $correos);
+        }
+
+    }
+
+
     public function accederUsuario($Correo, Request $request){
 
         $sessionRegistrada=Usuario::select('Correo')->where('Correo', '=', $Correo)->get();
@@ -208,6 +241,18 @@ class LoginController extends Controller
         ->where('doctores.Correo', '=', $Correo)
         ->where('doctor_consultorio.Consultorio', '=', $Registro)->get();
         $request->session()->put('doctorSession', $sessionRegistrada);
+        return redirect('/');
+    }
+
+
+    public function accedeAsis($Correo, $Registro, Request $request){
+
+        $sessionRegistrada=DB::table('doctores')
+        ->join('doctor_consultorio', 'doctores.Registro', '=', 'doctor_consultorio.Doctor')
+        ->select('doctor_consultorio.Consultorio', 'doctores.Correo', 'doctores.Registro', 'doctores.CorreoAsistente')
+        ->where('doctores.CorreoAsistente', '=', $Correo)
+        ->where('doctores.Registro', '=', $Registro)->get();
+        $request->session()->put('asistenteSession', $sessionRegistrada);
         return redirect('/');
     }
 }

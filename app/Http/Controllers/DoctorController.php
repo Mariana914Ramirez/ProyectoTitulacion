@@ -25,6 +25,8 @@ class DoctorController extends Controller
         else if ($request->session()->has('asistenteSession')) {
             $sesion=$request->session()->get('asistenteSession');
             $usuario=$sesion[0]->Correo;
+            $consultorio=$sesion[0]->Consultorio;
+            $doctor=$sesion[0]->Registro;
         }
 
         $doct_cons=DoctorConsultorio::where('Doctor', '=', $doctor)->where('Consultorio', '=', $consultorio)->get();
@@ -41,12 +43,14 @@ class DoctorController extends Controller
 
         $doctores=DB::table('doctores')
         ->join('doctor_consultorio', 'doctores.Registro', '=', 'doctor_consultorio.Doctor')
-        ->select('doctores.*')
+        ->join('consultorios', 'consultorios.Registro', '=', 'doctor_consultorio.Consultorio')
+        ->select('doctores.*', 'consultorios.Nombre as Consultorio')
         ->where('doctores.Correo', '=', $usuario)
-        ->where('doctor_consultorio.Consultorio', '=', $consultorio)->get();
+        ->where('doctor_consultorio.Consultorio', '=', $consultorio)
+        ->where('doctor_consultorio.Doctor', '=', $doctor)->get();
 
 
-        $especialidades=DB::table('doctor_especialidad')->select('*')->where('Correo', '=', $usuario)->distinct()->get();
+        $especialidades=DB::table('doctor_especialidad')->select('*')->where('Correo', '=', $usuario)->where('Doctor', '=', $doctor)->distinct()->get();
         
     	return view('paginaDoctor', compact('doctores', $doctores, 'especialidades', $especialidades, 'lunesHorarios', $lunesHorarios, 'martesHorarios', $martesHorarios, 'miercolesHorarios', $miercolesHorarios, 'juevesHorarios', $juevesHorarios, 'viernesHorarios', $viernesHorarios, 'sabadoHorarios', $sabadoHorarios, 'domingoHorarios', $domingoHorarios));
     }

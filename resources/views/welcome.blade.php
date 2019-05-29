@@ -1,5 +1,4 @@
 @extends ('layouts.admin')
-@extends ('Formularios')
 
 @section ('librerias')
 
@@ -111,12 +110,42 @@
                   </td>
                   <td colspan="2">
                     <p><b style="font-size: 20px;">{{$mandar->Nombre}} {{$mandar->Apellidos}}</b></p>
-                    <p>{{$mandar->Comentario}}</p><br>
+                    <p>{{$mandar->Comentario}}</p>
+
+
+                      @if (Session::exists('doctorSession'))
+                        @if (((Session::get('doctorSession'))[0]->Correo) == $mandar->Correo)
+                          <p style="text-align: right; margin-right: 40px;"><a href="" style="color: #36ABFF;">Modificar</a> / <a href="" style="color: #FF5B5B;">Eliminar</a></p>
+                        @else
+                          <br>
+                        @endif
+                      @elseif (Session::exists('usuarioSession'))
+                        @if (((Session::get('usuarioSession'))[0]->Correo) == $mandar->Correo)
+                          <p style="text-align: right; margin-right: 40px;"><a href="" style="color: #36ABFF;">Modificar</a> / <a href="" style="color: #FF5B5B;">Eliminar</a></p>
+                        @else
+                          <br>
+                        @endif
+                      @elseif (Session::exists('asistenteSession'))
+                        @if (((Session::get('asistenteSession'))[0]->CorreoAsistente) == $mandar->Correo)
+                          <p style="text-align: right; margin-right: 40px;"><a href="" style="color: #36ABFF;">Modificar</a> / <a href="" style="color: #FF5B5B;">Eliminar</a></p>
+                        @else
+                          <br>
+                        @endif
+                      @else
+                        <br>
+                      @endif
+
                     <i style="font-size: 13px;">Publicado: {{$mandar->Hora}}</i>
                   </td>
                 </tr>
                 @endforeach
               </table>
+
+              <div style="text-align:center;">
+                <div style="display:inline-block; margin:0 auto;">
+                  {!!$mandados->render()!!}
+                </div>
+              </div>
             </section>
 
 

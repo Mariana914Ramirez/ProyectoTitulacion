@@ -18,9 +18,9 @@ class ComentarioPrincipalController extends Controller
     public function index()
     {
     	
-        $mandados=DB::table('comentariosprincipales')->select('*')->paginate(10);
+        $mandados=DB::table('comentariosprincipales')->select('*')->orderBy('Hora', 'desc')->paginate(10);
         return view('welcome', compact('mandados', $mandados));
-    }
+    }  
 
     public function create()
     {

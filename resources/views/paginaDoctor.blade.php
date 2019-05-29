@@ -29,6 +29,7 @@ use Illuminate\Support\Carbon;
 
     <center>
         <section class="informacionCons" style="background: #CFA986; height: auto; padding: 20px;">
+            <h1>{{ $doctor->Consultorio }}</h1>
             <div class="card text-white mb-3" style="max-width: 70%; margin-top: 30px; align-content: center; padding: 20px; background: #444;">
                   <div class="card-header" style="font-size: 25px;">Información del doctor</div>
                   <div class="card-body" style="font-size: 20px;">
@@ -50,7 +51,7 @@ use Illuminate\Support\Carbon;
         <div class="container">
             @if ((Session::exists('asistenteSession'))||(Session::exists('doctorSession'))) 
                 @if (!$lunesHorarios->isEmpty())
-                <table style=" width: 90%;" class="table table-bordered table-dark formular" id="dynamic_field">
+                <table style=" width: 90%;" class="table table-bordered table-dark formular table table-striped" id="dynamic_field">
                     <thead style="font-size: 30px; text-align: center;">
                         <th colspan="2">Lunes</th>
                     </thead>

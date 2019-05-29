@@ -118,7 +118,7 @@ class ConsultorioController extends Controller
 
             //Registro Relación doctor-consultorio
 
-            $datos_doctor=Doctor::select('Registro')->where('Correo', '=', $partes[$i])->take(1)->get();
+            $datos_doctor=Doctor::select('Registro')->where('Correo', '=', $partes[$i])->orderBy('Registro', 'desc')->take(1)->get();
             $id_datos_doctor=$datos_doctor[0];
 
             $correo_consultorio=$request->input('Correo');
