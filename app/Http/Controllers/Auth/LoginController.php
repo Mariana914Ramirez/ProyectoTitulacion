@@ -74,6 +74,10 @@ class LoginController extends Controller
             $verificar=$comparar[0]->Password;
             if(Hash::check($password, $verificar))
             {
+                if(Doctor::where('CorreoAsistente', '=', $correo)->exists())
+                {
+                    return redirect('accedeOpciones/'.$correo);
+                }
                 return redirect('accede/'.$correo);
             }
             else
@@ -92,13 +96,6 @@ class LoginController extends Controller
             if(Hash::check($password, $verificar))
             {
                 return redirect('accedeA/'.$correo);
-
-                /*$sessionRegistrada=Doctor::select('Correo')->where('CorreoAsistente', '=', $correo)->take(1)->get();
-                if($_POST)
-                {
-                    $request->session()->put('asistenteSession', $sessionRegistrada);
-                    return redirect('/');
-                }*/
             }
             else
             {
@@ -254,5 +251,12 @@ class LoginController extends Controller
         ->where('doctores.Registro', '=', $Registro)->get();
         $request->session()->put('asistenteSession', $sessionRegistrada);
         return redirect('/');
+    }
+
+
+    public function accederOpciones($Correo){
+
+        $correos=Usuario::select('Correo')->where('Correo', '=', $Correo)->get();
+        return view('opcionesIngresoTresOpciones')->with('correos', $correos);
     }
 }

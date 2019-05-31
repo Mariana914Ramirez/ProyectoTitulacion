@@ -58,6 +58,8 @@ Route::any('accedeDoctorConsultorio/{Correo}/{Registro}/{Id}','Auth\LoginControl
 Route::any('accedeAsistente/{Correo}','Auth\LoginController@accederAsistente')->name('accederAsistente');
 Route::any('accedeUsuario/{Correo}','Auth\LoginController@accederUsuario')->name('accederUsuario');
 
+Route::any('accedeOpciones/{Correo}','Auth\LoginController@accederOpciones')->name('accederOpciones');
+
 Route::any('salir','Auth\LoginController@logout')->name('logout');
 
 
