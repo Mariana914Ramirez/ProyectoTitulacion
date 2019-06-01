@@ -9,6 +9,8 @@ use App\Usuario;
 use App\Doctor;
 use App\DoctorConsultorio;
 use App\Estudio;
+use App\Estado;
+use App\Municipio;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\ConsultorioController;
@@ -184,8 +186,20 @@ class ConsultorioController extends Controller
     }
 
 
-    public function cuenta()
+    public function cuenta(Request $request)
     {
-       return view('paginaConsultorio');
+       if ($request->session()->has('consultorioSession')) {
+            $sesion=$request->session()->get('consultorioSession');
+            $consultorio=$sesion[0]->Correo;
+        }
+
+        $consultorios=Consultorio::select('Imagen', 'Nombre', 'Telefono', 'Correo', 'Descripcion', 'Ubicacion', 'C_precio', 'C_limpieza', 'C_puntualidad', 'C_trato', 'Mes_uno', 'Mes_dos', 'Mes_tres', 'Mes_cuatro', 'Mes_cinco', 'Mes_seis', 'Estado', 'Municipio')->where('Correo', '=', $consultorio)->get();
+
+        $estados=Estado::select('Nombre')->where('Registro', '=', $consultorios[0]->Estado)->get();
+        $municipios=Municipio::select('Nombre')->where('Registro', '=', $consultorios[0]->Municipio)->get();
+
+
+        return view('paginaConsultorio', compact('consultorios', $consultorios, 'estados', $estados, 'municipios', $municipios));
     }
+
 }

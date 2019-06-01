@@ -10,16 +10,42 @@ use App\Consultorio;
 use App\Doctor;
 use App\Usuario;
 use App\Sugerencia;
+use App\Administrador;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection as Collection;
 use DB;
 
 class ComentarioPrincipalController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        if ($request->session()->has('doctorSession')) {
+            $sesion=$request->session()->get('doctorSession');
+            $usuario=$sesion[0]->Correo;
+            $nombres=Usuario::select('Nombre')->where('Correo', '=', $usuario)->distinct()->get();
+        }
+        else if ($request->session()->has('asistenteSession')) {
+            $sesion=$request->session()->get('asistenteSession');
+            $usuario=$sesion[0]->Correo;
+            $nombres=Usuario::select('Nombre')->where('Correo', '=', $usuario)->distinct()->get();
+        }
+        else if ($request->session()->has('usuarioSession')) {
+            $sesion=$request->session()->get('usuarioSession');
+            $usuario=$sesion[0]->Correo;
+            $nombres=Usuario::select('Nombre')->where('Correo', '=', $usuario)->distinct()->get();
+        }
+        else if ($request->session()->has('consultorioSession')) {
+            $sesion=$request->session()->get('consultorioSession');
+            $usuario=$sesion[0]->Correo;
+            $nombres=Consultorio::select('Nombre')->where('Correo', '=', $usuario)->distinct()->get();
+        }
+        else
+        {
+            $nombres=null;
+        }
     	
         $mandados=DB::table('comentariosprincipales')->select('*')->orderBy('Hora', 'desc')->paginate(10);
-        return view('welcome', compact('mandados', $mandados));
+        return view('welcome', compact('mandados', $mandados, 'nombres', $nombres));
     }  
 
     public function create()

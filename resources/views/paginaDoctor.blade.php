@@ -14,7 +14,7 @@ use Illuminate\Support\Carbon;
 @foreach($doctores as $doctor)
     <section class="FotoPrincipalConsultorio">
         <section class="FondoParallax" >
-            <section class="parallax" style="background-image: url(img/bosque.jpg); height: 400px; margin-bottom: 0px;">
+            <section class="parallax" style="background-image: url(img/atardecer.jpg); height: 400px; margin-bottom: 0px;">
                 <div align="center" style="margin-top: 75px;">
                     <p style="background: #333; width: 80%; color: #FFF; font-size: 35px;">{{ $doctor->Nombre }} {{ $doctor->Apellidos }}</p>
 
@@ -28,7 +28,7 @@ use Illuminate\Support\Carbon;
     </section>
 
     <center>
-        <section class="informacionCons" style="background: #CFA986; height: auto; padding: 20px;">
+        <section class="Bienvenida" style="height: auto; padding: 20px;">
             <h1>{{ $doctor->Consultorio }}</h1>
             <div class="card text-white mb-3" style="max-width: 70%; margin-top: 30px; align-content: center; padding: 20px; background: #444;">
                   <div class="card-header" style="font-size: 25px;">Información del doctor</div>
@@ -47,7 +47,7 @@ use Illuminate\Support\Carbon;
             </div>
         </section>
     
-    <section style="background: #CFA986; height: auto; padding: 20px; width: 100%;">
+    <section style="height: auto; padding: 20px; width: 100%; background: #A7D8E8;">
         <div class="container">
             @if ((Session::exists('asistenteSession'))||(Session::exists('doctorSession'))) 
                 @if (!$lunesHorarios->isEmpty())

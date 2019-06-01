@@ -16,7 +16,7 @@
 <body>
     <header class="sticky-top">
         <nav class="navbar navbar-expand-lg navbar-light sticky-top">
-          <a class="navbar-brand" href="index.html"><h1 class="icon-heartbeat">Salud a un click</h1></a>
+          <a class="navbar-brand" href="/"><h1 class="icon-heartbeat">Salud a un click</h1></a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -149,15 +149,14 @@
     
         
     <a name="FinalPagina"></a>
-    <footer class="footer text-lg-justify py-2">
-        <div class="container" >
+    <footer class="footer text-lg-justify">
             <div class="row">
-                <div class="col-md-4 icon-heartbeat" style="font-size: 70px; color: #FFF;"><a  href="#"></a></div>
-                <div class="col-md-4" style="font-size: 20px; font-weight: bolder; margin-top: 30px; color: #FFF;">
+                <a  href="/" class="col-md-4 col-sm-12" style="text-align: center;"><p class="icon-heartbeat" style="font-size: 70px; color: #FFF;"></p></a>
+                <div class="col-md-4 col-sm-12" style="font-size: 20px; font-weight: bolder; margin-top: 30px; color: #FFF;">
                     <p style="font-size: 25px;">Contáctanos</p>
                     <p>mariana914ram@gmail.com</p>
                 </div>
-                <div class="col-md-4" style="font-size: 20px; font-weight: bolder; color: #FFF;">
+                <div class="col-md-4 col-sm-12" style="font-size: 20px; font-weight: bolder; color: #FFF;">
                     <ul>
                         <li><a  href="#" style="color: #FFF;">Nosotros</a></li>
                         <li><a  href="#" style="color: #FFF;">Especialidades</a></li>
@@ -166,7 +165,6 @@
                     </ul>
                 </div>
             </div>
-        </div>
     </footer>
 
     <!--Modals*********************************************************-->

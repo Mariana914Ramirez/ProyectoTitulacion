@@ -56,17 +56,21 @@
 
     <section class="Bienvenida">
         <center>
+          @if ((Session::exists('consultorioSession'))||(Session::exists('usuarioSession'))||(Session::exists('asistenteSession'))||(Session::exists('doctorSession'))) 
+            @foreach($nombres as $nombre)
+              <h1>Te damos la Bienvenida {{ $nombre->Nombre }}</h1>
+            @endforeach
+          @elseif((Session::exists('administradorSession')))
+            <h1>Te damos la Bienvenida Administrador {{(Session::get('administradorSession'))[0]->Correo}}</h1>
+          @endif
             <p class="TextoDelBanner">¿Tienes un consultorio? Regístralo <a href="formulario"><button class="btn btn-success">Aquí</button></a></p>
 
             <section class="FondoParallax">
                 <section class="parallax" style="background-image: url(img/ciudad.jpeg);">
-                    <!--<div class="row w-100">
-                        <div class="col-md-12 align-self-center"></div>
-                    </div>-->
                     <div class="row align-items-center">
-                        <button class="btn btn-success Botones col-md-2 offset-md-2  col-sm-12 col-sm-12" ><p class="icon-user-md" style="font-size: 50px;"></p><p style="font-weight: bolder;">Consultorios</p></button>
-                        <button class="btn btn-success Botones col-md-2 offset-md-1 col-sm-12 col-sm-12" ><p class="icon-stethoscope" style="font-size: 50px;"></p><p style="font-weight: bolder;">Especialidades</p></button>
-                        <button class="btn btn-success Botones col-md-2 offset-md-1 col-sm-12 col-sm-12" ><p class="icon-phone" style="font-size: 50px;"></p><p style="font-weight: bolder; ">Contacto</p></button>
+                        <button class="btn btn-success Botones col-md-2 offset-md-2  col-sm-12 col-sm-12" ><a href="consultorios"><p class="icon-user-md" style="font-size: 50px;color: #FFF;"></p><p style="font-weight: bolder; color: #FFF;">Consultorios</p></a></button>
+                        <button class="btn btn-success Botones col-md-2 offset-md-1 col-sm-12 col-sm-12" ><a href="especialidades"><p class="icon-stethoscope" style="font-size: 50px;color: #FFF;"></p><p style="font-weight: bolder;color: #FFF;">Especialidades</p></a></button>
+                        <button class="btn btn-success Botones col-md-2 offset-md-1 col-sm-12 col-sm-12" ><a href="#FinalPagina"><p class="icon-phone" style="font-size: 50px;color: #FFF;"></p><p style="font-weight: bolder; color: #FFF;">Contacto</p></a></button>
                     </div>
 
                 </section>

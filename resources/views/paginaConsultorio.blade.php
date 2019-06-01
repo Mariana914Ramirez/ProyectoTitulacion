@@ -9,12 +9,13 @@
 @stop
 
 @section ('contenido')
+    @foreach($consultorios as $consultorio)
 	<section class="FotoPrincipalConsultorio">
         <section class="FondoParallax" >
             <section class="parallax" style="background-image: url(img/tranquilidad.jpg); height: 400px; margin-bottom: 0px;">
                 <div align="center" style="margin-top: 25px;">
-                    <p style="background: #333; width: 80%; color: #FFF; font-size: 35px;">Nombre del Consultorio</p>
-                    <img src="img/consultorio.jpg" width="350px" height="250px" style="border: solid;">
+                    <p style="background: #333; width: 80%; color: #FFF; font-size: 35px;">{{ $consultorio->Nombre }}</p>
+                    <img src="imagenesConsultorio/{{ $consultorio->Imagen }}" width="350px" height="250px" style="border: solid;">
                 </div>
             </section>
         </section>
@@ -23,14 +24,28 @@
     <center>
         <section class="informacionCons bg-info" style=" height: auto; padding: 20px;">
             <div class="card text-white  mb-3" style="max-width: 70%; margin-top: 30px; background: #333; align-content: center; padding: 20px;">
-                  <div class="card-header" style="font-size: 25px;">Nombre del consultorio</div>
+                  <div class="card-header" style="font-size: 25px;">{{ $consultorio->Nombre }}</div>
                   <div class="card-body" style="font-size: 20px;">
-                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                        proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                        <p class="card-text">{{ $consultorio->Descripcion }}</p>
+                        <br>
+                        <br>
+                        <p><b>Correo: </b>{{ $consultorio->Correo }}</p>
+                        <p><b>Ubicación: </b>{{ $consultorio->Ubicacion }}</p>
+                        <p><b>Telefono: </b>{{ $consultorio->Telefono }}</p>
+                        <p><b>Puntuación: </b>{{ (($consultorio->C_precio)+($consultorio->C_trato)+($consultorio->C_limpieza)+($consultorio->C_puntualidad))/4 }}</p>
+                        <div style="font-size: 18px; width: auto;">
+                            <li><b>Calificación de precio: </b>{{ $consultorio->C_precio }}</li>
+                            <li><b>Calificación de trato al cliente: </b>{{ $consultorio->C_trato }}</li>
+                            <li><b>Calificación de puntualidad: </b>{{ $consultorio->C_puntualidad }}</li>
+                            <li><b>Calificación de limpieza: </b>{{ $consultorio->C_limpieza }}</li>
+                        </div>
+                        <br>
+                        @foreach($estados as $estado)
+                        <p><b>Estado: </b>{{ $estado->Nombre }}</p>
+                        @endforeach
+                        @foreach($municipios as $municipio)
+                        <p><b>Municipio: </b>{{ $municipio->Nombre }}</p>
+                        @endforeach
                   </div>
             </div>
         </section>
@@ -39,8 +54,13 @@
         <section class="FondoParallax">
             <section class="parallax" style="background-image: url(img/rocas.jpeg); margin-bottom: 0px;">
                 <div class="row align-items-center">
+                    @if ((Session::exists('consultorioSession')))
+                    <button class="btn btn-info Botones col-md-2 offset-md-2  col-sm-12 col-sm-12" data-toggle="modal" data-target="#ModalCitas"><p class="icon-user-md" style="font-size: 50px;"></p><p style="font-weight: bolder;">Doctores<p></button>
+                    <button class="btn btn-info Botones col-md-2 offset-md-1 col-sm-12 col-sm-12"><p class="icon-users" style="font-size: 50px;"></p><p style="font-weight: bolder;">Estadísticas<p></button>
+                    @else
                     <button class="btn btn-info Botones col-md-2 offset-md-2  col-sm-12 col-sm-12" data-toggle="modal" data-target="#ModalCitas"><p class="icon-user-md" style="font-size: 50px;"></p><p style="font-weight: bolder;">Citas<p></button>
                     <button class="btn btn-info Botones col-md-2 offset-md-1 col-sm-12 col-sm-12"><p class="icon-users" style="font-size: 50px;"></p><p style="font-weight: bolder;">Comentarios<p></button>
+                    @endif
                     <button class="btn btn-info Botones col-md-2 offset-md-1 col-sm-12 col-sm-12" data-toggle="modal" data-target="#ModalGaleria"><p class="icon-camera" style="font-size: 50px;"></p><p style="font-weight: bolder;">Galería<p></button>
                 </div>
 
@@ -153,6 +173,7 @@
             </div>
         </div>
     </div>
+@endforeach
 @stop
 
 @section ('script')

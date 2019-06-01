@@ -50,7 +50,6 @@ Route::get('especialidad/{Registro}', 'ConsultorioController@getEspecialidad')->
 Route::post('usuario/login','Auth\LoginController@login')->name('login');
 Route::any('accede/{Correo}','Auth\LoginController@accederComo')->name('accederComo');
 Route::any('accedeA/{Correo}','Auth\LoginController@accederComoA')->name('accederComoA');
-//Route::any('elegirDoctor/{Correo}','Auth\LoginController@elegirDoctor')->name('elegirDoctor');
 Route::any('accedeAsis/{Correo}/{id}','Auth\LoginController@accedeAsis')->name('accedeAsis');
 
 Route::any('accedeDoctor/{Correo}','Auth\LoginController@accederDoctor')->name('accederDoctor');
