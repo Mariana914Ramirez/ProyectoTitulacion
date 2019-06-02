@@ -11,6 +11,7 @@ use App\DoctorConsultorio;
 use App\Estudio;
 use App\Estado;
 use App\Municipio;
+use App\Imagen;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\ConsultorioController;
@@ -193,13 +194,25 @@ class ConsultorioController extends Controller
             $consultorio=$sesion[0]->Correo;
         }
 
-        $consultorios=Consultorio::select('Imagen', 'Nombre', 'Telefono', 'Correo', 'Descripcion', 'Ubicacion', 'C_precio', 'C_limpieza', 'C_puntualidad', 'C_trato', 'Mes_uno', 'Mes_dos', 'Mes_tres', 'Mes_cuatro', 'Mes_cinco', 'Mes_seis', 'Estado', 'Municipio')->where('Correo', '=', $consultorio)->get();
+        $consultorios=Consultorio::select('Imagen', 'Registro', 'Nombre', 'Telefono', 'Correo', 'Descripcion', 'Ubicacion', 'C_precio', 'C_limpieza', 'C_puntualidad', 'C_trato', 'Mes_uno', 'Mes_dos', 'Mes_tres', 'Mes_cuatro', 'Mes_cinco', 'Mes_seis', 'Estado', 'Municipio')->where('Correo', '=', $consultorio)->get();
 
         $estados=Estado::select('Nombre')->where('Registro', '=', $consultorios[0]->Estado)->get();
         $municipios=Municipio::select('Nombre')->where('Registro', '=', $consultorios[0]->Municipio)->get();
 
+        $doctores=DB::table('doctores')
+        ->join('doctor_consultorio', 'doctores.Registro', '=', 'doctor_consultorio.Doctor')
+        ->select('doctores.Nombre', 'doctores.Apellidos', 'doctores.FechaNacimiento', 'doctores.Correo', 'doctores.Registro')
+        ->where('doctor_consultorio.Consultorio', '=', $consultorios[0]->Registro)->get();
 
-        return view('paginaConsultorio', compact('consultorios', $consultorios, 'estados', $estados, 'municipios', $municipios));
+        $especialidades_doctores=DB::table('doctor_especialidad')
+        ->select('*')->get();
+
+        $especialidades=DB::table('consultorios_especialidades')->where('Consultorio', '=', $consultorios[0]->Registro)->distinct()->get();
+
+        $fotos=Imagen::select('*')->where('Consultorio', '=', $consultorios[0]->Registro)->get();
+
+
+        return view('paginaConsultorio', compact('consultorios', $consultorios, 'estados', $estados, 'municipios', $municipios, 'doctores', $doctores, 'especialidades', $especialidades, 'especialidades_doctores', $especialidades_doctores, 'fotos', $fotos));
     }
 
 }

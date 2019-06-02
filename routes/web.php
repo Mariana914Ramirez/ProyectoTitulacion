@@ -21,6 +21,8 @@ Route::post('sugerencias', 'ComentarioPrincipalController@saveSugerencias')->nam
 Route::resource('administrador', 'AdministradorController');
 
 
+Route::resource('imagenes', 'imagenController');
+
 
 Route::get('cuentaConsultorio', 'ConsultorioController@cuenta')->name('cuenta');
 

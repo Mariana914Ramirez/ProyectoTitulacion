@@ -1,4 +1,7 @@
 @extends ('layouts.admin')
+<?php
+use Illuminate\Support\Carbon;
+?>
 
 @section ('librerias')
 	<link rel="stylesheet" type="text/css" href="css/estilos_consultorios.css">
@@ -46,6 +49,20 @@
                         @foreach($municipios as $municipio)
                         <p><b>Municipio: </b>{{ $municipio->Nombre }}</p>
                         @endforeach
+                        <br>
+                        <p>
+                            <b>Especialidades que se manejan:</b><br>
+                            @foreach($especialidades as $especialidad)
+                            <li>{{ $especialidad->Especialidad_Nom }}</li>
+                            @endforeach
+                        </p>
+
+
+                        @if ((Session::exists('consultorioSession')))
+                        <div align="right" style="margin-bottom: 0px;">
+                            <a href=""><button style="align-content: center;" class="btn btn-light"><q class="icon-pencil"></q></button></a>
+                        </div>
+                        @endif
                   </div>
             </div>
         </section>
@@ -56,7 +73,7 @@
                 <div class="row align-items-center">
                     @if ((Session::exists('consultorioSession')))
                     <button class="btn btn-info Botones col-md-2 offset-md-2  col-sm-12 col-sm-12" data-toggle="modal" data-target="#ModalCitas"><p class="icon-user-md" style="font-size: 50px;"></p><p style="font-weight: bolder;">Doctores<p></button>
-                    <button class="btn btn-info Botones col-md-2 offset-md-1 col-sm-12 col-sm-12"><p class="icon-users" style="font-size: 50px;"></p><p style="font-weight: bolder;">Estadísticas<p></button>
+                    <button class="btn btn-info Botones col-md-2 offset-md-1 col-sm-12 col-sm-12"><p class="icon-chart-bar-1" style="font-size: 50px;"></p><p style="font-weight: bolder;">Estadísticas<p></button>
                     @else
                     <button class="btn btn-info Botones col-md-2 offset-md-2  col-sm-12 col-sm-12" data-toggle="modal" data-target="#ModalCitas"><p class="icon-user-md" style="font-size: 50px;"></p><p style="font-weight: bolder;">Citas<p></button>
                     <button class="btn btn-info Botones col-md-2 offset-md-1 col-sm-12 col-sm-12"><p class="icon-users" style="font-size: 50px;"></p><p style="font-weight: bolder;">Comentarios<p></button>
@@ -76,14 +93,36 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-citas">
-                    <p>
-                        <p>Nombre: Sr Doctor Profesor Patricio</p>
-                        <p>Edad: 25 años</p>
-                        <p>Correo de contacto: ejemplo25patricio@gmail.com</p>
-                        <p>Especialidades: <br>Especialidad 1 <br>Especialidad 2</p>
-                    </p>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                              
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($doctores as $doctor)
+                            <tr>
+                                <td>
+                                    <p>
+                                        <p>Nombre: {{ $doctor->Nombre }} {{ $doctor->Apellidos }}</p>
+                                        <p>Edad: {{ Carbon::parse($doctores[0]->FechaNacimiento)->age }} años</p>
+                                        <p>Correo de contacto: {{ $doctor->Correo }}</p>
+                                        <p>Especialidades: <br>
+                                            @foreach($especialidades_doctores as $especialidad_doctor)
+                                                @if( $especialidad_doctor->Doctor == $doctor->Registro)
+                                                <li>{{ $especialidad_doctor->Nombre }}</li>
+                                                @endif
+                                            @endforeach
+                                        </p>
+                                    </p>
+                                    <button class="btn btn-primary" style="width: 49%;">Ver citas</button>
+                                    <button class="btn btn-danger" style="width: 49%;">Eliminar</button>
+                                </td>
+                            </tr>
+                            @endforeach
+                        <tbody>
+                    </table> 
                 </div>
-                <button class="btn btn-success">Ver más</button>
             </div>
         </div>
     </div>
@@ -92,83 +131,91 @@
 
     <div class="modal fade" role="dialog" id="ModalGaleria">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <div class="modal-content">              
                 <div class="modal-modales">
                     <div class="container">
- 
-                <div class="container gallery-container">
-                  
-                    <h1 class="text-center">Imágenes</h1>
-                      
-                    <div class="tz-gallery">
-                  
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="card">
-                                    <a class="lightbox" href="img/Ejemplo/pluma.jpg">
-                                    <img src="img/Ejemplo/pluma.jpg" alt="Park" class="card-img-top" height="250px">
-                                    </a>
-                                </div>
+                        <div class="container gallery-container" style="margin-bottom: 40px;">
+                          
+                            <h1 class="text-center" style="margin-top: 40px;">Imágenes</h1>
+
+                            @if ($fotos->isEmpty())
+                            <center>
+                                <p>No hay fotos que mostrar</p>
+                                @foreach($consultorios as $consultorio)
+                                <form action="imagenes" method="post" enctype="multipart/form-data">
+                                @csrf
+                                     <div class="form-group" align="center">
+                                        <label for="file-upload" class="btn btn-success">
+                                            <i class="fas fa-cloud-upload-alt icon-camera" style="font-size: 25px;"></i>+ Agregar
+                                        </label>
+                                        <input id="file-upload" onchange='cambiar()' type="file" style='display: none; font-size: 25px;' id="SubirFoto" name="SubirFoto" style="font-size: 25px;" required/>
+                                        <div id="info" style="font-size: 25px;"></div>
+                                    </div>
+                                    <select style="display: none;" name="consultorio">
+                                        <option value="{{$consultorio->Registro}}">{{$consultorio->Registro}}</option>
+                                    </select>
+                                    <button type="submit" class="btn btn-primary" style="margin-bottom: 40px; width: 70%;">Aceptar</button>
+                                </form>
+                                @endforeach
+                            </center>
+                            @else
+
+                            <center>
+                                <button class="icon-camera btn btn-success" data-toggle="modal" data-target="#ModalAgregarFoto" data-dismiss="modal">+ Agregar</button>
+                            </center>
+                              
+                            <div class="tz-gallery">
+                                @foreach($fotos as $foto)
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="card">
+                                            <a class="lightbox" href="galeriaConsultorio/{{ $foto->Imagen }}">
+                                            <img src="galeriaConsultorio/{{ $foto->Imagen }}" alt="Park" class="card-img-top" height="250px" style="float: right;">
+                                            </a>
+                                            <button class="btn btn-danger" style="float: right; position: absolute;">X Eliminar</button>
+                                        </div>
+                                    </div>
+                                </div> 
+                                @endforeach 
                             </div>
-                        </div>
-                        
-                        <div class="row">    
-                            <div class="col-md-12">
-                                <div class="card">
-                                    <a class="lightbox" href="img/Ejemplo/cielo.jpg">
-                                    <img src="img/Ejemplo/cielo.jpg" alt="Park" class="card-img-top" height="250px">
-                                    </a>
-                                </div>
-                            </div>
+                            @endif
                         </div> 
-                             
-                        <div class="row"> 
-                            <div class="col-md-12">
-                                <div class="card">
-                                    <a class="lightbox" href="img/Ejemplo/estrellas.jpg">
-                                    <img src="img/Ejemplo/estrellas.jpg" alt="Park" class="card-img-top" height="250px">
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-
-
-                          <div class="row"> 
-                            <div class="col-md-12">
-                                <div class="card">
-                                    <a class="lightbox" href="img/Ejemplo/mar.jpg">
-                                    <img src="img/Ejemplo/mar.jpg" alt="Park" class="card-img-top" height="250px">
-                                    </a>
-                                </div>
-                            </div>
-                          </div>
-
-                        <div class="row">      
-                            <div class="col-md-12">
-                                <div class="card">
-                                    <a class="lightbox" href="img/Ejemplo/vista.jpg">
-                                    <img src="img/Ejemplo/vista.jpg" alt="Park" class="card-img-top" height="250px">
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                             
-                        <div class="row"> 
-                            <div class="col-md-12">
-                                <div class="card">
-                                    <a class="lightbox" href="img/Ejemplo/rocas.jpg">
-                                    <img src="img/Ejemplo/rocas.jpg" alt="Park" class="card-img-top" height="250px">
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        </div>
-                  
                     </div>
-                  
                 </div>
- 
             </div>
+        </div>
+    </div>
+
+
+
+    <div class="modal fade" role="dialog" id="ModalAgregarFoto">
+        <div class="modal-dialog">
+            <div class="modal-content">              
+                <div class="modal-modales">
+                    <div class="container">
+                        <div class="container gallery-container" style="margin-bottom: 40px;">
+                          
+                            <h1 class="text-center" style="margin-top: 40px;">Imágenes</h1>
+                            <center>
+                                @foreach($consultorios as $consultorio)
+                                <form action="imagenes" method="post" enctype="multipart/form-data">
+                                @csrf
+                                     <div class="form-group" align="center">
+                                        <label for="file-upload" class="btn btn-success">
+                                            <i class="fas fa-cloud-upload-alt icon-camera" style="font-size: 25px;"></i>+ Agregar
+                                        </label>
+                                        <input id="file-upload" onchange='cambiar()' type="file" style='display: none; font-size: 25px;' id="SubirFoto" name="SubirFoto" style="font-size: 25px;" required/>
+                                        <div id="info" style="font-size: 25px;"></div>
+                                    </div>
+                                    <select style="display: none;" name="consultorio">
+                                        <option value="{{$consultorio->Registro}}">{{$consultorio->Registro}}</option>
+                                    </select>
+                                    <button type="submit" class="btn btn-primary" style="margin-bottom: 40px; width: 70%;">Aceptar</button>
+                                </form>
+                                @endforeach
+                            </center>
+                        </div> 
+                    </div>
                 </div>
             </div>
         </div>
@@ -184,5 +231,17 @@
 
     <script>
         baguetteBox.run('.tz-gallery');
+    </script>
+
+
+    <script src="js/dropdown.js"></script>
+
+
+
+    <script type="text/javascript">
+        function cambiar(){
+        var pdrs = document.getElementById('file-upload').files[0].name;
+        document.getElementById('info').innerHTML = pdrs;
+    }
     </script>
 @stop
