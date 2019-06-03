@@ -24,9 +24,10 @@ class CreateSlideTable extends Migration
             $table->engine = 'InnoDB';
             $table->increments('Registro');
             $table->integer('Consultorio')->unsigned();
-            $table->binary('Imagen');
+            $table->string('Imagen', 256);
             $table->date('FechaInicio');
             $table->date('FechaFinal');
+            $table->tinyInteger('Aceptado');
 
             $table->index(["Consultorio"], 'fk_Slide_Consultorios_idx');
 

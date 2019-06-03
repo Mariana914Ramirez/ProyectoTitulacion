@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\ImagenController;
 use App\Imagen;
+use App\Anuncio;
+use App\Consultorio;
 use Illuminate\Support\Facades\Hash;
 
 class ImagenController extends Controller
@@ -49,6 +51,38 @@ class ImagenController extends Controller
     public function destroy()
     {
 
+    }
+
+
+    public function anuncios(Request $request)
+    {
+        if ($request->session()->has('consultorioSession')) {
+            $sesion=$request->session()->get('consultorioSession');
+            $consultorio=$sesion[0]->Correo;
+        }
+
+        $consultorios=Consultorio::select('Registro')->where('Correo', '=', $consultorio)->get();
+        $consultorio=$consultorios[0]->Registro;
+
+        $file = $request->file('SubirAnuncio');
+        $imagen = time().$file->getClientOriginalName();
+        $file->move(public_path().'/slide/', $imagen);
+
+        
+        $partes = explode('/', $request->input('FechaInicio'));
+        $inicio = $partes[2].'-'.$partes[1].'-'.$partes[0];
+
+        $partes = explode('/', $request->input('FechaTermino'));
+        $termino = $partes[2].'-'.$partes[1].'-'.$partes[0];
+
+        $anuncios = new Anuncio();
+        $anuncios->Consultorio=$consultorio;
+        $anuncios->Imagen=$imagen;
+        $anuncios->FechaInicio=$inicio;
+        $anuncios->FechaFinal=$termino;
+        $anuncios->Aceptado=0;
+        $anuncios->save();
+        return redirect('/');
     }
 
 }

@@ -22,6 +22,7 @@ Route::resource('administrador', 'AdministradorController');
 
 
 Route::resource('imagenes', 'imagenController');
+Route::any('anuncios', 'imagenController@anuncios')->name('anuncios');
 
 
 Route::get('cuentaConsultorio', 'ConsultorioController@cuenta')->name('cuenta');

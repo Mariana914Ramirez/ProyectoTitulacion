@@ -84,6 +84,7 @@
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="cuentaConsultorio">Ir a mi cuenta</a>
                     <a class="dropdown-item" href="#">Modificar información</a>
+                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#mandarAnuncioModal">Mandar anuncio</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#">Eliminar cuenta</a>
                   </div>
@@ -199,7 +200,6 @@
                     
                 </div>
             </div>
-            <!--<button class="btn btn-primary" data-toggle="modal" data-target="#RegistroModal" data-dismiss="modal">Aquí</button>-->
         </div>
     </div>
 
@@ -302,16 +302,75 @@
 
 
 
+
+
+    <div class="modal fade" role="dialog" id="mandarAnuncioModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Mandar anuncio</h3>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                   <div style="margin-bottom: 40px; margin-top: 40px;">
+                    <form action="anuncios" method="post" enctype="multipart/form-data">
+                      @csrf
+                      <div class="form-group" style="text-align: center;">
+                          <div class='input-group date' id='datepickes' style="display:inline-block; margin:0 auto;">
+                              <input type='text' placeholder="Fecha de inicio" style="text-align: center; align-content: center;" id="FechaInicio" name="FechaInicio" required />
+                              <span class="input-group-addon">
+                                  <span class="glyphicon glyphicon-calendar"></span>
+                              </span>
+                          </div>
+                      </div>
+
+                      <div class="form-group" style="text-align: center;">
+                          <div class='input-group date' id='datepicks' style="display:inline-block; margin:0 auto;">
+                              <input type='text' placeholder="Fecha de término" style="text-align: center; align-content: center;" id="FechaTermino" name="FechaTermino" required />
+                              <span class="input-group-addon">
+                                  <span class="glyphicon glyphicon-calendar"></span>
+                              </span>
+                          </div>
+                      </div>
+
+
+
+                        <div class="form-group" align="center">
+                            <label for="file-uploadT" class="btn btn-primary">
+                                <i class="fas fa-cloud-upload-alt icon-camera" style="font-size: 20px;"></i> Subir foto de anuncio
+                            </label>
+                            <input id="file-uploadT" onchange='cambiarT()' type="file" style='display: none; font-size: 20px;' id="SubirAnuncio" name="SubirAnuncio" style="font-size: 20px;" required/>
+                            <div id="infoT" style="font-size: 20px;"></div>
+                        </div>
+                        <div class="modal-final" style="text-align: center; margin-bottom: 10px;">
+                            <button type="submit" class="btn btn-success" style="width: 70%;">Enviar</button>
+                        </div>
+                      </form>
+                    </div>
+            </div>
+        </div>
+    </div>
+
+
+
         @yield('modal')
 
 
     <script type="text/javascript" src="js/jquery.js"></script>
     <script src="js/bootstrap.min.js"></script>
 
+    <script src="js/dropdown.js"></script>
     <script type="text/javascript">
         function cambiar(){
         var pdrs = document.getElementById('file-upload').files[0].name;
         document.getElementById('info').innerHTML = pdrs;
+    }
+    </script>
+
+    <script type="text/javascript">
+        function cambiarT(){
+        var pdrs = document.getElementById('file-uploadT').files[0].name;
+        document.getElementById('infoT').innerHTML = pdrs;
     }
     </script>
 
@@ -332,6 +391,18 @@
             });
 
             $('#datepickes').datepicker({
+                format: "dd/mm/yyyy",
+                autoclose: true,
+                todayHighlight: true,
+                showOtherMonths: true,
+                selectOtherMonths: true,
+                autoclose: true,
+                changeMonth: true,
+                changeYear: true,
+                orientation: "button"
+            });
+
+            $('#datepicks').datepicker({
                 format: "dd/mm/yyyy",
                 autoclose: true,
                 todayHighlight: true,

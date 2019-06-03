@@ -146,10 +146,10 @@ use Illuminate\Support\Carbon;
                                 @csrf
                                      <div class="form-group" align="center">
                                         <label for="file-upload" class="btn btn-success">
-                                            <i class="fas fa-cloud-upload-alt icon-camera" style="font-size: 25px;"></i>+ Agregar
+                                            <i class="fas fa-cloud-upload-alt icon-camera" style="font-size: 20px;"></i>+ Agregar
                                         </label>
-                                        <input id="file-upload" onchange='cambiar()' type="file" style='display: none; font-size: 25px;' id="SubirFoto" name="SubirFoto" style="font-size: 25px;" required/>
-                                        <div id="info" style="font-size: 25px;"></div>
+                                        <input id="file-upload" onchange='cambiar()' type="file" style='display: none; font-size: 20px;' id="SubirFoto" name="SubirFoto" style="font-size: 20px;" required/>
+                                        <div id="info" style="font-size: 20px;"></div>
                                     </div>
                                     <select style="display: none;" name="consultorio">
                                         <option value="{{$consultorio->Registro}}">{{$consultorio->Registro}}</option>
@@ -202,10 +202,10 @@ use Illuminate\Support\Carbon;
                                 @csrf
                                      <div class="form-group" align="center">
                                         <label for="file-upload" class="btn btn-success">
-                                            <i class="fas fa-cloud-upload-alt icon-camera" style="font-size: 25px;"></i>+ Agregar
+                                            <i class="fas fa-cloud-upload-alt icon-camera" style="font-size: 20px;"></i>+ Agregar
                                         </label>
-                                        <input id="file-upload" onchange='cambiar()' type="file" style='display: none; font-size: 25px;' id="SubirFoto" name="SubirFoto" style="font-size: 25px;" required/>
-                                        <div id="info" style="font-size: 25px;"></div>
+                                        <input id="file-upload" onchange='cambiar()' type="file" style='display: none; font-size: 20px;' id="SubirFoto" name="SubirFoto" style="font-size: 20px;" required/>
+                                        <div id="info" style="font-size: 20px;"></div>
                                     </div>
                                     <select style="display: none;" name="consultorio">
                                         <option value="{{$consultorio->Registro}}">{{$consultorio->Registro}}</option>
@@ -233,15 +233,4 @@ use Illuminate\Support\Carbon;
         baguetteBox.run('.tz-gallery');
     </script>
 
-
-    <script src="js/dropdown.js"></script>
-
-
-
-    <script type="text/javascript">
-        function cambiar(){
-        var pdrs = document.getElementById('file-upload').files[0].name;
-        document.getElementById('info').innerHTML = pdrs;
-    }
-    </script>
 @stop
