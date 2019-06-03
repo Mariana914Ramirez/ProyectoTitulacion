@@ -16,6 +16,7 @@
 });*/
 Route::resource('/', 'ComentarioPrincipalController');
 Route::post('sugerencias', 'ComentarioPrincipalController@saveSugerencias')->name('saveSugerencias');
+Route::get('buscar', 'ComentarioPrincipalController@buscador')->name('buscador');
 
 
 Route::resource('administrador', 'AdministradorController');

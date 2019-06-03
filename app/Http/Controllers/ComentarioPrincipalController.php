@@ -11,6 +11,9 @@ use App\Doctor;
 use App\Usuario;
 use App\Sugerencia;
 use App\Administrador;
+use App\Estado;
+use App\Municipio;
+use App\Especialidad;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection as Collection;
 use DB;
@@ -127,5 +130,43 @@ class ComentarioPrincipalController extends Controller
         $sugerencias->Sugerencia=$comentario;
         $sugerencias->save();
         return redirect('/');
+    }
+
+
+    public function buscador(Request $request)
+    {
+        $buscar=$request->input('buscador');
+
+        $consultorios=Consultorio::select('Registro', 'Nombre', 'Telefono', 'Ubicacion', 'Imagen', 'C_trato', 'C_puntualidad', 'C_limpieza', 'C_precio')->where('Nombre', '=', $buscar)->orWhere('Correo', '=', $buscar)->orderBy('Puntos', 'asc')->get();
+
+        $doctores=DB::table('doctor_consultorio')
+            ->join('doctores', 'doctores.Registro', '=', 'doctor_consultorio.Doctor')
+            ->join('consultorios', 'consultorios.Registro', '=', 'doctor_consultorio.Consultorio')
+            ->select('doctor_consultorio.Consultorio', 'doctores.Correo', 'doctores.Registro', 'doctores.FechaNacimiento', 'consultorios.Nombre as Consultorio', 'doctores.Imagen', 'doctores.Nombre', 'doctores.Apellidos')->where('doctores.Nombre', '=', $buscar)->orWhere('doctores.Correo', '=', $buscar)->get();
+
+        $especialidades=Especialidad::select('Nombre', 'Registro')->where('Nombre', '=', $buscar)->where('Revision', '=', 1)->get();
+
+        $estados=Estado::select('Nombre', 'Registro')->where('Nombre', '=', $buscar)->get();
+        $municipios=Municipio::select('Nombre', 'Registro')->where('Nombre', '=', $buscar)->get();
+        if(!$estados->isEmpty())
+        {
+            $consultorios=Consultorio::select('Registro', 'Nombre', 'Telefono', 'Ubicacion', 'Imagen', 'C_trato', 'C_puntualidad', 'C_limpieza', 'C_precio')->where('Estado', '=', $estados[0]->Registro)->orderBy('Puntos', 'asc')->get();
+        }
+        else if(!$municipios->isEmpty())
+        {
+            $consultorios=Consultorio::select('Registro', 'Nombre', 'Telefono', 'Ubicacion', 'Imagen', 'C_trato', 'C_puntualidad', 'C_limpieza', 'C_precio')->where('Municipio', '=', $municipios[0]->Registro)->orderBy('Puntos', 'asc')->get();
+        }
+        else if(!$especialidades->isEmpty())
+        {
+            $consultorios=DB::table('consultorios_especialidades')->select('Consultorio as Registro', 'Nombre', 'Telefono', 'Ubicacion', 'Imagen', 'C_trato', 'C_puntualidad', 'C_limpieza', 'C_precio')->where('Especialidad', '=', $especialidades[0]->Registro)->orderBy('Puntos', 'asc')->distinct()->get();
+        }
+
+
+        if($estados->isEmpty()&&$municipios->isEmpty()&&$especialidades->isEmpty()&&$consultorios->isEmpty()&&$doctores->isEmpty())
+        {
+            return redirect('/')->withErrors(['NoSeEncuentra' => 'No se encontró ningún resultado']);
+        }
+
+        return view('resultados', compact('consultorios', $consultorios, 'doctores', $doctores));
     }
 }

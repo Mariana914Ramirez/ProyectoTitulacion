@@ -28,9 +28,9 @@
 				</tbody>
 			</table>
 			<div style="text-align:center;">
-			  <div style="display:inline-block; margin:0 auto;">
-			    
-			  </div>
+				<div style="display:inline-block; margin:0 auto;">
+					{!!$consultorios->render()!!}
+				</div>
 			</div>
 		</div>
 	</center>
