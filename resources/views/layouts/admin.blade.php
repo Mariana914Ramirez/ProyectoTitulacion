@@ -314,6 +314,15 @@
                 </div>
 
                    <div style="margin-bottom: 40px; margin-top: 40px;">
+                    <p style="margin-left: 10%; margin-right: 10%;">
+                      Para mandar un anuncio se deben cumplir con 2 requisitos. <br>
+                      <b>1.</b> La imagen debe medir 1000px de largo y 500px de alto.<br>
+                      <b>2.</b> No debe tener faltas ortográficas.<br><br>
+                      Se le dará prioridad a los consultorios que tengan mayor calificación, ya que la sección de anuncios sólo soportará 10 anuncios.<br>
+                      En caso de que los requisitos no se cumplan o que no haya espacio en el slide se le intentará mandar un mensaje a la brevedad explicando el motivo.<br><br>
+                    </p>
+
+                    <p style="margin-left: 10%; margin-right: 10%;">Ingrese la fecha en la que le interesaría empezar a mostrar su anuncio</p>
                     <form action="anuncios" method="post" enctype="multipart/form-data">
                       @csrf
                       <div class="form-group" style="text-align: center;">

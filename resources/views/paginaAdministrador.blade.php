@@ -1,4 +1,7 @@
 @extends ('layouts.admin')
+<?php
+use Intervention\Image\Facades\Image;
+?>
 
 @section ('librerias')
 	<link rel="stylesheet" type="text/css" href=" https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.8.1/baguetteBox.min.css">
@@ -41,39 +44,28 @@
                                 <th scope="col">Opciones</th>
                             </tr>
 
+                            @foreach($anuncios as $anuncio)
                             <tr>
                                 <td>
-                                    Consultorio 1
+                                    {{ $anuncio->Nombre }}
                                 </td>
                                 <td>
                                 	<div class="tz-gallery">
-	                                    <a class="lightbox" href="img/nieve.jpg">
-	                                    <img src="img/nieve.jpg" alt="Park" class="card-img-top" height="250px">
+	                                    <a class="lightbox" href="slide/{{ $anuncio->Imagen }}">
+	                                    <img src="slide/{{ $anuncio->Imagen }}" alt="Park" class="card-img-top" height="250px" style="width: 500px;">
                                     </div>
+                                    <p>
+                                        Alto: {{ Image::make('slide/'.$anuncio->Imagen)->height() }} <br>
+                                        Largo: {{ Image::make('slide/'.$anuncio->Imagen)->width() }}
+                                    </p>
                                 </td>
                                 <td>
-                                    <button class="btn btn-success">No hay espacio</button><br>
-                                    <button class="btn btn-success" style="margin-bottom: 5px; margin-top: 5px;">No cumple requisitos</button><br>
-                                    <button class="btn btn-success">Agregar</button>
+                                    <button class="btn btn-success" style="width: 100%;">No hay espacio</button><br>
+                                    <button class="btn btn-success" style="margin-bottom: 5px; margin-top: 5px; width: 100%;">No cumple requisitos</button><br>
+                                    <button class="btn btn-success" style="width: 100%;">Agregar</button>
                                 </td>
                             </tr>
-
-                            <tr>
-                                <td>
-                                    Consultorio 2
-                                </td>
-                                <td>
-                                    <div class="tz-gallery">
-	                                    <a class="lightbox" href="img/Ejemplo/cielo.jpg">
-	                                    <img src="img/Ejemplo/cielo.jpg" alt="Park" class="card-img-top" height="250px">
-                                    </div>
-                                </td>
-                                <td>
-                                    <button class="btn btn-success">No hay espacio</button><br>
-                                    <button class="btn btn-success" style="margin-bottom: 5px; margin-top: 5px;">No cumple requisitos</button><br>
-                                    <button class="btn btn-success">Agregar</button>
-                                </td>
-                            </tr>
+                            @endforeach
                         </table>
                     </center>
 	    			</div>
