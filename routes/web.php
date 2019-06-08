@@ -22,6 +22,10 @@ Route::get('buscar', 'ComentarioPrincipalController@buscador')->name('buscador')
 Route::resource('administrador', 'AdministradorController');
 
 
+Route::any('noCumpleRequisitosAnuncio/{id}/{anuncio}', 'CorreosController@NoCumpleRequisitos')->name('NoCumpleRequisitos');
+Route::any('agregarAnuncio/{id}/{anuncio}', 'CorreosController@AgregarAnuncio')->name('AgregarAnuncio');
+
+
 Route::resource('imagenes', 'imagenController');
 Route::any('anuncios', 'imagenController@anuncios')->name('anuncios');
 

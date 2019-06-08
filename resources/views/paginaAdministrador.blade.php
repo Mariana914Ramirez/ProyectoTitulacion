@@ -60,9 +60,8 @@ use Intervention\Image\Facades\Image;
                                     </p>
                                 </td>
                                 <td>
-                                    <button class="btn btn-success" style="width: 100%;">No hay espacio</button><br>
-                                    <button class="btn btn-success" style="margin-bottom: 5px; margin-top: 5px; width: 100%;">No cumple requisitos</button><br>
-                                    <button class="btn btn-success" style="width: 100%;">Agregar</button>
+                                    <a href="noCumpleRequisitosAnuncio/{{ $anuncio->Registro }}/{{ $anuncio->Slide }}"><button class="btn btn-success" style="margin-bottom: 5px; margin-top: 5px; width: 100%;">No cumple requisitos</button></a><br>
+                                    <a href="agregarAnuncio/{{ $anuncio->Registro }}/{{ $anuncio->Slide }}"><button class="btn btn-success" style="width: 100%;">Agregar</button></a>
                                 </td>
                             </tr>
                             @endforeach

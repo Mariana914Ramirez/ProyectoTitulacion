@@ -148,6 +148,19 @@ class ComentarioPrincipalController extends Controller
 
         $estados=Estado::select('Nombre', 'Registro')->where('Nombre', '=', $buscar)->get();
         $municipios=Municipio::select('Nombre', 'Registro')->where('Nombre', '=', $buscar)->get();
+
+        /*if($doctores->isEmpty())
+        {
+            $partes = explode(' ', $buscar);
+            return $partes[0];
+            $fecha = $partes[2].'-'.$partes[1].'-'.$partes[0];
+            $usuario->FechaNacimiento=$fecha;
+        }
+        if($doctores->isEmpty())
+        {
+
+        }*/
+
         if(!$estados->isEmpty())
         {
             $consultorios=Consultorio::select('Registro', 'Nombre', 'Telefono', 'Ubicacion', 'Imagen', 'C_trato', 'C_puntualidad', 'C_limpieza', 'C_precio')->where('Estado', '=', $estados[0]->Registro)->orderBy('Puntos', 'asc')->get();
