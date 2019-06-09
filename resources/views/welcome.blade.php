@@ -10,11 +10,7 @@
     <section class="contenedor">
         <div class="col-md-12 container" >
             <div id="banner" class="carousel slide" data-ride="carousel">
-              <ol class="carousel-indicators">
-                <li data-target="#banner" data-slide-to="0" class="active"></li>
-                <li data-target="#banner" data-slide-to="1"></li>
-                <li data-target="#banner" data-slide-to="2"></li>
-              </ol>
+              
 
               <center>
                 @if($errors->any())
@@ -26,17 +22,27 @@
                         </ul>
                     </div>
                 @endif
+
+
+
+
               <div class="carousel-inner imagenes" role="listbox">
+                
                 <div class="carousel-item active" data-interval="10000">
-                  <img class="d-block w-100" src="img/Anuncios/Foto1.png" alt="First slide">
+                  <img class="d-block w-100" src="img/Anuncios/Anuncio1.png" alt="Anuncio1">
                 </div>
+
                 <div class="carousel-item" data-interval="10000">
-                  <img class="d-block w-100" src="img/Anuncios/Foto2.png" alt="Second slide">
+                  <img class="d-block w-100" src="img/Anuncios/Anuncio2.png" alt="Anuncio2">
                 </div>
+
+                @foreach($anuncios as $anuncio)
                 <div class="carousel-item" data-interval="10000">
-                  <img class="d-block w-100" src="img/Anuncios/Foto3.png" alt="Third slide">
+                    <img class="d-block w-100" src="/slide/{{ $anuncio->Imagen }}" alt="{{ $anuncio->Imagen }}">
                 </div>
+                @endforeach
               </div>
+            
               </center>
 
               <a class="carousel-control-prev" href="#banner" role="button" data-slide="prev">
@@ -181,6 +187,8 @@
     </section>
     
 @stop
+
+
 
 
 @section ('modal')

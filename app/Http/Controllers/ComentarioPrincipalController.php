@@ -14,6 +14,7 @@ use App\Administrador;
 use App\Estado;
 use App\Municipio;
 use App\Especialidad;
+use App\Anuncio;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection as Collection;
 use DB;
@@ -46,9 +47,20 @@ class ComentarioPrincipalController extends Controller
         {
             $nombres=null;
         }
+
+
+        if((Anuncio::where('Aceptado', '=', 1)->count()) < 10)
+        {
+            $anuncios=Anuncio::select('*')->where('Aceptado', '=', 1)->inRandomOrder()->get();
+        }
+        else
+        {
+            $anuncios=Anuncio::select('*')->where('Aceptado', '=', 1)->inRandomOrder()->take(10)->get();
+        }
+        
     	
         $mandados=DB::table('comentariosprincipales')->select('*')->orderBy('Hora', 'desc')->paginate(10);
-        return view('welcome', compact('mandados', $mandados, 'nombres', $nombres));
+        return view('welcome', compact('mandados', $mandados, 'nombres', $nombres, 'anuncios', $anuncios));
     }  
 
     public function create()
