@@ -7,10 +7,9 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class MandarMensajes extends Mailable
+class AceptarAnuncio extends Mailable
 {
     use Queueable, SerializesModels;
-
 
     public $subject = 'Anuncios - Salud a un Click';
 
@@ -33,6 +32,6 @@ class MandarMensajes extends Mailable
      */
     public function build()
     {
-        return $this->view('correos.anuncios');
+        return $this->view('correos.anuncioAceptado');
     }
 }

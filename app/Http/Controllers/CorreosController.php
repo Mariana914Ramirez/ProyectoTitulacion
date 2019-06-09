@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Mail\MandarMensajes;
+use App\Mail\AceptarAnuncio;
 use App\Consultorio;
 use App\Anuncio;
 use Illuminate\Support\Facades\Mail;
@@ -25,8 +26,12 @@ class CorreosController extends Controller
 
     public function AgregarAnuncio($Registro, $Anuncio)
     {
-    	$consultorio = Consultorio::select('*')->where('Registro', '=', $Registro)->take(1)->get();
+    	$consultorio = Consultorio::select('Nombre', 'Correo')->where('Registro', '=', $Registro)->take(1)->get();
     	$destinatario = $consultorio[0]->Correo;
-		Mail::to($destinatario)->send(new MandarMensajes($consultorio));
+
+    	Anuncio::where('Registro', '=', $Anuncio)->update(array('Aceptado'=>1,));
+
+		Mail::to($destinatario)->send(new AceptarAnuncio($consultorio));
+		return redirect('/');
     }
 }

@@ -12,9 +12,12 @@ use App\Estudio;
 use App\Estado;
 use App\Municipio;
 use App\Imagen;
+use App\Sugerencia;
+use App\Mail\EspecialidadAgregada;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\ConsultorioController;
+use Illuminate\Support\Facades\Mail;
 use Input;
 use DB;
 use Illuminate\Support\Collection as Collection;
@@ -148,6 +151,21 @@ class ConsultorioController extends Controller
 
                     Especialidad::where('Registro', '=', $id_datos_especialidad)->update(array(
                          'Revision'=>1,));
+                    $paraMandarCorreo=Especialidad::select('*')->where('Registro', '=', $id_datos_especialidad)->get();
+                    
+                    $sugerencias=Sugerencia::select('*')->where('Sugerencia', '=', $paraMandarCorreo[0]->Nombre)->get();
+
+
+                    foreach ($sugerencias as $sugerencia) {
+                        $usuario = DB::table('sugerencias')
+                        ->join('usuarios', 'usuarios.Registro', '=', 'sugerencias.Usuario')
+                        ->select('usuarios.Nombre', 'usuarios.Apellidos', 'usuarios.Correo')
+                        ->where('usuarios.Registro', '=', $sugerencia->Usuario)->take(1)->get();
+                        $destinatario = $usuario[0]->Correo;
+                        Mail::to($destinatario)->send(new EspecialidadAgregada($usuario, $paraMandarCorreo));
+
+                        Sugerencia::where('Registro', '=', $sugerencia->Registro)->delete();
+                    }
 
                     $estudios = new Estudio();
                     $estudios->Especialidad=$id_datos_especialidad;

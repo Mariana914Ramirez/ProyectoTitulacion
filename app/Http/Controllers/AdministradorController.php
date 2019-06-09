@@ -18,6 +18,7 @@ class AdministradorController extends Controller
         $anuncios=DB::table('slide')
         ->join('consultorios', 'consultorios.Registro', '=', 'slide.Consultorio')
         ->select('slide.Imagen', 'consultorios.Correo', 'slide.FechaInicio', 'slide.FechaFinal', 'consultorios.Nombre', 'consultorios.Registro', 'slide.Registro as Slide')
+        ->where('slide.Aceptado', '=', 0)
         ->orderBy('consultorios.puntos', 'asc')->get();
 
 
