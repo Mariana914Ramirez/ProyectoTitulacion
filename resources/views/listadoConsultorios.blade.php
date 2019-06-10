@@ -6,7 +6,7 @@
 <section id="content" class="Bienvenida">
 	<center>
 		<div style="width: 80%;">
-			<table class="table table-dark" style="width: 100%;">
+			<table class="table table-striped" style="width: 100%;">
 				<tbody style="font-size: 25px;">
 					@foreach($consultorios as $consultorio)
 						<tr>
@@ -22,7 +22,7 @@
 								<p><b>Teléfono:</b> {{ $consultorio->Telefono }}</p>
 								<p style="max-width: 90%;"><b>Ubicación:</b> {{ $consultorio->Ubicacion }}</p>
 							</td>
-							<td><a href="" class="btn btn-info" style="height: 100%; width: 90%; margin-top: 40%;">Visitar Consultorio</a></td>
+							<td><a href="http://127.0.0.1:8000/visitarConsultorio/{{ $consultorio->Registro }}" class="btn btn-info" style="height: 100%; width: 90%; margin-top: 40%;">Visitar Consultorio</a></td>
 						</tr>
 					@endforeach
 				</tbody>

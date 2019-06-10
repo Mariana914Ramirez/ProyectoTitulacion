@@ -13,6 +13,7 @@ use App\Estado;
 use App\Municipio;
 use App\Imagen;
 use App\Sugerencia;
+use App\ComentarioConsultorio;
 use App\Mail\EspecialidadAgregada;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
@@ -20,6 +21,7 @@ use App\Http\Controllers\ConsultorioController;
 use Illuminate\Support\Facades\Mail;
 use Input;
 use DB;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection as Collection;
 
 class ConsultorioController extends Controller
@@ -199,7 +201,7 @@ class ConsultorioController extends Controller
     }
     public function getEspecialidad($Registro)
     {
-        $consultorios = DB::table('consultorios_especialidades')->select('Nombre', 'Telefono', 'Ubicacion', 'Imagen', 'C_trato', 'C_puntualidad', 'C_limpieza', 'C_precio')->where('Especialidad', '=', $Registro)->distinct()->paginate(10);
+        $consultorios = DB::table('consultorios_especialidades')->select('Nombre', 'Telefono', 'Ubicacion', 'Imagen', 'C_trato', 'C_puntualidad', 'C_limpieza', 'C_precio', 'Consultorio as Registro')->where('Especialidad', '=', $Registro)->distinct()->paginate(10);
         return view('listadoConsultorios', compact('consultorios', $consultorios));
        
     }
@@ -230,7 +232,103 @@ class ConsultorioController extends Controller
         $fotos=Imagen::select('*')->where('Consultorio', '=', $consultorios[0]->Registro)->get();
 
 
-        return view('paginaConsultorio', compact('consultorios', $consultorios, 'estados', $estados, 'municipios', $municipios, 'doctores', $doctores, 'especialidades', $especialidades, 'especialidades_doctores', $especialidades_doctores, 'fotos', $fotos));
+        $mandados=ComentarioConsultorio::select('*')->where('Consultorio', '=', $consultorios[0]->Registro)->orderBy('Hora', 'desc')->paginate(10);
+        $pacientesComentarios=DB::table('comentariosconsultorios')
+        ->join('usuarios', 'usuarios.Registro', '=', 'comentariosconsultorios.Usuario')
+        ->select('usuarios.Nombre', 'usuarios.Imagen', 'usuarios.Apellidos', 'usuarios.Registro', 'usuarios.Correo')->distinct()->get();
+
+
+        return view('paginaConsultorio', compact('consultorios', $consultorios, 'estados', $estados, 'municipios', $municipios, 'doctores', $doctores, 'especialidades', $especialidades, 'especialidades_doctores', $especialidades_doctores, 'fotos', $fotos, 'mandados', $mandados, 'pacientesComentarios', $pacientesComentarios));
+    }
+
+
+
+
+    public function PacientesVisitantes($Registro)
+    {
+        $consultorios=Consultorio::select('Imagen', 'Registro', 'Nombre', 'Telefono', 'Correo', 'Descripcion', 'Ubicacion', 'C_precio', 'C_limpieza', 'C_puntualidad', 'C_trato', 'Mes_uno', 'Mes_dos', 'Mes_tres', 'Mes_cuatro', 'Mes_cinco', 'Mes_seis', 'Estado', 'Municipio')->where('Registro', '=', $Registro)->get();
+
+        $estados=Estado::select('Nombre')->where('Registro', '=', $consultorios[0]->Estado)->get();
+        $municipios=Municipio::select('Nombre')->where('Registro', '=', $consultorios[0]->Municipio)->get();
+
+        $doctores=DB::table('doctores')
+        ->join('doctor_consultorio', 'doctores.Registro', '=', 'doctor_consultorio.Doctor')
+        ->select('doctores.Nombre', 'doctores.Apellidos', 'doctores.FechaNacimiento', 'doctores.Correo', 'doctores.Registro')
+        ->where('doctor_consultorio.Consultorio', '=', $consultorios[0]->Registro)->get();
+
+        $especialidades_doctores=DB::table('doctor_especialidad')
+        ->select('*')->get();
+
+        $especialidades=DB::table('consultorios_especialidades')->where('Consultorio', '=', $consultorios[0]->Registro)->distinct()->get();
+
+        $fotos=Imagen::select('*')->where('Consultorio', '=', $consultorios[0]->Registro)->get();
+
+
+        $mandados=ComentarioConsultorio::select('*')->where('Consultorio', '=', $Registro)->orderBy('Hora', 'desc')->paginate(10);
+        $pacientesComentarios=DB::table('comentariosconsultorios')
+        ->join('usuarios', 'usuarios.Registro', '=', 'comentariosconsultorios.Usuario')
+        ->select('usuarios.Nombre', 'usuarios.Imagen', 'usuarios.Apellidos', 'usuarios.Registro', 'usuarios.Correo')->distinct()->get();
+
+
+        return view('paginaConsultorio', compact('consultorios', $consultorios, 'estados', $estados, 'municipios', $municipios, 'doctores', $doctores, 'especialidades', $especialidades, 'especialidades_doctores', $especialidades_doctores, 'fotos', $fotos, 'mandados', $mandados, 'pacientesComentarios', $pacientesComentarios));
+    }
+
+
+
+
+    public function comentarConsultorios(Request $request, $RegistroConsultorio)
+    {
+        if ($request->session()->has('consultorioSession'))
+        {
+            $sesion=$request->session()->get('consultorioSession');
+            $consultorio=$sesion[0]->Correo;
+            $consultorio=Consultorio::select('Registro')->where('Correo', '=', $consultorio)->get();
+
+            $hora = Carbon::now();
+
+            $comentario_principal = new ComentarioConsultorio();
+            $comentario_principal->Consultorio=$consultorio[0]->Registro;
+            $comentario_principal->Usuario=null;
+            $comentario_principal->Comentario=$request->input('Comentarios');
+            $comentario_principal->Hora=$hora;
+            $comentario_principal->save();
+            return redirect('cuentaConsultorio');
+        }
+        else
+        {
+            if ($request->session()->has('doctorSession')) {
+                $sesion=$request->session()->get('doctorSession');
+                $usuario=$sesion[0]->Correo;
+            }
+            else if ($request->session()->has('usuarioSession')) {
+                $sesion=$request->session()->get('usuarioSession');
+                $usuario=$sesion[0]->Correo;
+            }
+            else if ($request->session()->has('asistenteSession')) {
+                $sesion=$request->session()->get('asistenteSession');
+                $usuario=$sesion[0]->Correo;
+            }
+            else{
+                return back()->withErrors(['NoRegistrado' => 'Debes tener una cuenta para realizar esta acción']);
+            }
+
+            $usuario=Usuario::select('Nombre', 'Apellidos', 'Registro')->where('Correo', '=', $usuario)->get();
+            $usuarioRegistro=$usuario[0]->Registro;
+
+             $hora = Carbon::now();
+
+            $comentario_principal = new ComentarioConsultorio();
+            $comentario_principal->Consultorio=$RegistroConsultorio;
+            $comentario_principal->Usuario=$usuarioRegistro;
+            $comentario_principal->Comentario=$request->input('Comentarios');
+            $comentario_principal->Hora=$hora;
+            $comentario_principal->save();
+
+
+            return redirect("visitarConsultorio/$RegistroConsultorio");
+        }
+        
     }
 
 }
+

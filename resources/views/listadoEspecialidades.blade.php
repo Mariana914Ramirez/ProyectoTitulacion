@@ -5,7 +5,7 @@
 <section id="content" class="Bienvenida">
 	<center>
 		<div style="width: 80%;">
-			<table class="table table-hover table-dark" style="width: 100%;">
+			<table class="table table-hover table-striped" style="width: 100%;">
 				<thead style="font-size: 40px; text-align: center;">
 					<th>Especialidades</th>
 				</thead>

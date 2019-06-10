@@ -82,18 +82,17 @@
                 </section>
             </section>
 
-
-            <div class="card text-black bg-info mb-3" style="max-width: 70%;">
-                  <div class="card-header" style="font-size: 25px;">!Bienvenido a ...........</div>
-                  <div class="card-body" style="font-size: 20px;">
-                        <p class="card-text">Esta página ha sido creada con el propósito de ayudarle a encontrar un consultorio que logre adecuarse a sus necesidades. <br> Después de cada consulta que usted programe, podrá calificar cada uno de los aspectos del consultorio (Limpieza, Puntualidad, Trato al cliente y Precio) Para así ayudar a otros pacientes a conocer de antemano el servicio que ofrece el consultorio. <br> Si usted tiene un consultorio puede registrarlo en la página para que más personas puedan conocerlo y su negocio pueda crecer más rápido.<br></p>
-                        <p class="Frase">¡Nosotros nos preocupamos por usted! <br><br></p>
-                  </div>
-            </div>
+            <section style="background-image: url(http://127.0.0.1:8000/img/fondo6.png); padding: 40px 40px 20px 20px; width: 85%; height: auto; margin-bottom: 40px;">
+              <div style="color: #FFF; width: 80%; background: #222; opacity: 0.7; padding: 20px 20px 20px 20px;">
+                <p style="font-size: 25px;">!Bienvenido a Salud a un Click</p>
+                <p style="font-size: 20px;">Esta página ha sido creada con el propósito de ayudarle a encontrar un consultorio que logre adecuarse a sus necesidades. <br> Después de cada consulta que usted programe, podrá calificar cada uno de los aspectos del consultorio (Limpieza, Puntualidad, Trato al cliente y Precio) Para así ayudar a otros pacientes a conocer de antemano el servicio que ofrece el consultorio. <br> Si usted tiene un consultorio puede registrarlo en la página para que más personas puedan conocerlo y su negocio pueda crecer más rápido.<br></p>
+                <p style="font-size: 23px;">¡Nosotros nos preocupamos por usted! <br><br></p>
+              </div>
+            </section>
 
 
             <section id="Comentarios">
-              <table class="table table-dark" style="width: 80%;">
+              <table class="table table-dark" style="width: 100%;">
                 <thead style="font-size: 30px;">
                     <th colspan="3" style="padding-left: 20px;">Comentarios</th>
                 </thead>

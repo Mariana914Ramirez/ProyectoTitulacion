@@ -19,6 +19,16 @@ Route::post('sugerencias', 'ComentarioPrincipalController@saveSugerencias')->nam
 Route::get('buscar', 'ComentarioPrincipalController@buscador')->name('buscador');
 
 
+Route::get('cuentaConsultorio', 'ConsultorioController@cuenta')->name('cuenta');
+Route::any('visitarConsultorio/{id}', 'ConsultorioController@PacientesVisitantes')->name('PacientesVisitantes');
+
+
+Route::any('comentarConsultorios/{id}', 'ConsultorioController@comentarConsultorios')->name('comentarConsultorios');
+
+
+
+
+
 Route::resource('administrador', 'AdministradorController');
 
 
@@ -30,7 +40,7 @@ Route::resource('imagenes', 'imagenController');
 Route::any('anuncios', 'imagenController@anuncios')->name('anuncios');
 
 
-Route::get('cuentaConsultorio', 'ConsultorioController@cuenta')->name('cuenta');
+
 
 
 

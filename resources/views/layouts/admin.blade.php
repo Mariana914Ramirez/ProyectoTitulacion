@@ -31,12 +31,12 @@
 
 
               <li class="nav-item">
-                <a class="nav-link" href="consultorios"><b class="icon-user-md">Consultorios </b><span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="http://127.0.0.1:8000/consultorios"><b class="icon-user-md">Consultorios </b><span class="sr-only">(current)</span></a>
               </li>
 
 
               <li class="nav-item">
-                <a class="nav-link" href="especialidades"><b class="icon-stethoscope">Especialidades </b><span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="http://127.0.0.1:8000/especialidades"><b class="icon-stethoscope">Especialidades </b><span class="sr-only">(current)</span></a>
               </li>
 
                @if ((Session::exists('consultorioSession'))||(Session::exists('administradorSession'))||(Session::exists('usuarioSession'))||(Session::exists('asistenteSession'))||(Session::exists('doctorSession'))) 
@@ -45,12 +45,6 @@
                     <b class="icon-users">Notificaciones</b>
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <table class="table table-dark">
-                      <tr>
-                        <td>Hola</td>
-                        <td>Cómo estás</td>
-                      </tr>
-                    </table>
                     <a class="dropdown-item" href="#">Action</a>
                     <a class="dropdown-item" href="#">Another action</a>
                     <div class="dropdown-divider"></div>
@@ -70,7 +64,7 @@
                     <b class="icon-cog-alt">Mi cuenta</b>
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="administrador">Ir a mi cuenta</a>
+                    <a class="dropdown-item" href="http://127.0.0.1:8000/administrador">Ir a mi cuenta</a>
                     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#administradorRegistroModal">Agregar administrador</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#">Eliminar cuenta</a>
@@ -82,7 +76,7 @@
                     <b class="icon-cog-alt">Mi cuenta</b>
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="cuentaConsultorio">Ir a mi cuenta</a>
+                    <a class="dropdown-item" href="http://127.0.0.1:8000/cuentaConsultorio">Ir a mi cuenta</a>
                     <a class="dropdown-item" href="#">Modificar información</a>
                     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#mandarAnuncioModal">Mandar anuncio</a>
                     <div class="dropdown-divider"></div>
@@ -95,9 +89,9 @@
                     <b class="icon-cog-alt">Mi cuenta</b>
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="doctor">Ir a mi cuenta</a>
+                    <a class="dropdown-item" href="http://127.0.0.1:8000/doctor">Ir a mi cuenta</a>
                     <a class="dropdown-item" href="#">Modificar información</a>
-                    <a class="dropdown-item" href="modificarHorarios">Modificar horarios</a>
+                    <a class="dropdown-item" href="http://127.0.0.1:8000/modificarHorarios">Modificar horarios</a>
                     <a class="dropdown-item" href="#">Agenda</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#">Eliminar cuenta</a>
@@ -105,11 +99,11 @@
                 </li>
                 @elseif (Session::exists('usuarioSession'))
                 <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="administrador" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <a class="nav-link dropdown-toggle" href="http://127.0.0.1:8000/administrador" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <b class="icon-cog-alt">Mi cuenta</b>
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="modificarUsuario">Modificar información</a>
+                    <a class="dropdown-item" href="http://127.0.0.1:8000/modificarUsuario">Modificar información</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#">Eliminar cuenta</a>
                   </div>
@@ -119,7 +113,7 @@
 
               @if ((Session::exists('consultorioSession'))||(Session::exists('administradorSession'))||(Session::exists('usuarioSession'))||(Session::exists('asistenteSession'))||(Session::exists('doctorSession'))) 
                   <li class="nav-item">
-                    <a class="nav-link" href="salir"><b class="icon-user">Cerrar Sesión </b><span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="http://127.0.0.1:8000/salir"><b class="icon-user">Cerrar Sesión </b><span class="sr-only">(current)</span></a>
                 </li>              
               @else
                 <li class="nav-item">
@@ -179,7 +173,7 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
 
-                <form action="usuario/login" method="post" >
+                <form action="http://127.0.0.1:8000/usuario/login" method="post" >
                    @csrf
                     <div class="modal-body">
                         <div class="form-group">
@@ -213,7 +207,7 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 
-                <form action="usuario" method="post" enctype="multipart/form-data">
+                <form action="http://127.0.0.1:8000/usuario" method="post" enctype="multipart/form-data">
                   @csrf
                   <div class="modal-body">
 
@@ -281,7 +275,7 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
 
-                <form action="administrador" method="post" >
+                <form action="http://127.0.0.1:8000/administrador" method="post" >
                    @csrf
                     <div class="modal-body">
                         <div class="form-group">
@@ -323,7 +317,7 @@
                     </p>
 
                     <p style="margin-left: 10%; margin-right: 10%;">Ingrese la fecha en la que le interesaría empezar a mostrar su anuncio</p>
-                    <form action="anuncios" method="post" enctype="multipart/form-data">
+                    <form action="http://127.0.0.1:8000/anuncios" method="post" enctype="multipart/form-data">
                       @csrf
                       <div class="form-group" style="text-align: center;">
                           <div class='input-group date' id='datepickes' style="display:inline-block; margin:0 auto;">
