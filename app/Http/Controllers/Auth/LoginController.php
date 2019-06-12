@@ -9,18 +9,22 @@ use App\Usuario;
 use App\Administrador;
 use App\DoctorConsultorio;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\EloquentUserProvider;
 use Illuminate\Contracts\Auth\Authenticatable;
+
+
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Request;
 use DB;
 
 class LoginController extends Controller
 {
     public function login(Request $request)
     {
-        $correo=$request->input('Correo');
-        $password=$request->input('Password');
+        $correo=Request::input('Correo');
+        $password=Request::input('Password');
         if (Administrador::where('Correo', '=', $correo)->exists())
         {
             $comparar=Administrador::select('Password')->where('Correo', '=', $correo)->get();
@@ -30,7 +34,7 @@ class LoginController extends Controller
                 $sessionRegistrada=Administrador::select('Correo')->where('Correo', '=', $correo)->get();
                 if($_POST)
                 {
-                    $request->session()->put('administradorSession', $sessionRegistrada);
+                    Request::session()->put('administradorSession', $sessionRegistrada);
                     return redirect('/');
                 }
             }
@@ -53,7 +57,7 @@ class LoginController extends Controller
                 $sessionRegistrada=Consultorio::select('Correo')->where('Correo', '=', $correo)->get();
                 if($_POST)
                 {
-                    $request->session()->put('consultorioSession', $sessionRegistrada);
+                    Request::session()->put('consultorioSession', $sessionRegistrada);
                     return redirect('/');
                 }
             }
@@ -70,6 +74,7 @@ class LoginController extends Controller
 
         else if (Doctor::where('Correo', '=', $correo)->exists())
         {
+            Session::put('url',Request::server('HTTP_REFERER')); ;
             $comparar=Doctor::select('Password')->where('Correo', '=', $correo)->get();
             $verificar=$comparar[0]->Password;
             if(Hash::check($password, $verificar))
@@ -117,7 +122,7 @@ class LoginController extends Controller
                 $sessionRegistrada=Usuario::select('Correo')->where('Correo', '=', $correo)->get();
                 if($_POST)
                 {
-                    $request->session()->put('usuarioSession', $sessionRegistrada);
+                    Request::session()->put('usuarioSession', $sessionRegistrada);
                     return redirect('/');
                 }
             }
@@ -139,24 +144,24 @@ class LoginController extends Controller
 
     public function logout(Request $request){
 
-        if ($request->session()->has('administradorSession')) {
-            $request->session()->forget('administradorSession');
+        if (Request::session()->has('administradorSession')) {
+            Request::session()->forget('administradorSession');
         }
-        if ($request->session()->has('consultorioSession')) {
-            $request->session()->forget('consultorioSession');
+        if (Request::session()->has('consultorioSession')) {
+            Request::session()->forget('consultorioSession');
         }
-        if ($request->session()->has('doctorSession')) {
-            $request->session()->forget('doctorSession');
+        if (Request::session()->has('doctorSession')) {
+            Request::session()->forget('doctorSession');
         }
-        if ($request->session()->has('asistenteSession')) {
-            $request->session()->forget('asistenteSession');
+        if (Request::session()->has('asistenteSession')) {
+            Request::session()->forget('asistenteSession');
         }
-        if ($request->session()->has('usuarioSession')) {
-            $request->session()->forget('usuarioSession');
+        if (Request::session()->has('usuarioSession')) {
+            Request::session()->forget('usuarioSession');
         }
 
         
-        return redirect('/');
+        return Redirect::to(Session::get('/'));  
     }
 
 
@@ -187,8 +192,8 @@ class LoginController extends Controller
             ->join('doctor_consultorio', 'doctores.Registro', '=', 'doctor_consultorio.Doctor')
             ->select('doctor_consultorio.Consultorio', 'doctores.Correo', 'doctores.Registro')
             ->where('doctores.Correo', '=', $Correo)->get();
-            $request->session()->put('doctorSession', $sessionRegistrada);
-            return redirect('/');
+            Request::session()->put('doctorSession', $sessionRegistrada);
+            return Redirect::to(Session::get('url'));  
         }
         else
         {
@@ -206,8 +211,8 @@ class LoginController extends Controller
             ->join('doctor_consultorio', 'doctores.Registro', '=', 'doctor_consultorio.Doctor')
             ->select('doctor_consultorio.Consultorio', 'doctores.Correo', 'doctores.Registro', 'doctores.CorreoAsistente')
             ->where('doctores.CorreoAsistente', '=', $Correo)->get();
-            $request->session()->put('asistenteSession', $sessionRegistrada);
-            return redirect('/');
+            Request::session()->put('asistenteSession', $sessionRegistrada);
+            return Redirect::to(Session::get('url'));  
         }
         else
         {
@@ -225,8 +230,8 @@ class LoginController extends Controller
     public function accederUsuario($Correo, Request $request){
 
         $sessionRegistrada=Usuario::select('Correo')->where('Correo', '=', $Correo)->get();
-        $request->session()->put('usuarioSession', $sessionRegistrada);
-        return redirect('/');
+        Request::session()->put('usuarioSession', $sessionRegistrada);
+        return Redirect::to(Session::get('url'));  
     }
 
 
@@ -237,8 +242,8 @@ class LoginController extends Controller
         ->select('doctor_consultorio.Consultorio', 'doctores.Correo', 'doctores.Registro')
         ->where('doctores.Correo', '=', $Correo)
         ->where('doctor_consultorio.Consultorio', '=', $Registro)->get();
-        $request->session()->put('doctorSession', $sessionRegistrada);
-        return redirect('/');
+        Request::session()->put('doctorSession', $sessionRegistrada);
+        return Redirect::to(Session::get('url'));  
     }
 
 
@@ -249,8 +254,8 @@ class LoginController extends Controller
         ->select('doctor_consultorio.Consultorio', 'doctores.Correo', 'doctores.Registro', 'doctores.CorreoAsistente')
         ->where('doctores.CorreoAsistente', '=', $Correo)
         ->where('doctores.Registro', '=', $Registro)->get();
-        $request->session()->put('asistenteSession', $sessionRegistrada);
-        return redirect('/');
+        Request::session()->put('asistenteSession', $sessionRegistrada);
+        return Redirect::to(Session::get('url'));  
     }
 
 

@@ -123,7 +123,7 @@
 
 
             </ul>
-            <form class="form-inline my-2 my-lg-0" action="buscar" method="get">
+            <form class="form-inline my-2 my-lg-0" action="http://127.0.0.1:8000/buscar" method="get">
               @csrf
               <input class="form-control mr-sm-2" type="search" placeholder="Buscar" aria-label="Search" name="buscador">
               <button class="icon-search btn btn-outline-primary my-2 my-sm-0" type="submit"></button>

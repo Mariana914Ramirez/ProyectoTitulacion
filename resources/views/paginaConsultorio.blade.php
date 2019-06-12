@@ -231,8 +231,12 @@ use Illuminate\Support\Carbon;
                                     <button class="btn btn-primary" style="width: 49%;">Ver citas</button>
                                     <button class="btn btn-danger" style="width: 49%;">Eliminar</button>
                                     @else
+                                        @if ((Session::exists('administradorSession'))||(Session::exists('usuarioSession'))||(Session::exists('asistenteSession'))||(Session::exists('doctorSession'))) 
+                                        <button class="btn btn-success" style="width: 49%;">Generar cita</button>
+                                        @else
+                                        <button class="btn btn-success" style="width: 49%;" data-toggle="modal" data-target="#loginModal" data-dismiss="modal">Generar cita</button>
+                                        @endif
                                     <button class="btn btn-primary" style="width: 49%;">Ver más</button>
-                                    <button class="btn btn-success" style="width: 49%;">Generar cita</button>
                                     @endif
                                 </td>
                             </tr>

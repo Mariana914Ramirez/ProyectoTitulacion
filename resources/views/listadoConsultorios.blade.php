@@ -5,8 +5,11 @@
 @section ('contenido')
 <section id="content" class="Bienvenida">
 	<center>
-		<div style="width: 80%;">
-			<table class="table table-striped" style="width: 100%;">
+		<div style="width: 90%;">
+			<table class="table table-striped" style="width: 100%; background: #AAA;">
+				<thead style="font-size: 40px; text-align: center;">
+					<th colspan="4">Consultorios</th>
+				</thead>
 				<tbody style="font-size: 25px;">
 					@foreach($consultorios as $consultorio)
 						<tr>
