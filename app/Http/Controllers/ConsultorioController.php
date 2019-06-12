@@ -28,7 +28,36 @@ class ConsultorioController extends Controller
 {
     public function index()
     {
-        $consultorios = Consultorio::orderBy('Puntos', 'asc')->paginate(10);
+        $consultorios = DB::table('doctor_consultorio')
+        ->join('consultorios', 'consultorios.Registro', '=', 'doctor_consultorio.Consultorio')
+        ->join('horario', 'horario.DoctorConsultorio', '=', 'doctor_consultorio.Registro')
+        ->join('precios', 'precios.DoctorConsultorio', '=', 'doctor_consultorio.Registro')
+        ->select('consultorios.Imagen', 'consultorios.Nombre', 'consultorios.Ubicacion', 'consultorios.Registro', 'consultorios.Telefono', 'consultorios.Correo', 'consultorios.C_precio', 'consultorios.C_trato', 'consultorios.C_limpieza', 'consultorios.C_puntualidad')
+        ->orderBy('Puntos', 'asc')
+        ->paginate(10);
+
+
+        $especialidades = DB::table('consultorios_especialidades')->select('*')->distinct()->get();
+        foreach ($consultorios as $consultorio) {
+            foreach ($especialidades as $especialidad) {
+                if($especialidad->Consultorio == $consultorio->Registro && Estudio::where('Especialidad', '=', $especialidad->Especialidad)->exists())
+                {
+                    Especialidad::where('Registro', '=', $especialidad->Especialidad)->update(array('Revision'=>1,));
+                }
+                else
+                {
+                    Especialidad::where('Registro', '=', $especialidad->Especialidad)->update(array('Revision'=>0,));
+                }
+            }
+        }
+
+        $especialidades = Especialidad::select('*')->get();
+        if($consultorios->isEmpty())
+        {
+            foreach ($especialidades as $especialidad) {
+                Especialidad::where('Registro', '=', $especialidad->Registro)->update(array('Revision'=>0,));
+            }
+        }
         return view('listadoConsultorios')->with('consultorios', $consultorios);
 
     }
@@ -151,23 +180,6 @@ class ConsultorioController extends Controller
                 {
                     $id_datos_especialidad=$nombre_especialidad[$contadorInformacion];
 
-                    Especialidad::where('Registro', '=', $id_datos_especialidad)->update(array(
-                         'Revision'=>1,));
-                    $paraMandarCorreo=Especialidad::select('*')->where('Registro', '=', $id_datos_especialidad)->get();
-                    
-                    $sugerencias=Sugerencia::select('*')->where('Sugerencia', '=', $paraMandarCorreo[0]->Nombre)->get();
-
-
-                    foreach ($sugerencias as $sugerencia) {
-                        $usuario = DB::table('sugerencias')
-                        ->join('usuarios', 'usuarios.Registro', '=', 'sugerencias.Usuario')
-                        ->select('usuarios.Nombre', 'usuarios.Apellidos', 'usuarios.Correo')
-                        ->where('usuarios.Registro', '=', $sugerencia->Usuario)->take(1)->get();
-                        $destinatario = $usuario[0]->Correo;
-                        Mail::to($destinatario)->send(new EspecialidadAgregada($usuario, $paraMandarCorreo));
-
-                        Sugerencia::where('Registro', '=', $sugerencia->Registro)->delete();
-                    }
 
                     $estudios = new Estudio();
                     $estudios->Especialidad=$id_datos_especialidad;
