@@ -34,6 +34,7 @@ Route::resource('administrador', 'AdministradorController');
 
 Route::any('noCumpleRequisitosAnuncio/{id}/{anuncio}', 'CorreosController@NoCumpleRequisitos')->name('NoCumpleRequisitos');
 Route::any('agregarAnuncio/{id}/{anuncio}', 'CorreosController@AgregarAnuncio')->name('AgregarAnuncio');
+Route::any('especialdadAgregada/{id}', 'CorreosController@EspecialdadAgregada')->name('EspecialdadAgregada');
 
 
 Route::resource('imagenes', 'imagenController');
@@ -46,6 +47,7 @@ Route::any('anuncios', 'imagenController@anuncios')->name('anuncios');
 
 Route::resource('doctor', 'DoctorController');
 Route::get('modificarHorarios', 'DoctorController@horario')->name('horario');
+Route::any('precios', 'DoctorController@precios')->name('precios');
 
 
 

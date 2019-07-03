@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Mail\MandarMensajes;
 use App\Mail\AceptarAnuncio;
+use App\Mail\EspecialidadAgregada;
 use App\Consultorio;
 use App\Anuncio;
 use Illuminate\Support\Facades\Mail;
@@ -34,4 +35,5 @@ class CorreosController extends Controller
 		Mail::to($destinatario)->send(new AceptarAnuncio($consultorio));
 		return redirect('/');
     }
+
 }

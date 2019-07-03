@@ -20,6 +20,20 @@ use Illuminate\Support\Carbon;
                     <p style="background: #EEE; width: 100%; color: #000; font-size: 35px; margin-bottom: 40px; font-weight: bolder;">{{ $consultorio->Nombre }}</p>
                     <img src="http://127.0.0.1:8000/imagenesConsultorio/{{ $consultorio->Imagen }}" width="450px" height="350px">
                 </div>
+
+
+                <center>
+                @if((Session::exists('consultorioSession')) && (((Session::get('consultorioSession'))[0]->Correo) == $consultorio->Correo))
+                    @if($revisiones->isEmpty())
+                    <div style="width: 80%; background: #DDD; margin-top: 30px; opacity: 0.95;">
+                        <p style="font-size: 20px;">
+                            Su consultorio aún no es visible para otros usuarios.
+                            Para que todos los usuarios puedan acceder se necesita que los doctores de su consultorio configuren sus horarios y los precios de las consultas
+                        </p>
+                    </div>
+                    @endif
+                @endif
+                </center>
             </section>
         </section>
     </section>
@@ -69,7 +83,7 @@ use Illuminate\Support\Carbon;
                 </div>
 
 
-                @if ((Session::exists('consultorioSession')))
+                @if ((Session::exists('consultorioSession')) && (((Session::get('consultorioSession'))[0]->Correo) == $consultorio->Correo))
                 <div align="right" style="margin-bottom: 0px;">
                     <a href=""><button style="align-content: center;" class="btn btn-light"><q class="icon-pencil"></q></button></a>
                 </div>
@@ -227,16 +241,20 @@ use Illuminate\Support\Carbon;
                                             @endforeach
                                         </p>
                                     </p>
-                                    @if ((Session::exists('consultorioSession')))
+                                    @if ((Session::exists('consultorioSession')) && (((Session::get('consultorioSession'))[0]->Correo) == $consultorio->Correo))
                                     <button class="btn btn-primary" style="width: 49%;">Ver citas</button>
                                     <button class="btn btn-danger" style="width: 49%;">Eliminar</button>
                                     @else
                                         @if ((Session::exists('administradorSession'))||(Session::exists('usuarioSession'))||(Session::exists('asistenteSession'))||(Session::exists('doctorSession'))) 
                                         <button class="btn btn-success" style="width: 49%;">Generar cita</button>
-                                        @else
+                                        @elseif(!(Session::exists('consultorioSession')))
                                         <button class="btn btn-success" style="width: 49%;" data-toggle="modal" data-target="#loginModal" data-dismiss="modal">Generar cita</button>
                                         @endif
-                                    <button class="btn btn-primary" style="width: 49%;">Ver más</button>
+                                        @if((Session::exists('consultorioSession')))
+                                        <button class="btn btn-primary" style="width: 100%;">Ver más</button>
+                                        @else
+                                        <button class="btn btn-primary" style="width: 49%;">Ver más</button>
+                                        @endif
                                     @endif
                                 </td>
                             </tr>
@@ -262,7 +280,7 @@ use Illuminate\Support\Carbon;
                             @if ($fotos->isEmpty())
                             <center>
                                 <p>No hay fotos que mostrar</p>
-                                @if ((Session::exists('consultorioSession')))
+                                @if ((Session::exists('consultorioSession')) && (((Session::get('consultorioSession'))[0]->Correo) == $consultorio->Correo))
                                 @foreach($consultorios as $consultorio)
                                 <form action="imagenes" method="post" enctype="multipart/form-data">
                                 @csrf
@@ -283,7 +301,7 @@ use Illuminate\Support\Carbon;
                             </center>
                             @else
 
-                            @if ((Session::exists('consultorioSession')))
+                            @if ((Session::exists('consultorioSession')) && (((Session::get('consultorioSession'))[0]->Correo) == $consultorio->Correo))
                             <center>
                                 <button class="icon-camera btn btn-success" data-toggle="modal" data-target="#ModalAgregarFoto" data-dismiss="modal">+ Agregar</button>
                             </center>
@@ -297,7 +315,7 @@ use Illuminate\Support\Carbon;
                                             <a class="lightbox" href="http://127.0.0.1:8000/galeriaConsultorio/{{ $foto->Imagen }}">
                                             <img src="http://127.0.0.1:8000/galeriaConsultorio/{{ $foto->Imagen }}" alt="Park" class="card-img-top" height="250px" style="float: right;">
                                             </a>
-                                            @if ((Session::exists('consultorioSession')))
+                                            @if ((Session::exists('consultorioSession')) && (((Session::get('consultorioSession'))[0]->Correo) == $consultorio->Correo))
                                             <button class="btn btn-danger" style="float: right; position: absolute;">X Eliminar</button>
                                             @endif
                                         </div>

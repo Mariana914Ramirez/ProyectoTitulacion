@@ -8,8 +8,13 @@ use App\Http\Controllers\DoctorController;
 use App\Doctor;
 use App\DoctorConsultorio;
 use App\Horario;
+use App\Precio;
+use App\Sugerencia;
+use App\Especialidad;
+use App\Mail\EspecialidadAgregada;
 use DB;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Collection as Collection;
 
 class DoctorController extends Controller
@@ -51,8 +56,17 @@ class DoctorController extends Controller
 
 
         $especialidades=DB::table('doctor_especialidad')->select('*')->where('Correo', '=', $usuario)->where('Doctor', '=', $doctor)->distinct()->get();
-        
-    	return view('paginaDoctor', compact('doctores', $doctores, 'especialidades', $especialidades, 'lunesHorarios', $lunesHorarios, 'martesHorarios', $martesHorarios, 'miercolesHorarios', $miercolesHorarios, 'juevesHorarios', $juevesHorarios, 'viernesHorarios', $viernesHorarios, 'sabadoHorarios', $sabadoHorarios, 'domingoHorarios', $domingoHorarios));
+
+
+        $revisiones=DB::table('doctor_consultorio')
+        ->join('doctores', 'doctores.Registro', '=', 'doctor_consultorio.Doctor')
+        ->join('horario', 'horario.DoctorConsultorio', '=', 'doctor_consultorio.Registro')
+        ->join('precios', 'precios.DoctorConsultorio', '=', 'doctor_consultorio.Registro')
+        ->select('doctores.Nombre', 'doctores.Apellidos', 'doctores.FechaNacimiento', 'doctores.Correo', 'doctores.Registro')
+        ->where('doctor_consultorio.Doctor', '=', $doctor)->get();
+ 
+
+    	return view('paginaDoctor', compact('doctores', $doctores, 'especialidades', $especialidades, 'lunesHorarios', $lunesHorarios, 'martesHorarios', $martesHorarios, 'miercolesHorarios', $miercolesHorarios, 'juevesHorarios', $juevesHorarios, 'viernesHorarios', $viernesHorarios, 'sabadoHorarios', $sabadoHorarios, 'domingoHorarios', $domingoHorarios, 'revisiones', $revisiones));
     }
 
     public function create()
@@ -64,6 +78,12 @@ class DoctorController extends Controller
     {
         if ($request->session()->has('doctorSession')) {
             $sesion=$request->session()->get('doctorSession');
+            $usuario=$sesion[0]->Correo;
+            $consultorio=$sesion[0]->Consultorio;
+            $doctor=$sesion[0]->Registro;
+        }
+        else if ($request->session()->has('asistenteSession')) {
+            $sesion=$request->session()->get('asistenteSession');
             $usuario=$sesion[0]->Correo;
             $consultorio=$sesion[0]->Consultorio;
             $doctor=$sesion[0]->Registro;
@@ -208,6 +228,47 @@ class DoctorController extends Controller
                 $horario->save();
             }
         }
+
+
+
+
+
+
+        $revisiones=DB::table('doctor_consultorio')
+        ->join('doctores', 'doctores.Registro', '=', 'doctor_consultorio.Doctor')
+        ->join('horario', 'horario.DoctorConsultorio', '=', 'doctor_consultorio.Registro')
+        ->join('precios', 'precios.DoctorConsultorio', '=', 'doctor_consultorio.Registro')
+        ->select('doctores.Nombre', 'doctores.Apellidos', 'doctores.FechaNacimiento', 'doctores.Correo', 'doctores.Registro')
+        ->where('doctor_consultorio.Doctor', '=', $doctor)->get();
+
+        
+        if(!$revisiones->isEmpty())
+        {
+            $especialidades=Especialidad::select('*')->get();
+
+            foreach ($especialidades as $especialidad) {
+                $sugerencias=DB::table('sugerencias')
+                ->join('usuarios', 'usuarios.Registro', '=', 'sugerencias.Usuario')
+                ->select('usuarios.Nombre', 'usuarios.Apellidos', 'usuarios.Correo', 'sugerencias.Registro')
+                ->where('sugerencias.Sugerencia', '=', $especialidad->Nombre)
+                ->get();
+                foreach ($sugerencias as $sugerencia) {
+                    $nom = DB::table('sugerencias')
+                    ->join('usuarios', 'usuarios.Registro', '=', 'sugerencias.Usuario')
+                    ->select('usuarios.Nombre', 'usuarios.Apellidos', 'usuarios.Correo', 'sugerencias.Registro')
+                    ->where('sugerencias.Registro', '=', $sugerencia->Registro)
+                    ->take(1)->get();
+                    $esp = Especialidad::select('Nombre')->where('Registro', '=', $especialidad->Registro)->take(1)->get();
+
+                    $destinatario=$sugerencia->Correo;
+                    Mail::to($destinatario)->send(new EspecialidadAgregada($nom, $esp));
+
+                    Sugerencia::where('Registro', '=', $sugerencia->Registro)->delete();
+                }
+
+            }
+        }
+
         
 
         return redirect('/');
@@ -235,5 +296,87 @@ class DoctorController extends Controller
     public function horario()
     {
         return view('modificarHorarios');
+    }
+
+
+    public function precios(Request $request)
+    {
+        if ($request->session()->has('doctorSession')) {
+            $sesion=$request->session()->get('doctorSession');
+            $usuario=$sesion[0]->Correo;
+            $consultorio=$sesion[0]->Consultorio;
+            $doctor=$sesion[0]->Registro;
+        }
+        else if ($request->session()->has('asistenteSession')) {
+            $sesion=$request->session()->get('asistenteSession');
+            $usuario=$sesion[0]->Correo;
+            $consultorio=$sesion[0]->Consultorio;
+            $doctor=$sesion[0]->Registro;
+        }
+
+        $doct_cons=DoctorConsultorio::where('Doctor', '=', $doctor)->where('Consultorio', '=', $consultorio)->get();
+        $doct_cons=$doct_cons[0]->Registro;
+
+
+        $conceptoArray=$request->input('Concepto');
+        $holaArray=$request->input('Hola');
+        $precioArray=$request->input('Precio');
+
+        for ($i=0; $i < sizeof($conceptoArray); $i++) { 
+            if($conceptoArray[$i]=='Otro')
+            {
+                $precios = new Precio();
+                $precios->Descripcion=$holaArray[$i];
+                $precios->Precio=$precioArray[$i];
+                $precios->DoctorConsultorio=$doct_cons;
+                $precios->save();
+            }
+            else
+            {
+                $precios = new Precio();
+                $precios->Descripcion=$conceptoArray[$i];
+                $precios->Precio=$precioArray[$i];
+                $precios->DoctorConsultorio=$doct_cons;
+                $precios->save();
+            }
+        }
+        $revisiones=DB::table('doctor_consultorio')
+        ->join('doctores', 'doctores.Registro', '=', 'doctor_consultorio.Doctor')
+        ->join('horario', 'horario.DoctorConsultorio', '=', 'doctor_consultorio.Registro')
+        ->join('precios', 'precios.DoctorConsultorio', '=', 'doctor_consultorio.Registro')
+        ->select('doctores.Nombre', 'doctores.Apellidos', 'doctores.FechaNacimiento', 'doctores.Correo', 'doctores.Registro')
+        ->where('doctor_consultorio.Doctor', '=', $doctor)->get();
+
+        
+        if(!$revisiones->isEmpty())
+        {
+            $especialidades=Especialidad::select('*')->get();
+
+            foreach ($especialidades as $especialidad) {
+                $sugerencias=DB::table('sugerencias')
+                ->join('usuarios', 'usuarios.Registro', '=', 'sugerencias.Usuario')
+                ->select('usuarios.Nombre', 'usuarios.Apellidos', 'usuarios.Correo', 'sugerencias.Registro')
+                ->where('sugerencias.Sugerencia', '=', $especialidad->Nombre)
+                ->get();
+                foreach ($sugerencias as $sugerencia) {
+                    $nom = DB::table('sugerencias')
+                    ->join('usuarios', 'usuarios.Registro', '=', 'sugerencias.Usuario')
+                    ->select('usuarios.Nombre', 'usuarios.Apellidos', 'usuarios.Correo', 'sugerencias.Registro')
+                    ->where('sugerencias.Registro', '=', $sugerencia->Registro)
+                    ->take(1)->get();
+                    $esp = Especialidad::select('Nombre')->where('Registro', '=', $especialidad->Registro)->take(1)->get();
+
+                    $destinatario=$sugerencia->Correo;
+                    Mail::to($destinatario)->send(new EspecialidadAgregada($nom, $esp));
+
+                    Sugerencia::where('Registro', '=', $sugerencia->Registro)->delete();
+                }
+
+            }
+        }
+
+
+        return redirect('/');
+        
     }
 }

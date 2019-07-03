@@ -33,7 +33,7 @@ class ConsultorioController extends Controller
         ->join('horario', 'horario.DoctorConsultorio', '=', 'doctor_consultorio.Registro')
         ->join('precios', 'precios.DoctorConsultorio', '=', 'doctor_consultorio.Registro')
         ->select('consultorios.Imagen', 'consultorios.Nombre', 'consultorios.Ubicacion', 'consultorios.Registro', 'consultorios.Telefono', 'consultorios.Correo', 'consultorios.C_precio', 'consultorios.C_trato', 'consultorios.C_limpieza', 'consultorios.C_puntualidad')
-        ->orderBy('Puntos', 'asc')
+        ->orderBy('Puntos', 'asc')->distinct()
         ->paginate(10);
 
 
@@ -213,7 +213,7 @@ class ConsultorioController extends Controller
     }
     public function getEspecialidad($Registro)
     {
-        $consultorios = DB::table('consultorios_especialidades')->select('Nombre', 'Telefono', 'Ubicacion', 'Imagen', 'C_trato', 'C_puntualidad', 'C_limpieza', 'C_precio', 'Consultorio as Registro')->where('Especialidad', '=', $Registro)->distinct()->paginate(10);
+        $consultorios = DB::table('consultorios_especialidades')->select('Nombre', 'Telefono', 'Ubicacion', 'Imagen', 'C_trato', 'C_puntualidad', 'C_limpieza', 'C_precio', 'Consultorio as Registro', 'Correo')->where('Especialidad', '=', $Registro)->distinct()->paginate(10);
         return view('listadoConsultorios', compact('consultorios', $consultorios));
        
     }
@@ -250,7 +250,16 @@ class ConsultorioController extends Controller
         ->select('usuarios.Nombre', 'usuarios.Imagen', 'usuarios.Apellidos', 'usuarios.Registro', 'usuarios.Correo')->distinct()->get();
 
 
-        return view('paginaConsultorio', compact('consultorios', $consultorios, 'estados', $estados, 'municipios', $municipios, 'doctores', $doctores, 'especialidades', $especialidades, 'especialidades_doctores', $especialidades_doctores, 'fotos', $fotos, 'mandados', $mandados, 'pacientesComentarios', $pacientesComentarios));
+
+        $revisiones = DB::table('doctor_consultorio')
+        ->join('consultorios', 'consultorios.Registro', '=', 'doctor_consultorio.Consultorio')
+        ->join('horario', 'horario.DoctorConsultorio', '=', 'doctor_consultorio.Registro')
+        ->join('precios', 'precios.DoctorConsultorio', '=', 'doctor_consultorio.Registro')
+        ->select('doctor_consultorio.Registro')
+        ->where('consultorios.Correo', '=', $consultorio)->get();
+
+
+        return view('paginaConsultorio', compact('consultorios', $consultorios, 'estados', $estados, 'municipios', $municipios, 'doctores', $doctores, 'especialidades', $especialidades, 'especialidades_doctores', $especialidades_doctores, 'fotos', $fotos, 'mandados', $mandados, 'pacientesComentarios', $pacientesComentarios, 'revisiones', $revisiones));
     }
 
 
@@ -263,8 +272,10 @@ class ConsultorioController extends Controller
         $estados=Estado::select('Nombre')->where('Registro', '=', $consultorios[0]->Estado)->get();
         $municipios=Municipio::select('Nombre')->where('Registro', '=', $consultorios[0]->Municipio)->get();
 
-        $doctores=DB::table('doctores')
-        ->join('doctor_consultorio', 'doctores.Registro', '=', 'doctor_consultorio.Doctor')
+        $doctores=DB::table('doctor_consultorio')
+        ->join('doctores', 'doctores.Registro', '=', 'doctor_consultorio.Doctor')
+        ->join('horario', 'horario.DoctorConsultorio', '=', 'doctor_consultorio.Registro')
+        ->join('precios', 'precios.DoctorConsultorio', '=', 'doctor_consultorio.Registro')
         ->select('doctores.Nombre', 'doctores.Apellidos', 'doctores.FechaNacimiento', 'doctores.Correo', 'doctores.Registro')
         ->where('doctor_consultorio.Consultorio', '=', $consultorios[0]->Registro)->get();
 

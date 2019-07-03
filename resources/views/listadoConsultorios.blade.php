@@ -25,7 +25,13 @@
 								<p><b>Teléfono:</b> {{ $consultorio->Telefono }}</p>
 								<p style="max-width: 90%;"><b>Ubicación:</b> {{ $consultorio->Ubicacion }}</p>
 							</td>
-							<td><a href="http://127.0.0.1:8000/visitarConsultorio/{{ $consultorio->Registro }}" class="btn btn-info" style="height: 100%; width: 90%; margin-top: 40%;">Visitar Consultorio</a></td>
+							<td>
+								@if((Session::exists('consultorioSession')) && (((Session::get('consultorioSession'))[0]->Correo) == $consultorio->Correo))
+									<a href="http://127.0.0.1:8000/cuentaConsultorio" class="btn btn-info" style="height: 100%; width: 90%; margin-top: 40%;">Visitar Consultorio</a>
+								@else
+									<a href="http://127.0.0.1:8000/visitarConsultorio/{{ $consultorio->Registro }}" class="btn btn-info" style="height: 100%; width: 90%; margin-top: 40%;">Visitar Consultorio</a>
+								@endif
+							</td>
 						</tr>
 					@endforeach
 				</tbody>

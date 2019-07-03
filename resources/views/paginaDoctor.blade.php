@@ -13,41 +13,66 @@ use Illuminate\Support\Carbon;
 @section ('contenido')
 @foreach($doctores as $doctor)
     <section class="FotoPrincipalConsultorio">
-        <section class="FondoParallax" >
-            <section class="parallax" style="background-image: url(img/atardecer.jpg); height: 400px; margin-bottom: 0px;">
-                <div align="center" style="margin-top: 75px;">
-                    <p style="background: #333; width: 80%; color: #FFF; font-size: 35px;">{{ $doctor->Nombre }} {{ $doctor->Apellidos }}</p>
+        <section class="FondoParallax" style="background: #BBB;">
+            <section class="parallax" style="background-image: url(img/fondo7.png); height: 400px; margin-bottom: 0px;">
+                <div align="center" style="margin-top: 0px;">
+                    <p style="background: #DDD; width: 100%; color: #333; font-size: 35px;">{{ $doctor->Consultorio }}</p>
+                    <p style="background: #5DBA4E; width: 100%; color: #333; font-size: 35px;">{{ $doctor->Nombre }} {{ $doctor->Apellidos }}</p>
 
-                    @foreach($especialidades as $especialidad)
-                        <p style="background: #333; width: 50%; color: #FFF; font-size: 30px;">{{ $especialidad->Nombre }}</p>
-                    @endforeach
                     <img src="/avatar/{{ $doctor->Imagen }}">
                 </div>
+
+                <center>
+                    @if((Session::exists('doctorSession')))
+                        @if($revisiones->isEmpty())
+                        <div style="width: 80%; background: #DDD; margin-top: 30px; opacity: 0.95;">
+                            <p style="font-size: 20px;">
+                                Su página aún no es visible para otros usuarios.
+                                Para que todos los usuarios puedan acceder y generar sus citas con usted, se necesita que cumpla lo siguiente: <br>
+                                <ul style="font-size: 18px;">
+                                    <li>Haber escrito los horarios de atención a cliente. Si usted aún no lo ha realizado puede hacerlo <a href="http://127.0.0.1:8000/modificarHorarios">Aquí</a></li>
+                                    <li>Haber agregado los precios de sus consultas. Si usted aún no lo ha realizado puede hacerlo <a href="#" data-toggle="modal" data-target="#preciosModal">Aquí</a></li>
+                                </ul>
+                                
+                            </p>      
+                        </div>
+                        @endif
+                    @endif
+                </center>
             </section>
         </section>
     </section>
 
     <center>
-        <section class="Bienvenida" style="height: auto; padding: 20px;">
-            <h1>{{ $doctor->Consultorio }}</h1>
-            <div class="card text-white mb-3" style="max-width: 70%; margin-top: 30px; align-content: center; padding: 20px; background: #444;">
-                  <div class="card-header" style="font-size: 25px;">Información del doctor</div>
-                  <div class="card-body" style="font-size: 20px;">
-                        <p class="card-text">
-                            <p><b>Nombre:</b> {{ $doctor->Nombre }} {{ $doctor->Apellidos }}</p>
-                            <p><b>Edad:</b> {{ Carbon::parse($doctores[0]->FechaNacimiento)->age }} años</p>
-                            <p><b>Correo de contacto:</b> {{ $doctor->Correo }}</p>
-                            <p><b>Especialidades:</b><br>
-                            @foreach($especialidades as $especialidad)    
-                                {{ $especialidad->Nombre }}<br>
-                            @endforeach
-                            </p>
+        <section style="height: auto; padding: 0px; margin-top: 0px; padding-top: 0px; margin-bottom: 0px; padding-bottom: 0px; background: #FFF;">
+            <section style="background-image: url(img/fondo8.png); margin-bottom: 0px; padding-top: 40px; opacity: 0.75; width: 100%; padding-bottom: 40px;">
+
+                <div style="background: #2E429E; opacity: 0.8; width: 70%; padding-top: 40px; margin-bottom: 40px; padding-bottom: 40px; font-size: 20px; color: #FFF;">
+                    <h1 style="padding-top: 40px;"><b>{{ $doctor->Consultorio }}</b></h1>
+                    <p>
+                        <p><b>Nombre:</b> {{ $doctor->Nombre }} {{ $doctor->Apellidos }}</p>
+                        <p><b>Edad:</b> {{ Carbon::parse($doctores[0]->FechaNacimiento)->age }} años</p>
+                        <p><b>Correo de contacto:</b> {{ $doctor->Correo }}</p>
+                        <p><b>Especialidades:</b><br>
+                        @foreach($especialidades as $especialidad)    
+                            {{ $especialidad->Nombre }}<br>
+                        @endforeach
                         </p>
-                  </div>
-            </div>
+                    </p>
+
+                    @if((Session::exists('doctorSession')))
+                    <div style="padding: 5px;">
+                    <button style="float: right; background: #1A9E25; color: #FFF; border: none; border-radius: 15px; font-size: 20px; padding: 5px;"><b class="icon-pencil"></b></button></div>
+                    @endif
+                </div>
+            </section>
+
+
+
+            
         </section>
     
-    <section style="height: auto; padding: 20px; width: 100%; background: #A7D8E8;">
+    <section style="height: auto; padding: 20px; width: 100%; background: #DDD;">
         <div class="container">
             @if ((Session::exists('asistenteSession'))||(Session::exists('doctorSession'))) 
                 @if (!$lunesHorarios->isEmpty())
@@ -209,9 +234,6 @@ use Illuminate\Support\Carbon;
 
 
 
-
-
-
     <div class="modal fade" role="dialog" id="ModalVisualizarHorarios">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -263,5 +285,6 @@ use Illuminate\Support\Carbon;
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.8.1/baguetteBox.min.js"></script>
+
 
 @stop

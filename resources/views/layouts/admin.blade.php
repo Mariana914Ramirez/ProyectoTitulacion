@@ -93,6 +93,7 @@
                     <a class="dropdown-item" href="#">Modificar información</a>
                     <a class="dropdown-item" href="http://127.0.0.1:8000/modificarHorarios">Modificar horarios</a>
                     <a class="dropdown-item" href="#">Agenda</a>
+                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#preciosModal">Modificar precios</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#">Eliminar cuenta</a>
                   </div>
@@ -357,6 +358,59 @@
 
 
 
+    <div class="modal fade" role="dialog" id="preciosModal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Conceptos de citas</h3>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                   <div style="margin-bottom: 40px; margin-top: 40px; align-content: center;">
+                    <p style="margin-left: 10%; margin-right: 10%;">
+                      Aquí puede agregar los conceptos que te gustaría darles un precio
+                    </p>
+
+                    <form action="http://127.0.0.1:8000/precios" method="post" enctype="multipart/form-data">
+                        @csrf
+                        <center>
+                        <table class="table table-dark" style="width: 90%;" id="dynamic_field_precios">
+                            <thead>
+                                <th style="width: 70%;">Concepto</th>
+                                <th style="width: 20%;">Precio</th>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <div>
+                                        <td>
+                                            <select name="Concepto[]" onchange='checkvalue(this.value, 0)' class="form-control" id="Concepto[]">
+                                                <option>Concepto</option>
+                                                <option>Consulta general</option>
+                                                <option>Estudios</option>
+                                                <option>Otro</option>
+                                            </select>
+                                            <input type="text" name="Hola[]" placeholder="Concepto" style="display: none;" id="Hola[0]" class="form-control">
+                                        </td>
+                                        
+                                        <td><input type="text" name="Precio[]" placeholder="Precio" class="form-control" required pattern="[0-9]*" title="Sólo se aceptan números" id="Precio[]"></td>
+                                        <td><button type="button" class="btn btn-success form-control" name="addAgregar" id="addAgregar">+</button></td>
+                                    </div>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="modal-final" style="text-align: center; margin-bottom: 10px;">
+                            <button type="submit" class="btn btn-success" style="width: 70%;">Enviar</button>
+                        </div>
+                        </center>
+                    </form>
+                        
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
         @yield('modal')
 
 
@@ -418,6 +472,40 @@
                 orientation: "button"
             });
         });
+    </script>
+
+
+
+
+    <script>
+        function checkvalue(val, i)
+        {
+            if(val==="Otro")
+               document.getElementById('Hola['+i+']').style.display='block';
+            else
+               document.getElementById('Hola['+i+']').style.display='none'; 
+        }
+    </script>
+
+
+
+
+    <script>  
+     $(document).ready(function(){  
+
+
+            var i=1; 
+            var j=1;
+         $('#addAgregar').click(function(){  
+               $('#dynamic_field_precios').append('<tr id="row'+i+'"><div><td><select name="Concepto[]" id="Concepto['+i+']" onchange="checkvalue(this.value, '+i+')" class="form-control"><option>Concepto</option> <option>Consulta general</option><option>Estudios</option><option>Otro</option></select><input type="text" name="Hola[]" placeholder="Concepto" style="display: none;" id="Hola['+i+']" class="form-control"> </td> <td><input type="text" name="Precio[]" placeholder="Precio" id="Precio['+i+']" class="form-control"></td><td><button type="button" name="remove" id="'+i+'" class="btn btn-danger btn_remove form-control">X</button></td></div></tr>');  
+               i++;
+          });  
+
+            $(document).on('click', '.btn_remove', function(){  
+               var button_id = $(this).attr("id");   
+               $('#row'+button_id+'').remove();  
+            });  
+        });  
     </script>
 
     
