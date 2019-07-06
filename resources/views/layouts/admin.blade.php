@@ -5,9 +5,20 @@
     <title>Salud a un click</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <link rel="stylesheet" type="text/css" href="http://127.0.0.1:8000/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="http://127.0.0.1:8000/css/estilos.css">
     <link rel="stylesheet" type="text/css" href="http://127.0.0.1:8000/css/fontello.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/highcharts-more.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    
+    <script src="https://code.highcharts.com/modules/data.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+
 
 
     @yield('librerias')
@@ -507,6 +518,14 @@
             });  
         });  
     </script>
+
+
+
+
+
+
+
+    
 
     
         @yield('script')

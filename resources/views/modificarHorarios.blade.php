@@ -4,7 +4,7 @@
  <center>
  	<form action="doctor" method="post" enctype="multipart/form-data">
      @csrf
-    <section class="informacionCons" style="background: #CFA986; height: auto; padding: 20px;">
+    <section class="informacionCons" style="background: #FFF; height: auto; padding: 20px;">
 		<table style=" width: 90%; margin-top: 100px;" class="table table-bordered table-dark formular" id="dynamic_field">
 	        <thead style="font-size: 30px; text-align: center;">
 	            <th colspan="7">Lunes</th>

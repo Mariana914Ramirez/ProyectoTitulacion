@@ -2,17 +2,17 @@
 @extends ('Formularios')
 
 @section ('contenido')
-<section id="content" class="Bienvenida">
+<section id="content" class="Bienvenida" style="background: #EEE;">
 	<center>
 		<div style="width: 80%;">
-			<table class="table table-hover table-striped" style="width: 100%;">
+			<table class="table table-hover table-striped" style="width: 100%; background: #EEE;">
 				<thead style="font-size: 40px; text-align: center;">
 					<th>Especialidades</th>
 				</thead>
 				<tbody style="font-size: 30px; text-align: center;">
 					@foreach($especialidades as $especialidad)
 						<tr>
-							<td><a href="especialidad/{{ $especialidad->Registro }}">{{ $especialidad->Nombre }}</a></td>
+							<td><a href="especialidad/{{ $especialidad->Registro }}" style="color: #000;">{{ $especialidad->Nombre }}</a></td>
 						</tr>
 					@endforeach
 				</tbody>

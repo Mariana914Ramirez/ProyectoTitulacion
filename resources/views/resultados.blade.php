@@ -5,10 +5,10 @@ use Illuminate\Support\Carbon;
 
 @section ('contenido')
 
-        <section id="content" class="Bienvenida">
+        <section id="content" class="Bienvenida" style="background: #EEE;">
             <center>
-                <div style="width: 80%;">
-                    <table class="table table-dark" style="width: 100%;">
+                <div style="width: 90%;">
+                    <table class="table table-striped" style="width: 100%; background: #EEE;">
                         <tbody style="font-size: 25px;">
                                 @foreach($consultorios as $consultorio)
                                     <tr>
@@ -24,7 +24,7 @@ use Illuminate\Support\Carbon;
                                             <p><b>Teléfono:</b> {{ $consultorio->Telefono }}</p>
                                             <p style="max-width: 90%;"><b>Ubicación:</b> {{ $consultorio->Ubicacion }}</p>
                                         </td>
-                                        <td><a href="" class="btn btn-info" style="height: 100%; width: 90%; margin-top: 40%;">Visitar Consultorio</a></td>
+                                        <td><a href="" class="btn btn-success" style="height: 100%; width: 90%; margin-top: 40%; align-content: center;">Visitar Consultorio</a></td>
                                     </tr>
                                 @endforeach
 
@@ -41,7 +41,7 @@ use Illuminate\Support\Carbon;
                                             <p><b>Correo:</b> {{ $doctor->Correo }}</p>
                                             <p><b>Edad:</b> {{ Carbon::parse($doctor->FechaNacimiento)->age }} años</p>
                                         </td>
-                                        <td><a href="" style="height: 100%; width: 90%; margin-top: 40%; padding: 20px;">Elegir</a></td>
+                                        <td><a href="" class="btn btn-success" style="height: 100%; width: 90%; margin-top: 40%; padding: 20px;">Elegir</a></td>
                                     </tr>
                                 @endforeach
                         </tbody>

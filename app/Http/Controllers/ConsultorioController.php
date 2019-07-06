@@ -14,6 +14,7 @@ use App\Municipio;
 use App\Imagen;
 use App\Sugerencia;
 use App\ComentarioConsultorio;
+use App\Calificacion;
 use App\Mail\EspecialidadAgregada;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
@@ -23,6 +24,7 @@ use Input;
 use DB;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection as Collection;
+setlocale(LC_ALL, 'es_ES');
 
 class ConsultorioController extends Controller
 {
@@ -33,31 +35,9 @@ class ConsultorioController extends Controller
         ->join('horario', 'horario.DoctorConsultorio', '=', 'doctor_consultorio.Registro')
         ->join('precios', 'precios.DoctorConsultorio', '=', 'doctor_consultorio.Registro')
         ->select('consultorios.Imagen', 'consultorios.Nombre', 'consultorios.Ubicacion', 'consultorios.Registro', 'consultorios.Telefono', 'consultorios.Correo', 'consultorios.C_precio', 'consultorios.C_trato', 'consultorios.C_limpieza', 'consultorios.C_puntualidad')
-        ->orderBy('Puntos', 'asc')->distinct()
-        ->paginate(10);
-
-
-        $especialidades = DB::table('consultorios_especialidades')->select('*')->distinct()->get();
-        foreach ($consultorios as $consultorio) {
-            foreach ($especialidades as $especialidad) {
-                if($especialidad->Consultorio == $consultorio->Registro && Estudio::where('Especialidad', '=', $especialidad->Especialidad)->exists())
-                {
-                    Especialidad::where('Registro', '=', $especialidad->Especialidad)->update(array('Revision'=>1,));
-                }
-                else
-                {
-                    Especialidad::where('Registro', '=', $especialidad->Especialidad)->update(array('Revision'=>0,));
-                }
-            }
-        }
-
-        $especialidades = Especialidad::select('*')->get();
-        if($consultorios->isEmpty())
-        {
-            foreach ($especialidades as $especialidad) {
-                Especialidad::where('Registro', '=', $especialidad->Registro)->update(array('Revision'=>0,));
-            }
-        }
+        ->distinct()->orderBy('Puntos', 'asc')
+        ->get();
+ 
         return view('listadoConsultorios')->with('consultorios', $consultorios);
 
     }
@@ -117,6 +97,11 @@ class ConsultorioController extends Controller
         $file->move(public_path().'/imagenesConsultorio/', $name);
         $consultorio->Imagen=$name;
         $consultorio->Revisado=0;
+
+        $parte1 = Carbon::parse(Carbon::now())->formatLocalized('%B');
+        $parte2 = Carbon::parse(Carbon::now())->year;
+        $parte3 = $parte1 .' '. $parte2;
+        $consultorio->mes = $parte3;
         $consultorio->save();
 
 
@@ -226,7 +211,7 @@ class ConsultorioController extends Controller
             $consultorio=$sesion[0]->Correo;
         }
 
-        $consultorios=Consultorio::select('Imagen', 'Registro', 'Nombre', 'Telefono', 'Correo', 'Descripcion', 'Ubicacion', 'C_precio', 'C_limpieza', 'C_puntualidad', 'C_trato', 'Mes_uno', 'Mes_dos', 'Mes_tres', 'Mes_cuatro', 'Mes_cinco', 'Mes_seis', 'Estado', 'Municipio')->where('Correo', '=', $consultorio)->get();
+        $consultorios=Consultorio::select('Imagen', 'Registro', 'Nombre', 'Telefono', 'Correo', 'Descripcion', 'Ubicacion', 'C_precio', 'C_limpieza', 'C_puntualidad', 'Estado', 'Municipio')->where('Correo', '=', $consultorio)->get();
 
         $estados=Estado::select('Nombre')->where('Registro', '=', $consultorios[0]->Estado)->get();
         $municipios=Municipio::select('Nombre')->where('Registro', '=', $consultorios[0]->Municipio)->get();
@@ -267,7 +252,7 @@ class ConsultorioController extends Controller
 
     public function PacientesVisitantes($Registro)
     {
-        $consultorios=Consultorio::select('Imagen', 'Registro', 'Nombre', 'Telefono', 'Correo', 'Descripcion', 'Ubicacion', 'C_precio', 'C_limpieza', 'C_puntualidad', 'C_trato', 'Mes_uno', 'Mes_dos', 'Mes_tres', 'Mes_cuatro', 'Mes_cinco', 'Mes_seis', 'Estado', 'Municipio')->where('Registro', '=', $Registro)->get();
+        $consultorios=Consultorio::select('Imagen', 'Registro', 'Nombre', 'Telefono', 'Correo', 'Descripcion', 'Ubicacion', 'C_precio', 'C_limpieza', 'C_puntualidad', 'C_trato', 'Estado', 'Municipio')->where('Registro', '=', $Registro)->get();
 
         $estados=Estado::select('Nombre')->where('Registro', '=', $consultorios[0]->Estado)->get();
         $municipios=Municipio::select('Nombre')->where('Registro', '=', $consultorios[0]->Municipio)->get();
@@ -350,6 +335,24 @@ class ConsultorioController extends Controller
 
             return redirect("visitarConsultorio/$RegistroConsultorio");
         }
+        
+    }
+
+
+
+
+    public function estadisticas($Registro)
+    {
+        $estadisticas = Consultorio::select('C_limpieza', 'C_trato', 'C_precio', 'C_puntualidad', 'mes')->where('Registro', '=', $Registro)->take(1)->get();
+
+        $primero = Calificacion::select('C_limpieza', 'C_trato', 'C_precio', 'C_puntualidad', 'promedio', 'mes')->where('Consultorio', '=', $Registro)->where('num_mes', '=', 1)->take(1)->get();
+        $segundo = Calificacion::select('C_limpieza', 'C_trato', 'C_precio', 'C_puntualidad', 'promedio', 'mes')->where('Consultorio', '=', $Registro)->where('num_mes', '=', 2)->take(1)->get();
+        $tercero = Calificacion::select('C_limpieza', 'C_trato', 'C_precio', 'C_puntualidad', 'promedio', 'mes')->where('Consultorio', '=', $Registro)->where('num_mes', '=', 3)->take(1)->get();
+        $cuarto = Calificacion::select('C_limpieza', 'C_trato', 'C_precio', 'C_puntualidad', 'promedio', 'mes')->where('Consultorio', '=', $Registro)->where('num_mes', '=', 4)->take(1)->get();
+        $quinto = Calificacion::select('C_limpieza', 'C_trato', 'C_precio', 'C_puntualidad', 'promedio', 'mes')->where('Consultorio', '=', $Registro)->where('num_mes', '=', 5)->take(1)->get();
+        $sexto = Calificacion::select('C_limpieza', 'C_trato', 'C_precio', 'C_puntualidad', 'promedio', 'mes')->where('Consultorio', '=', $Registro)->where('num_mes', '=', 6)->take(1)->get();
+
+        return view('graficas', compact('estadisticas', $estadisticas, 'primero', $primero, 'segundo', $segundo, 'tercero', $tercero, 'cuarto', $cuarto, 'quinto', $quinto, 'sexto', $sexto));
         
     }
 

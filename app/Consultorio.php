@@ -18,20 +18,15 @@ class Consultorio extends Model
     	'Password',
         'Ubicacion',
         'Descripcion',
-    	'Puntos',
+        'Puntos',
     	'C_precio',
     	'C_limpieza',
     	'C_puntualidad',
     	'C_trato',
-    	'Mes_uno',
-    	'Mes_dos',
-    	'Mes_tres',
-    	'Mes_cuatro',
-    	'Mes_cinco',
-    	'Mes_seis',
     	'CorreoRecuperacion',
     	'Imagen',
-    	'Revisado'
+    	'Revisado',
+        'mes'
     ];
 
     public $timestamps=false;

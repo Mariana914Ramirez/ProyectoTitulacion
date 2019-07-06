@@ -4,11 +4,11 @@ use Illuminate\Support\Carbon;
 ?>
 
 @section ('contenido')
-<section id="content" class="Bienvenida">
+<section id="content" class="Bienvenida" style="background: #EEE;">
 	<center>
-		<div style="width: 80%;">
-			<h1><b>Elegir Doctor...</b></h1>
-			<table class="table table-dark" style="width: 100%;">
+		<div style="width: 90%;">
+			<h1><b>Elegir doctor...</b></h1>
+			<table class="table table-striped" style="width: 100%; background: #EEE;">
 				<tbody style="font-size: 25px;">
 					@foreach($correos as $correo)
 						<tr>
@@ -23,7 +23,7 @@ use Illuminate\Support\Carbon;
 								<p><b>Correo:</b> {{ $correo->Correo }}</p>
 								<p><b>Edad:</b> {{ Carbon::parse($correo->FechaNacimiento)->age }} años</p>
 							</td>
-							<td><a href="http://127.0.0.1:8000/accedeAsis/{{$correo->CorreoAsistente}}/{{$correo->Registro}}" class="btn btn-info" style="height: 100%; width: 90%; margin-top: 40%; padding: 20px;">Elegir</a></td>
+							<td><a href="http://127.0.0.1:8000/accedeAsis/{{$correo->CorreoAsistente}}/{{$correo->Registro}}" class="btn btn-success" style="height: 100%; width: 90%; margin-top: 40%; padding: 20px;">Elegir</a></td>
 						</tr>
 					@endforeach
 				</tbody>

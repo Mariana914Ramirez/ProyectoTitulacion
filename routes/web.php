@@ -25,6 +25,8 @@ Route::any('visitarConsultorio/{id}', 'ConsultorioController@PacientesVisitantes
 
 Route::any('comentarConsultorios/{id}', 'ConsultorioController@comentarConsultorios')->name('comentarConsultorios');
 
+Route::any('estadisticas/{id}', 'ConsultorioController@estadisticas')->name('estadisticas');
+
 
 
 

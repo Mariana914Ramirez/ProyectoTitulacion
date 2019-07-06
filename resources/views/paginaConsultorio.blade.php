@@ -91,22 +91,23 @@ use Illuminate\Support\Carbon;
             </section>
         </section>
 
-
+       @foreach($consultorios as $consultorio) 
         <section class="FondoParallax">
             <section class="parallax" style="background-image: url(http://127.0.0.1:8000/img/fondo7.png); margin-bottom: 0px;">
                 <div class="row align-items-center">
                     @if ((Session::exists('consultorioSession')))
                     <button class="btn btn-info Botones col-md-2 offset-md-2  col-sm-12 col-sm-12" data-toggle="modal" data-target="#ModalCitas"><p class="icon-user-md" style="font-size: 50px;"></p><p style="font-weight: bolder;">Doctores<p></button>
-                    <button class="btn btn-info Botones col-md-2 offset-md-1 col-sm-12 col-sm-12"><p class="icon-chart-bar-1" style="font-size: 50px;"></p><p style="font-weight: bolder;">Estadísticas<p></button>
                     @else
                     <button class="btn btn-info Botones col-md-2 offset-md-2  col-sm-12 col-sm-12" data-toggle="modal" data-target="#ModalCitas"><p class="icon-user-md" style="font-size: 50px;"></p><p style="font-weight: bolder;">Citas<p></button>
-                    <button class="btn btn-info Botones col-md-2 offset-md-1 col-sm-12 col-sm-12"><p class="icon-users" style="font-size: 50px;"></p><p style="font-weight: bolder;">Comentarios<p></button>
                     @endif
+                    <button class="btn btn-info Botones col-md-2 offset-md-1 col-sm-12 col-sm-12"><a href="http://127.0.0.1:8000/estadisticas/{{ $consultorio->Registro }}" style="color: #FFF;"><p class="icon-chart-bar-1" style="font-size: 50px;"></p><p style="font-weight: bolder;">Estadísticas<p></a></button>
+
                     <button class="btn btn-info Botones col-md-2 offset-md-1 col-sm-12 col-sm-12" data-toggle="modal" data-target="#ModalGaleria"><p class="icon-camera" style="font-size: 50px;"></p><p style="font-weight: bolder;">Galería<p></button>
                 </div>
 
             </section>
         </section>
+        @endforeach
 
         <div style="background: #A7D8E8; padding-bottom: 30px;">
             <center>

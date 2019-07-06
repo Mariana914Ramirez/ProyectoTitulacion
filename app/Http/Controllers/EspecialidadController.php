@@ -21,8 +21,7 @@ class EspecialidadController extends Controller
         ->join('horario', 'horario.DoctorConsultorio', '=', 'doctor_consultorio.Registro')
         ->join('precios', 'precios.DoctorConsultorio', '=', 'doctor_consultorio.Registro')
         ->select('consultorios.Registro')
-        ->orderBy('Puntos', 'asc')
-        ->paginate(10);
+        ->get();
 
 
         $especialidades = Especialidad::select('*')->get();
@@ -32,25 +31,16 @@ class EspecialidadController extends Controller
 
 
         foreach ($consultorios as $consultorio) {
-            $especialidades = DB::table('consultorios_especialidades')->select('*')->distinct()->get();
+
+            $especialidades = DB::table('consultorios_especialidades')->select('*')->where('Consultorio', '=', $consultorio->Registro)->distinct()->get();
             foreach ($especialidades as $especialidad) {
-                $doctores = DB::table('doctor_consultorio')
-                ->join('doctores', 'doctores.Registro', '=', 'doctor_consultorio.Doctor')
-                ->join('horario', 'horario.DoctorConsultorio', '=', 'doctor_consultorio.Registro')
-                ->join('precios', 'precios.DoctorConsultorio', '=', 'doctor_consultorio.Registro')
-                ->select('doctores.Registro')
-                ->get();
-                foreach ($doctores as $doctor) {
-                    if((DB::table('doctor_especialidad')->where('Doctor', '=', $doctor->Registro)->where('Registro', '=', $especialidad->Especialidad)->exists()) && $especialidad->Consultorio == $consultorio->Registro && Estudio::where('Especialidad', '=', $especialidad->Especialidad)->exists())
-                    {
-                        Especialidad::where('Registro', '=', $especialidad->Especialidad)->update(array('Revision'=>1,));
-                    }
-                }
+                Especialidad::where('Registro', '=', $especialidad->Especialidad)->update(array('Revision'=>1,));
             }
+
         }
 
         
-        $especialidades = Especialidad::select('*')->where('Revision', '=', 1)->orderBy('Registro', 'asc')->paginate(10);
+        $especialidades = Especialidad::select('*')->where('Revision', '=', 1)->orderBy('Nombre', 'asc')->paginate(10);
         return view('listadoEspecialidades')->with('especialidades', $especialidades);
 
     }
