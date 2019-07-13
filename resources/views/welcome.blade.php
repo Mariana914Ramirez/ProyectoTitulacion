@@ -13,15 +13,7 @@
               
 
               <center>
-                @if($errors->any())
-                    <div class="alert alert-danger" style="width: 80%; padding-bottom: 0px; margin-bottom: 0px;">
-                        <ul>
-                            @foreach($errors->all() as $error)
-                                <li style="display: unset; font-size: 25px;">{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
+                
 
 
 

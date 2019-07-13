@@ -58,7 +58,7 @@ class UsuariosController extends Controller
         $usuario->FechaNacimiento=$fecha;
         $usuario->Imagen=$imagen;
         $usuario->save();
-    	return redirect('/');
+    	return redirect('/')->with(['mensaje' => 'Registro agregado']);
     }
 
     public function show()

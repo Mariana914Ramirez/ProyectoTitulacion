@@ -8,6 +8,7 @@ use Illuminate\Support\Carbon;
     <link rel="stylesheet" type="text/css" href=" https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.8.1/baguetteBox.min.css">
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker3.css" rel="stylesheet" id="bootstrap-css">
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 @stop
 
@@ -246,15 +247,17 @@ use Illuminate\Support\Carbon;
                                     <button class="btn btn-primary" style="width: 49%;">Ver citas</button>
                                     <button class="btn btn-danger" style="width: 49%;">Eliminar</button>
                                     @else
-                                        @if ((Session::exists('administradorSession'))||(Session::exists('usuarioSession'))||(Session::exists('asistenteSession'))||(Session::exists('doctorSession'))) 
-                                        <button class="btn btn-success" style="width: 49%;">Generar cita</button>
-                                        @elseif(!(Session::exists('consultorioSession')))
+                                        @if ((Session::exists('administradorSession'))||(Session::exists('usuarioSession'))||((Session::exists('asistenteSession') && (((Session::get('asistenteSession'))[0]->Registro) != $doctor->Registro)))||((Session::exists('doctorSession')) && (((Session::get('doctorSession'))[0]->Registro) != $doctor->Registro))) 
+                                        <a><button class="btn btn-success" style="width: 49%;">Generar cita</button></a>
+                                        @elseif((!(Session::exists('consultorioSession'))) && (!(Session::exists('doctorSession'))) && (!(Session::exists('asistenteSession'))))
                                         <button class="btn btn-success" style="width: 49%;" data-toggle="modal" data-target="#loginModal" data-dismiss="modal">Generar cita</button>
                                         @endif
                                         @if((Session::exists('consultorioSession')))
-                                        <button class="btn btn-primary" style="width: 100%;">Ver más</button>
+                                        <a href="http://127.0.0.1:8000/visitantes/{{ $doctor->Registro }}/{{ $consultorio->Registro }}"><button class="btn btn-primary" style="width: 100%;">Ver más</button></a>
+                                        @elseif(((Session::exists('doctorSession')) && (((Session::get('doctorSession'))[0]->Registro) == $doctor->Registro)) || ((Session::exists('asistenteSession')) && (((Session::get('asistenteSession'))[0]->Registro) == $doctor->Registro)))
+                                        <a href="http://127.0.0.1:8000/doctor"><button class="btn btn-primary" style="width: 100%;">Ir a cuenta</button></a>
                                         @else
-                                        <button class="btn btn-primary" style="width: 49%;">Ver más</button>
+                                        <a href="http://127.0.0.1:8000/visitantes/{{ $doctor->Registro }}/{{ $consultorio->Registro }}"><button class="btn btn-primary" style="width: 49%;">Ver más</button></a>
                                         @endif
                                     @endif
                                 </td>

@@ -50,6 +50,14 @@ Route::any('anuncios', 'imagenController@anuncios')->name('anuncios');
 Route::resource('doctor', 'DoctorController');
 Route::get('modificarHorarios', 'DoctorController@horario')->name('horario');
 Route::any('precios', 'DoctorController@precios')->name('precios');
+Route::any('visitantes/{doctor}/{consultorio}', 'DoctorController@visitantes')->name('visitantes');
+Route::any('citas/{doctor}/{consultorio}', 'DoctorController@citas')->name('citas');
+Route::any('generarCitas', 'DoctorController@generarCitas')->name('generarCitas');
+
+
+Route::any('guardar-cita/{horario}/{doctorConsultorio}/{fecha}', 'CitaController@guardarCita')->name('guardarCita');
+Route::get('registro-cita/{horario}/{doctorConsultorio}/{fecha}', 'CitaController@registroCita')->name('registroCita');
+Route::any('ver-agenda', 'CitaController@index')->name('index');
 
 
 

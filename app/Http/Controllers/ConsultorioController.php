@@ -262,7 +262,7 @@ class ConsultorioController extends Controller
         ->join('horario', 'horario.DoctorConsultorio', '=', 'doctor_consultorio.Registro')
         ->join('precios', 'precios.DoctorConsultorio', '=', 'doctor_consultorio.Registro')
         ->select('doctores.Nombre', 'doctores.Apellidos', 'doctores.FechaNacimiento', 'doctores.Correo', 'doctores.Registro')
-        ->where('doctor_consultorio.Consultorio', '=', $consultorios[0]->Registro)->get();
+        ->where('doctor_consultorio.Consultorio', '=', $consultorios[0]->Registro)->distinct()->get();
 
         $especialidades_doctores=DB::table('doctor_especialidad')
         ->select('*')->get();

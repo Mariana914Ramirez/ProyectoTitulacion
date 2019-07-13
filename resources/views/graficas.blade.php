@@ -39,7 +39,7 @@ setlocale(LC_ALL, 'es_ES');
 		<img src="http://127.0.0.1:8000/img/separador.png">
 
 
-		@if(!$sexto->isEmpty())
+		@if(!$primero->isEmpty())
 		<section id="MesesYEstadisticas">
 			<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto;"></div>
 
@@ -71,7 +71,8 @@ setlocale(LC_ALL, 'es_ES');
 			            <td>{{ $uno->C_trato }}</td>
 			            @endforeach
 			        </tr>
-			        @elseif(!$segundo->isEmpty())
+			        @endif
+			        @if(!$segundo->isEmpty())
 			        <tr align="center">
 			            @foreach($segundo as $dos)
 			            <th>{{ $dos->mes }}</th>
@@ -81,7 +82,8 @@ setlocale(LC_ALL, 'es_ES');
 			            <td>{{ $dos->C_trato }}</td>
 			            @endforeach
 			        </tr>
-			        @elseif(!$tercero->isEmpty())
+			        @endif
+			        @if(!$tercero->isEmpty())
 			        <tr align="center">
 			            @foreach($tercero as $tres)
 			            <th>{{ $tres->mes }}</th>
@@ -91,7 +93,8 @@ setlocale(LC_ALL, 'es_ES');
 			            <td>{{ $tres->C_trato }}</td>
 			            @endforeach
 			        </tr>
-			        @elseif(!$cuarto->isEmpty())
+			        @endif
+			        @if(!$cuarto->isEmpty())
 			        <tr align="center">
 			            @foreach($cuarto as $cuatro)
 			            <th>{{ $cuatro->mes }}</th>
@@ -101,7 +104,8 @@ setlocale(LC_ALL, 'es_ES');
 			            <td>{{ $cuatro->C_trato }}</td>
 			            @endforeach
 			        </tr>
-			        @elseif(!$quinto->isEmpty())
+			        @endif
+			        @if(!$quinto->isEmpty())
 			        <tr align="center">
 			            @foreach($quinto as $cinco)
 			            <th>{{ $cinco->mes }}</th>
@@ -112,6 +116,7 @@ setlocale(LC_ALL, 'es_ES');
 			            @endforeach
 			        </tr>
 			        @endif
+			        @if(!$sexto->isEmpty())
 			        <tr align="center">
 			        	@foreach($sexto as $seis)
 			            <th>{{ $seis->mes }}</th>
@@ -121,6 +126,7 @@ setlocale(LC_ALL, 'es_ES');
 			            <td>{{ $seis->C_trato }}</td>
 			            @endforeach
 			        </tr>
+			        @endif
 			    </tbody>
 			</table>
 		</section>
@@ -151,28 +157,32 @@ setlocale(LC_ALL, 'es_ES');
 			            <td>{{ $uno->promedio }}</td>
 			            @endforeach
 			        </tr>
-			        @elseif(!$segundo->isEmpty())
+			        @endif
+			        @if(!$segundo->isEmpty())
 			        <tr align="center">
 			            @foreach($segundo as $dos)
 			            <th>{{ $dos->mes }}</th>
 			            <td>{{ $dos->promedio }}</td>
 			            @endforeach
 			        </tr>
-			        @elseif(!$tercero->isEmpty())
+			        @endif
+			        @if(!$tercero->isEmpty())
 			        <tr align="center">
 			            @foreach($tercero as $tres)
 			            <th>{{ $tres->mes }}</th>
 			            <td>{{ $tres->promedio }}</td>
 			            @endforeach
 			        </tr>
-			        @elseif(!$cuarto->isEmpty())
+			        @endif
+			        @if(!$cuarto->isEmpty())
 			        <tr align="center">
 			            @foreach($cuarto as $cuatro)
 			            <th>{{ $cuatro->mes }}</th>
 			            <td>{{ $cuatro->promedio }}</td>
 			            @endforeach
 			        </tr>
-			        @elseif(!$quinto->isEmpty())
+			        @endif
+			        @if(!$quinto->isEmpty())
 			        <tr align="center">
 			            @foreach($quinto as $cinco)
 			            <th>{{ $cinco->mes }}</th>
@@ -180,12 +190,14 @@ setlocale(LC_ALL, 'es_ES');
 			            @endforeach
 			        </tr>
 			        @endif
+			        @if(!$sexto->isEmpty())
 			        <tr align="center">
 			        	@foreach($sexto as $seis)
 			            <th>{{ $seis->mes }}</th>
 			            <td>{{ $seis->promedio }}</td>
 			            @endforeach
 			        </tr>
+			        @endif
 			    </tbody>
 			</table>
 		</section>
@@ -232,7 +244,7 @@ setlocale(LC_ALL, 'es_ES');
 		        type: 'column'
 		    },
 		    title: {
-		        text: 'Calificaciones de aspectos específicos'
+		        text: 'Calificaciones de aspectos específicos en distintos meses'
 		    },
 		    yAxis: {
 		        allowDecimals: false,
@@ -260,7 +272,7 @@ setlocale(LC_ALL, 'es_ES');
 		        type: 'column'
 		    },
 		    title: {
-		        text: 'Calificaciones de aspectos específicos'
+		        text: 'Promedios en distintos meses'
 		    },
 		    yAxis: {
 		        allowDecimals: false,

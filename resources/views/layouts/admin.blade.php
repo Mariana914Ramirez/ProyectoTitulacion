@@ -103,7 +103,7 @@
                     <a class="dropdown-item" href="http://127.0.0.1:8000/doctor">Ir a mi cuenta</a>
                     <a class="dropdown-item" href="#">Modificar información</a>
                     <a class="dropdown-item" href="http://127.0.0.1:8000/modificarHorarios">Modificar horarios</a>
-                    <a class="dropdown-item" href="#">Agenda</a>
+                    <a class="dropdown-item" href="http://127.0.0.1:8000/ver-agenda">Agenda</a>
                     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#preciosModal">Modificar precios</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#">Eliminar cuenta</a>
@@ -148,6 +148,21 @@
 
 
       <main>
+        @if($errors->any())
+            <div class="alert alert-danger" style="width: 100%; padding-bottom: 0px; margin-bottom: 0px;">
+                <ul style="text-align: center;">
+                    @foreach($errors->all() as $error)
+                        <li style="display: unset; font-size: 25px;">{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        @if(session('mensaje'))
+          <div class="alert alert-success" style="width: 100%; padding-bottom: 0px; margin-bottom: 0px; text-align: center;">
+              <p style="display: unset; font-size: 25px;">{{ session('mensaje') }}</p>
+            </div>
+        @endif
         @yield('contenido')
       </main>
 
@@ -350,7 +365,6 @@
                       </div>
 
 
-
                         <div class="form-group" align="center">
                             <label for="file-uploadT" class="btn btn-primary">
                                 <i class="fas fa-cloud-upload-alt icon-camera" style="font-size: 20px;"></i> Subir foto de anuncio
@@ -425,10 +439,10 @@
         @yield('modal')
 
 
-    <script type="text/javascript" src="js/jquery.js"></script>
-    <script src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="http://127.0.0.1:8000/js/jquery.js"></script>
+    <script src="http://127.0.0.1:8000/js/bootstrap.min.js"></script>
 
-    <script src="js/dropdown.js"></script>
+    <script src="http://127.0.0.1:8000/js/dropdown.js"></script>
     <script type="text/javascript">
         function cambiar(){
         var pdrs = document.getElementById('file-upload').files[0].name;
@@ -444,7 +458,7 @@
     </script>
 
 
-    <script type="text/javascript" src="js/calendario.js"></script>
+    <script type="text/javascript" src="http://127.0.0.1:8000/js/calendario.js"></script>
     <script >
         $(function () {
             $('#datepicker').datepicker({
@@ -482,6 +496,36 @@
                 changeYear: true,
                 orientation: "button"
             });
+
+
+            $('#cuatro').datepicker({
+                format: "dd/mm/yyyy",
+                autoclose: true,
+                todayHighlight: true,
+                showOtherMonths: true,
+                selectOtherMonths: true,
+                autoclose: true,
+                changeMonth: true,
+                changeYear: true,
+                orientation: "button"
+            });
+
+
+            $('#cinco').datepicker({
+                format: "dd/mm/yyyy",
+                autoclose: true,
+                todayHighlight: true,
+                showOtherMonths: true,
+                selectOtherMonths: true,
+                autoclose: true,
+                changeMonth: true,
+                changeYear: true,
+                orientation: "button"
+            });
+
+
+
+
         });
     </script>
 

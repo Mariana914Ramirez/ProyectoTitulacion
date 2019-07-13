@@ -12,6 +12,7 @@ use App\Precio;
 use App\Sugerencia;
 use App\Especialidad;
 use App\Mail\EspecialidadAgregada;
+use App\Cita;
 use DB;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Mail;
@@ -64,9 +65,11 @@ class DoctorController extends Controller
         ->join('precios', 'precios.DoctorConsultorio', '=', 'doctor_consultorio.Registro')
         ->select('doctores.Nombre', 'doctores.Apellidos', 'doctores.FechaNacimiento', 'doctores.Correo', 'doctores.Registro')
         ->where('doctor_consultorio.Doctor', '=', $doctor)->get();
+
+        $precios=Precio::select('Descripcion', 'Precio')->where('DoctorConsultorio', '=', $doct_cons)->get();
  
 
-    	return view('paginaDoctor', compact('doctores', $doctores, 'especialidades', $especialidades, 'lunesHorarios', $lunesHorarios, 'martesHorarios', $martesHorarios, 'miercolesHorarios', $miercolesHorarios, 'juevesHorarios', $juevesHorarios, 'viernesHorarios', $viernesHorarios, 'sabadoHorarios', $sabadoHorarios, 'domingoHorarios', $domingoHorarios, 'revisiones', $revisiones));
+    	return view('paginaDoctor', compact('doctores', $doctores, 'especialidades', $especialidades, 'lunesHorarios', $lunesHorarios, 'martesHorarios', $martesHorarios, 'miercolesHorarios', $miercolesHorarios, 'juevesHorarios', $juevesHorarios, 'viernesHorarios', $viernesHorarios, 'sabadoHorarios', $sabadoHorarios, 'domingoHorarios', $domingoHorarios, 'revisiones', $revisiones, 'precios', $precios));
     }
 
     public function create()
@@ -378,5 +381,136 @@ class DoctorController extends Controller
 
         return redirect('/');
         
+    }
+
+
+
+
+
+    public function visitantes(Request $request, $doctor, $consultorio)
+    {
+        $usuario=Doctor::select('Correo')->where('Registro', '=', $doctor)->take(1)->get();
+        $usuario=$usuario[0]->Correo;
+
+        $doct_cons=DoctorConsultorio::where('Doctor', '=', $doctor)->where('Consultorio', '=', $consultorio)->get();
+        $doct_cons=$doct_cons[0]->Registro;
+
+        $lunesHorarios=Horario::select('*')->where('DoctorConsultorio', '=', $doct_cons)->where('Dia', '=', 'L')->get();
+        $martesHorarios=Horario::select('*')->where('DoctorConsultorio', '=', $doct_cons)->where('Dia', '=', 'M')->get();
+        $miercolesHorarios=Horario::select('*')->where('DoctorConsultorio', '=', $doct_cons)->where('Dia', '=', 'X')->get();
+        $juevesHorarios=Horario::select('*')->where('DoctorConsultorio', '=', $doct_cons)->where('Dia', '=', 'J')->get();
+        $viernesHorarios=Horario::select('*')->where('DoctorConsultorio', '=', $doct_cons)->where('Dia', '=', 'V')->get();
+        $sabadoHorarios=Horario::select('*')->where('DoctorConsultorio', '=', $doct_cons)->where('Dia', '=', 'S')->get();
+        $domingoHorarios=Horario::select('*')->where('DoctorConsultorio', '=', $doct_cons)->where('Dia', '=', 'D')->get();
+
+
+        $doctores=DB::table('doctores')
+        ->join('doctor_consultorio', 'doctores.Registro', '=', 'doctor_consultorio.Doctor')
+        ->join('consultorios', 'consultorios.Registro', '=', 'doctor_consultorio.Consultorio')
+        ->select('doctores.*', 'consultorios.Nombre as Consultorio', 'consultorios.Registro as RegConsultorio')
+        ->where('doctores.Correo', '=', $usuario)
+        ->where('doctor_consultorio.Consultorio', '=', $consultorio)
+        ->where('doctor_consultorio.Doctor', '=', $doctor)->get();
+
+
+        $especialidades=DB::table('doctor_especialidad')->select('*')->where('Correo', '=', $usuario)->where('Doctor', '=', $doctor)->distinct()->get();
+
+
+        $revisiones=DB::table('doctor_consultorio')
+        ->join('doctores', 'doctores.Registro', '=', 'doctor_consultorio.Doctor')
+        ->join('horario', 'horario.DoctorConsultorio', '=', 'doctor_consultorio.Registro')
+        ->join('precios', 'precios.DoctorConsultorio', '=', 'doctor_consultorio.Registro')
+        ->select('doctores.Nombre', 'doctores.Apellidos', 'doctores.FechaNacimiento', 'doctores.Correo', 'doctores.Registro')
+        ->where('doctor_consultorio.Doctor', '=', $doctor)->get();
+
+        $precios=Precio::select('Descripcion', 'Precio')->where('DoctorConsultorio', '=', $doct_cons)->get();
+ 
+
+        return view('paginaDoctor', compact('doctores', $doctores, 'especialidades', $especialidades, 'lunesHorarios', $lunesHorarios, 'martesHorarios', $martesHorarios, 'miercolesHorarios', $miercolesHorarios, 'juevesHorarios', $juevesHorarios, 'viernesHorarios', $viernesHorarios, 'sabadoHorarios', $sabadoHorarios, 'domingoHorarios', $domingoHorarios, 'revisiones', $revisiones, 'precios', $precios));
+    }
+
+
+    public function citas(Request $request, $doctor, $consultorio)
+    {
+        if(($request->session()->has('fechaCita')) && ($request->input('FechaCitas') == null))
+        {
+            $dia=$request->session()->get('fechaCita');
+            $fecha = Carbon::createFromDate($dia);
+            $request->session()->forget('fechaCita');
+        }
+        else
+        {
+            $partes = explode('/', $request->input('FechaCitas'));
+            $dia = $partes[2].'-'.$partes[1].'-'.$partes[0];
+            $fecha = Carbon::createFromDate($partes[2],$partes[1],$partes[0]);
+        }
+        
+        $date = $fecha->format('l');
+
+        $doct_cons = DoctorConsultorio::where('Doctor', '=', $doctor)->where('Consultorio', '=', $consultorio)->get();
+        $doct_cons = $doct_cons[0]->Registro;
+
+        $citas = Cita::where('Fecha', '=', $dia)->where('DoctorConsultorio', '=', $doct_cons)->get();
+
+        if($date == 'Monday')
+        {
+            $horarios=Horario::select('*')->where('DoctorConsultorio', '=', $doct_cons)->where('Dia', '=', 'L')->get();
+        }
+        else if($date == 'Tuesday')
+        {
+            $horarios=Horario::select('*')->where('DoctorConsultorio', '=', $doct_cons)->where('Dia', '=', 'M')->get();
+        }
+        else if($date == 'Wednesday')
+        {
+            $horarios=Horario::select('*')->where('DoctorConsultorio', '=', $doct_cons)->where('Dia', '=', 'X')->get();
+        }
+        else if($date == 'Thursday')
+        {
+            $horarios=Horario::select('*')->where('DoctorConsultorio', '=', $doct_cons)->where('Dia', '=', 'J')->get();
+        }
+        else if($date == 'Friday')
+        {
+            $horarios=Horario::select('*')->where('DoctorConsultorio', '=', $doct_cons)->where('Dia', '=', 'V')->get();
+        }
+        else if($date == 'Saturday')
+        {
+            $horarios=Horario::select('*')->where('DoctorConsultorio', '=', $doct_cons)->where('Dia', '=', 'S')->get();
+        }
+        else if($date == 'Sunday')
+        {
+            $horarios=Horario::select('*')->where('DoctorConsultorio', '=', $doct_cons)->where('Dia', '=', 'D')->get();
+        }
+
+
+
+        if(!($citas->isEmpty()))
+        {
+            $contarHorarios = $horarios->count();
+            $contarCitas = $citas->count();
+            if($contarHorarios == $contarCitas)
+            {
+                return back()->withErrors(['No hay cupo' => 'Todos los horarios de este día han sido reservados ya']);
+            }
+        }
+
+        if($horarios->isEmpty())
+        {
+            return back()->withErrors(['No hay horarios' => 'El doctor no trabaja este día, te sugerimos ver los horarios de atención que tiene']);
+        }
+        $doct_cons = DoctorConsultorio::where('Doctor', '=', $doctor)->where('Consultorio', '=', $consultorio)->get();
+
+
+        $request->session()->put('fechaCita', $dia);
+
+        $doctor = Doctor::select('Correo')->where('Registro', '=', $doctor)->take(1)->get();
+        
+        return view('citasPacientes', compact('horarios', $horarios, 'citas', $citas, 'doct_cons', $doct_cons, 'doctor', $doctor));
+    }
+
+
+    public function generarCitas(Request $request) //Doctor
+    {
+        return "Hola";
+        return view();
     }
 }
