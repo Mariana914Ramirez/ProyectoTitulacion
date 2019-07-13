@@ -7,7 +7,7 @@
 	<p>Hola {{ $usuario[0]->Nombre }} {{ $usuario[0]->Apellidos }}</p>
 	 <p>¡Le damos un cordial saludo y agradecimiento por utilizar nuestra plataforma!</p>
 
-    <p>Se le informa que su cita en el consultorio {{ $consultorio[0]->Nombre }} ha sido cancelada por algún inconveniente <br>
+    <p>Se le informa que su cita en el consultorio {{ $consultorio[0]->Nombre }} a las {{ $horario[0]->Hora_inicio }} por parte del doctor {{ $doctor[0]->Nombre }} {{ $doctor[0]->Apellidos }} ha sido cancelada por algún inconveniente <br>
 
     	Para conocer mayor información sobre el motivo de la cancelación le dejamos los datos del consultorio: <br>
     	<ul>

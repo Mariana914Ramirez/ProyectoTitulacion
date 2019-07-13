@@ -58,6 +58,8 @@ Route::any('generarCitas', 'DoctorController@generarCitas')->name('generarCitas'
 Route::any('guardar-cita/{horario}/{doctorConsultorio}/{fecha}', 'CitaController@guardarCita')->name('guardarCita');
 Route::get('registro-cita/{horario}/{doctorConsultorio}/{fecha}', 'CitaController@registroCita')->name('registroCita');
 Route::any('ver-agenda', 'CitaController@index')->name('index');
+Route::any('ver-citas/{fecha}', 'CitaController@verCitas')->name('verCitas');
+Route::any('cita-cancelada/{idCita}', 'CitaController@citaCancelada')->name('citaCancelada');
 
 
 

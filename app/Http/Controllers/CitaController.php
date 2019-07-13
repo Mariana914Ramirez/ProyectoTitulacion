@@ -12,7 +12,9 @@ use App\Usuario;
 use App\Precio;
 use App\Doctor;
 use App\Consultorio;
+use App\Mail\CitaCancelada;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Collection as Collection;
 use DB;
 
@@ -82,8 +84,75 @@ class CitaController extends Controller
     }
 
 
-    public function index()
+    public function index(Request $request)
     {
+        if ($request->session()->has('doctorSession')) {
+            $sesion=$request->session()->get('doctorSession');
+            $consultorio=$sesion[0]->Consultorio;
+            $doctor=$sesion[0]->Registro;
+        }
+        else if ($request->session()->has('asistenteSession')) {
+            $sesion=$request->session()->get('asistenteSession');
+            $consultorio=$sesion[0]->Consultorio;
+            $doctor=$sesion[0]->Registro;
+        }
 
+        $doct_cons=DoctorConsultorio::where('Doctor', '=', $doctor)->where('Consultorio', '=', $consultorio)->get();
+        $doct_cons=$doct_cons[0]->Registro;
+
+        $dias = Cita::select('Fecha')->where('DoctorConsultorio', '=', $doct_cons)->where('Asistir', '=', 1)->distinct()->orderBy('Fecha', 'asc')->get();
+
+        return view('agenda', compact('dias', $dias));
+    }
+
+
+    public function verCitas(Request $request, $fecha)
+    {
+        if ($request->session()->has('doctorSession')) {
+            $sesion=$request->session()->get('doctorSession');
+            $consultorio=$sesion[0]->Consultorio;
+            $doctor=$sesion[0]->Registro;
+        }
+        else if ($request->session()->has('asistenteSession')) {
+            $sesion=$request->session()->get('asistenteSession');
+            $consultorio=$sesion[0]->Consultorio;
+            $doctor=$sesion[0]->Registro;
+        }
+
+        $doct_cons=DoctorConsultorio::where('Doctor', '=', $doctor)->where('Consultorio', '=', $consultorio)->get();
+        $doct_cons=$doct_cons[0]->Registro;
+
+        $dias = Cita::select('*')->where('DoctorConsultorio', '=', $doct_cons)->where('Fecha', '=', $fecha)->where('Asistir', '=', 1)->get();
+        $horarios = Horario::where('DoctorConsultorio', '=', $doct_cons)->orderBy('Hora_inicio', 'asc')->get();
+
+        return view('agendaCitas', compact('dias', $dias, 'horarios', $horarios));
+    }
+
+
+    public function citaCancelada(Request $request, $idCita)
+    {
+        if ($request->session()->has('doctorSession')) {
+            $sesion=$request->session()->get('doctorSession');
+            $consultorio=$sesion[0]->Consultorio;
+            $doctor=$sesion[0]->Registro;
+        }
+        else if ($request->session()->has('asistenteSession')) {
+            $sesion=$request->session()->get('asistenteSession');
+            $consultorio=$sesion[0]->Consultorio;
+            $doctor=$sesion[0]->Registro;
+        }
+
+        $cita = Cita::where('Registro', '=', $idCita)->get();
+        $usuario = Usuario::select('Correo', 'Nombre', 'Apellidos')->where('Registro', '=', $cita[0]->Usuario)->take(1)->get();
+        $destinatario = $usuario[0]->Correo;
+        $doctor = Doctor::select('Nombre', 'Apellidos', 'Correo')->where('Registro', '=', $doctor)->take(1)->get();
+        $consultorio = Consultorio::select('Nombre', 'Correo', 'Telefono')->where('Registro', '=', $consultorio)->take(1)->get();
+        $horario = Horario::select('Hora_inicio')->where('Registro', '=', $cita[0]->Horarios)->take(1)->get();
+
+        Mail::to($destinatario)->send(new CitaCancelada($usuario, $doctor, $consultorio, $horario));
+
+        Cita::where('Registro', '=', $idCita)->update(array('Asistir'=>0,));
+
+        return back()->with(['mensaje' => 'Cita eliminada']);
     }
 }
