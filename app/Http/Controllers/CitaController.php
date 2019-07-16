@@ -102,7 +102,11 @@ class CitaController extends Controller
 
         $dias = Cita::select('Fecha')->where('DoctorConsultorio', '=', $doct_cons)->where('Asistir', '=', 1)->distinct()->orderBy('Fecha', 'asc')->get();
 
-        return view('agenda', compact('dias', $dias));
+
+        $cancelados = Cita::select('*')->where('DoctorConsultorio', '=', $doct_cons)->where('Asistir', '=', 0)->get();
+        $horarios = Horario::where('DoctorConsultorio', '=', $doct_cons)->orderBy('Hora_inicio', 'asc')->get();
+
+        return view('agenda', compact('dias', $dias, 'cancelados', $cancelados, 'horarios', $horarios));
     }
 
 
@@ -153,6 +157,38 @@ class CitaController extends Controller
 
         Cita::where('Registro', '=', $idCita)->update(array('Asistir'=>0,));
 
+        if(Cita::select('*')->where('DoctorConsultorio', '=', $cita[0]->DoctorConsultorio)->where('Fecha', '=', $cita[0]->Fecha)->where('Asistir', '=', 1)->count() == 0)
+        {
+            return redirect('ver-agenda')->with(['mensaje' => 'Cita eliminada']);
+        }
         return back()->with(['mensaje' => 'Cita eliminada']);
+    }
+
+
+
+    public function confirmarCancelacion(Request $request, $idCita)
+    {
+        Cita::where('Registro', '=', $idCita)->delete();
+        return back();
+    }
+
+
+    public function verInformacionCitas(Request $request)
+    {
+        if ($request->session()->has('usuarioSession')) {
+            $sesion=$request->session()->get('usuarioSession');
+            $usuario=$sesion[0]->Correo;
+        }
+
+        $usuario = Usuario::where('Correo', '=', $usuario)->take(1)->get();
+        $usuario = $usuario[0]->Registro;
+
+        $citas = Cita::where('Usuario', '=', $usuario)->get();
+        $horarios = Horario::select('*')->get();
+        $doctores = Doctor::select('Nombre', 'Apellidos', 'Registro')->get();
+        $consultorios = Consultorio::select('Nombre', 'Registro')->get();
+        $doctoresConsultorios = DoctorConsultorio::select('*')->get();
+
+        return view('agendaUsuarioSesion', compact('citas', $citas, 'horarios', $horarios, 'doctores', $doctores, 'consultorios', $consultorios, 'doctoresConsultorios', $doctoresConsultorios)); 
     }
 }

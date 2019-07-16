@@ -31,7 +31,7 @@ class LoginController extends Controller
             $verificar=$comparar[0]->Password;
             if(Hash::check($password, $verificar))
             {
-                $sessionRegistrada=Administrador::select('Correo')->where('Correo', '=', $correo)->get();
+                $sessionRegistrada=Administrador::select('Correo', 'Registro')->where('Correo', '=', $correo)->get();
                 if($_POST)
                 {
                     Request::session()->put('administradorSession', $sessionRegistrada);
@@ -54,7 +54,7 @@ class LoginController extends Controller
             $verificar=$comparar[0]->Password;
             if(Hash::check($password, $verificar))
             {
-                $sessionRegistrada=Consultorio::select('Correo')->where('Correo', '=', $correo)->get();
+                $sessionRegistrada=Consultorio::select('Correo', 'Registro')->where('Correo', '=', $correo)->get();
                 if($_POST)
                 {
                     Request::session()->put('consultorioSession', $sessionRegistrada);
@@ -74,7 +74,7 @@ class LoginController extends Controller
 
         else if (Doctor::where('Correo', '=', $correo)->exists())
         {
-            Session::put('url',Request::server('HTTP_REFERER')); ;
+            Session::put('url',Request::server('HTTP_REFERER')); 
             $comparar=Doctor::select('Password')->where('Correo', '=', $correo)->get();
             $verificar=$comparar[0]->Password;
             if(Hash::check($password, $verificar))
@@ -96,6 +96,7 @@ class LoginController extends Controller
 
         else if (Doctor::where('CorreoAsistente', '=', $correo)->exists())
         {
+            Session::put('url',Request::server('HTTP_REFERER')); 
             $comparar=Usuario::select('Password')->where('Correo', '=', $correo)->get();
             $verificar=$comparar[0]->Password;
             if(Hash::check($password, $verificar))
@@ -119,7 +120,7 @@ class LoginController extends Controller
             $verificar=$comparar[0]->Password;
             if(Hash::check($password, $verificar))
             {
-                $sessionRegistrada=Usuario::select('Correo')->where('Correo', '=', $correo)->get();
+                $sessionRegistrada=Usuario::select('Correo', 'Registro')->where('Correo', '=', $correo)->get();
                 if($_POST)
                 {
                     Request::session()->put('usuarioSession', $sessionRegistrada);

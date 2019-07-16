@@ -26,7 +26,8 @@ class Consultorio extends Model
     	'CorreoRecuperacion',
     	'Imagen',
     	'Revisado',
-        'mes'
+        'mes',
+        'CantidadPersonas'
     ];
 
     public $timestamps=false;

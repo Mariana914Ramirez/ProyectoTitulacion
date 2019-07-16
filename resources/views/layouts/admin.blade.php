@@ -1,4 +1,38 @@
+<?php
+  use Illuminate\Support\Facades\Request;
+  use App\Notificacion;
 
+  if (Request::session()->has('doctorSession')) {
+            $sesion=Request::session()->get('doctorSession');
+            $usuario=$sesion[0]->Correo;
+  }
+  else if (Request::session()->has('asistenteSession')) {
+      $sesion=Request::session()->get('asistenteSession');
+      $usuario=$sesion[0]->Correo;
+  }
+  else if (Request::session()->has('administradorSession')) {
+      $sesion=Request::session()->get('administradorSession');
+      $usuario=$sesion[0]->Correo;
+  }
+  else if (Request::session()->has('consultorioSession')) {
+      $sesion=Request::session()->get('consultorioSession');
+      $usuario=$sesion[0]->Correo;
+  }
+  else if (Request::session()->has('usuarioSession')) {
+      $sesion=Request::session()->get('usuarioSession');
+      $usuario=$sesion[0]->Correo;
+  }
+
+
+  if((Request::session()->has('doctorSession')) || (Request::session()->has('asistenteSession')) || (Request::session()->has('administradorSession')) || (Request::session()->has('consultorioSession')) || (Request::session()->has('usuarioSession')))
+  {
+    $notificacion = Notificacion::where('Receptor', '=', $usuario)->get();
+  }
+  else
+  {
+    $notificacion = null;
+  }
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -51,21 +85,19 @@
               </li>
 
                @if ((Session::exists('consultorioSession'))||(Session::exists('administradorSession'))||(Session::exists('usuarioSession'))||(Session::exists('asistenteSession'))||(Session::exists('doctorSession'))) 
-               <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <b class="icon-users">Notificaciones</b>
-                  </a>
-                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="#">Action</a>
-                    <a class="dropdown-item" href="#">Another action</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Something else here</a>
-                  </div>
+                @if($notificacion->isEmpty())
+                 <li class="nav-item">
+                  <a class="nav-link" href="http://127.0.0.1:8000/notificaciones"><b class="icon-bell">Notificaciones *</b><span class="sr-only">(current)</span></a>
                 </li>
+                @else
+                <li class="nav-item" style="background: #081BA8;">
+                  <a class="nav-link" href="http://127.0.0.1:8000/notificaciones" style="color: #FFF;"><b class="icon-bell">Notificaciones *</b><span class="sr-only">(current)</span></a>
+                </li>
+                @endif
                @else
-              <li class="nav-item">
-                <a class="nav-link" href="#FinalPagina"><b class="icon-phone">Contacto </b><span class="sr-only">(current)</span></a>
-              </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#FinalPagina"><b class="icon-phone">Contacto </b><span class="sr-only">(current)</span></a>
+                </li>
               @endif
 
 
@@ -83,13 +115,14 @@
                 </li>
                 @elseif (Session::exists('consultorioSession'))
                 <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <b class="icon-cog-alt">Mi cuenta</b>
+                  <a class="nav-link dropdown-toggle icon-cog-alt" href="http://127.0.0.1:8000/cuentaConsultorio" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <b>Mi cuenta</b>
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="http://127.0.0.1:8000/cuentaConsultorio">Ir a mi cuenta</a>
                     <a class="dropdown-item" href="#">Modificar información</a>
                     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#mandarAnuncioModal">Mandar anuncio</a>
+                    <a class="dropdown-item" href="http://127.0.0.1:8000/estadisticas/{{ (Session::get('consultorioSession'))[0]->Registro }}">Estadísticas</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#">Eliminar cuenta</a>
                   </div>
@@ -116,6 +149,7 @@
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="http://127.0.0.1:8000/modificarUsuario">Modificar información</a>
+                    <a class="dropdown-item" href="http://127.0.0.1:8000/ver-informacion-citas">Citas</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#">Eliminar cuenta</a>
                   </div>

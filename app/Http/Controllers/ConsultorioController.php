@@ -102,6 +102,7 @@ class ConsultorioController extends Controller
         $parte2 = Carbon::parse(Carbon::now())->year;
         $parte3 = $parte1 .' '. $parte2;
         $consultorio->mes = $parte3;
+        $consultorio->CantidadPersonas = 10;
         $consultorio->save();
 
 

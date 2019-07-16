@@ -444,7 +444,7 @@ class DoctorController extends Controller
             $dia = $partes[2].'-'.$partes[1].'-'.$partes[0];
             $fecha = Carbon::createFromDate($partes[2],$partes[1],$partes[0]);
         }
-        
+
         $date = $fecha->format('l');
 
         $doct_cons = DoctorConsultorio::where('Doctor', '=', $doctor)->where('Consultorio', '=', $consultorio)->get();

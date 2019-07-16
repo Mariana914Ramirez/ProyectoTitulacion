@@ -2,6 +2,7 @@
 <?php 
 
         $no = 0;
+        $mensaje = 0;
         use Illuminate\Support\Carbon;
 
 ?>
@@ -31,6 +32,21 @@
                                 }
                             ?>
                         @endforeach
+
+                        <?php
+                            $hora = (Carbon::createFromDate(Session::get('fechaCita')))->format('Y-m-d');
+                            $horaHorario = $horario->Hora_inicio;
+                            $horaCita = $hora.' '.$horaHorario;
+                            $horaActual = Carbon::now()->format('Y-m-d H:i:s');
+
+                            $horaInicio = new DateTime($horaActual);
+                            $horaTermino = new DateTime($horaCita);
+
+                            if($horaInicio > $horaTermino)
+                            {
+                                $mensaje = 1;
+                            }
+                        ?>
                         @if($no < 1)
                             <tr>
                                 <td>
@@ -39,7 +55,11 @@
                                 <td>
                                     {{ $horario->Hora_termino }}
                                 </td>
-                                @if(((Session::exists('doctorSession')) && (((Session::get('doctorSession'))[0]->Registro) == $doct_cons[0]->Doctor))||((Session::exists('usuarioSession')) && (((Session::get('usuarioSession'))[0]->Correo) != $doctor[0]->Correo))||((Session::exists('asistenteSession')) && (((Session::get('asistenteSession'))[0]->Registro) == $doct_cons[0]->Doctor)))
+                                @if($mensaje == 1)
+                                <td>
+                                    Esta hora ya no está disponible
+                                </td>
+                                @elseif(((Session::exists('doctorSession')) && (((Session::get('doctorSession'))[0]->Registro) == $doct_cons[0]->Doctor))||((Session::exists('usuarioSession')) && (((Session::get('usuarioSession'))[0]->Correo) != $doctor[0]->Correo))||((Session::exists('asistenteSession')) && (((Session::get('asistenteSession'))[0]->Registro) == $doct_cons[0]->Doctor)))
                                 <td>
                                     <a href="http://127.0.0.1:8000/registro-cita/{{ $horario->Registro }}/{{ $doct_cons[0]->Registro }}/{{ (Session::get('fechaCita')) }}"><button class="btn btn-success">Reservar</button></a>
                                 </td>
@@ -53,11 +73,13 @@
                                 </td>
                                 @endif
                             </tr>
-                            @else
-                                <?php 
-                                    $no=0;
-                                ?>
+                                
                         @endif
+
+                        <?php 
+                            $no=0;
+                            $mensaje=0;
+                        ?>
                         
                     @endforeach
                 </table>

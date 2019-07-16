@@ -60,6 +60,8 @@ Route::get('registro-cita/{horario}/{doctorConsultorio}/{fecha}', 'CitaControlle
 Route::any('ver-agenda', 'CitaController@index')->name('index');
 Route::any('ver-citas/{fecha}', 'CitaController@verCitas')->name('verCitas');
 Route::any('cita-cancelada/{idCita}', 'CitaController@citaCancelada')->name('citaCancelada');
+Route::any('cancelar-confirmacion/{idCita}', 'CitaController@confirmarCancelacion')->name('confirmarCancelacion');
+Route::any('ver-informacion-citas', 'CitaController@verInformacionCitas')->name('verInformacionCitas');
 
 
 

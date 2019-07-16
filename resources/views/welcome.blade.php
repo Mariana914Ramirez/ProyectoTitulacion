@@ -13,27 +13,23 @@
               
 
               <center>
-                
 
+                  <div class="carousel-inner imagenes" role="listbox">
+                    
+                    <div class="carousel-item active" data-interval="10000">
+                      <img class="d-block w-100" src="img/Anuncios/Anuncio1.png" alt="Anuncio1">
+                    </div>
 
+                    <div class="carousel-item" data-interval="10000">
+                      <img class="d-block w-100" src="img/Anuncios/Anuncio2.png" alt="Anuncio2">
+                    </div>
 
-
-              <div class="carousel-inner imagenes" role="listbox">
-                
-                <div class="carousel-item active" data-interval="10000">
-                  <img class="d-block w-100" src="img/Anuncios/Anuncio1.png" alt="Anuncio1">
-                </div>
-
-                <div class="carousel-item" data-interval="10000">
-                  <img class="d-block w-100" src="img/Anuncios/Anuncio2.png" alt="Anuncio2">
-                </div>
-
-                @foreach($anuncios as $anuncio)
-                <div class="carousel-item" data-interval="10000">
-                    <img class="d-block w-100" src="/slide/{{ $anuncio->Imagen }}" alt="{{ $anuncio->Imagen }}">
-                </div>
-                @endforeach
-              </div>
+                    @foreach($anuncios as $anuncio)
+                    <div class="carousel-item" data-interval="10000">
+                        <img class="d-block w-100" src="/slide/{{ $anuncio->Imagen }}" alt="{{ $anuncio->Imagen }}">
+                    </div>
+                    @endforeach
+                  </div>
             
               </center>
 

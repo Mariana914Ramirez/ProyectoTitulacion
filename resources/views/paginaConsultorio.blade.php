@@ -247,16 +247,13 @@ use Illuminate\Support\Carbon;
                                     <button class="btn btn-primary" style="width: 49%;">Ver citas</button>
                                     <button class="btn btn-danger" style="width: 49%;">Eliminar</button>
                                     @else
-                                        @if ((Session::exists('administradorSession'))||(Session::exists('usuarioSession'))||((Session::exists('asistenteSession') && (((Session::get('asistenteSession'))[0]->Registro) != $doctor->Registro)))||((Session::exists('doctorSession')) && (((Session::get('doctorSession'))[0]->Registro) != $doctor->Registro))) 
-                                        <a><button class="btn btn-success" style="width: 49%;">Generar cita</button></a>
-                                        @elseif((!(Session::exists('consultorioSession'))) && (!(Session::exists('doctorSession'))) && (!(Session::exists('asistenteSession'))))
-                                        <button class="btn btn-success" style="width: 49%;" data-toggle="modal" data-target="#loginModal" data-dismiss="modal">Generar cita</button>
-                                        @endif
+
                                         @if((Session::exists('consultorioSession')))
                                         <a href="http://127.0.0.1:8000/visitantes/{{ $doctor->Registro }}/{{ $consultorio->Registro }}"><button class="btn btn-primary" style="width: 100%;">Ver más</button></a>
                                         @elseif(((Session::exists('doctorSession')) && (((Session::get('doctorSession'))[0]->Registro) == $doctor->Registro)) || ((Session::exists('asistenteSession')) && (((Session::get('asistenteSession'))[0]->Registro) == $doctor->Registro)))
                                         <a href="http://127.0.0.1:8000/doctor"><button class="btn btn-primary" style="width: 100%;">Ir a cuenta</button></a>
                                         @else
+                                        <a><button class="btn btn-success" style="width: 49%;" data-toggle="modal" data-target="#citasModal" data-dismiss="modal">Visualizar horarios</button></a>
                                         <a href="http://127.0.0.1:8000/visitantes/{{ $doctor->Registro }}/{{ $consultorio->Registro }}"><button class="btn btn-primary" style="width: 49%;">Ver más</button></a>
                                         @endif
                                     @endif
@@ -265,6 +262,59 @@ use Illuminate\Support\Carbon;
                             @endforeach
                         <tbody>
                     </table> 
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" role="dialog" id="citasModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Generar cita</h3>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-horarios" style="padding: 20px;">
+                    <center>
+
+                        @foreach($doctores as $doctor)
+
+                        @if(((Session::exists('doctorSession')) && (((Session::get('doctorSession'))[0]->Registro) == $doctor->Registro)) || ((Session::exists('asistenteSession')) && (((Session::get('asistenteSession'))[0]->Registro) == $doctor->Registro)))
+                        <form action="http://127.0.0.1:8000/citas/{{ ((Session::get('doctorSession'))[0]->Registro) }}/{{ ((Session::get('doctorSession'))[0]->Consultorio) }}" method="post" enctype="multipart/form-data">
+                        @csrf
+                            <div class="form-group" style="text-align: center;">
+                              <div class='input-group date' data-provide="cuatro" id="cuatro" style="display:inline-block; margin:0 auto;">
+                                  <input type='text' placeholder="Fecha de cita" style="text-align: center; align-content: center;" id="FechaCitas" name="FechaCitas" required />
+                                  <span class="input-group-addon">
+                                      <span class="glyphicon glyphicon-calendar"></span>
+                                  </span>
+                              </div>
+                            </div>
+
+                            <div style="align-content: center;">
+                                <button class="btn btn-success" type="submit" style="font-size: 20px;">Visualizar horarios disponibles</button>
+                            </div>
+                        </form>
+                        @else
+                        <form action="http://127.0.0.1:8000/citas/{{ $doctor->Registro }}/{{ $consultorios[0]->Registro }}" method="post" enctype="multipart/form-data">
+                        @csrf
+                            <div class="form-group" style="text-align: center;">
+                              <div class='input-group date' data-provide="cinco" id="cinco" style="display:inline-block; margin:0 auto;">
+                                  <input type='text' placeholder="Fecha de cita" style="text-align: center; align-content: center;" id="FechaCitas" name="FechaCitas" required />
+                                  <span class="input-group-addon">
+                                      <span class="glyphicon glyphicon-calendar"></span>
+                                  </span>
+                              </div>
+                            </div>
+
+                            <div style="align-content: center;">
+                                <button class="btn btn-success" type="submit" style="font-size: 20px;">Visualizar horarios disponibles</button>
+                            </div>
+                        </form>
+                        @endif
+                        @endforeach
+                    </center>
                 </div>
             </div>
         </div>
