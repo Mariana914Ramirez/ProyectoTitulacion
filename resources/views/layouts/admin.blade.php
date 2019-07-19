@@ -26,7 +26,7 @@
 
   if((Request::session()->has('doctorSession')) || (Request::session()->has('asistenteSession')) || (Request::session()->has('administradorSession')) || (Request::session()->has('consultorioSession')) || (Request::session()->has('usuarioSession')))
   {
-    $notificacion = Notificacion::where('Receptor', '=', $usuario)->get();
+    $notificacion = Notificacion::where('Receptor', '=', $usuario)->where('Visto', '=', 0)->get();
   }
   else
   {
@@ -84,22 +84,6 @@
                 <a class="nav-link" href="http://127.0.0.1:8000/especialidades"><b class="icon-stethoscope">Especialidades </b><span class="sr-only">(current)</span></a>
               </li>
 
-               @if ((Session::exists('consultorioSession'))||(Session::exists('administradorSession'))||(Session::exists('usuarioSession'))||(Session::exists('asistenteSession'))||(Session::exists('doctorSession'))) 
-                @if($notificacion->isEmpty())
-                 <li class="nav-item">
-                  <a class="nav-link" href="http://127.0.0.1:8000/notificaciones"><b class="icon-bell">Notificaciones *</b><span class="sr-only">(current)</span></a>
-                </li>
-                @else
-                <li class="nav-item" style="background: #081BA8;">
-                  <a class="nav-link" href="http://127.0.0.1:8000/notificaciones" style="color: #FFF;"><b class="icon-bell">Notificaciones *</b><span class="sr-only">(current)</span></a>
-                </li>
-                @endif
-               @else
-                <li class="nav-item">
-                  <a class="nav-link" href="#FinalPagina"><b class="icon-phone">Contacto </b><span class="sr-only">(current)</span></a>
-                </li>
-              @endif
-
 
               @if (Session::exists('administradorSession'))
                 <li class="nav-item dropdown">
@@ -153,6 +137,23 @@
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#">Eliminar cuenta</a>
                   </div>
+                </li>
+              @endif
+
+
+              @if ((Session::exists('consultorioSession'))||(Session::exists('administradorSession'))||(Session::exists('usuarioSession'))||(Session::exists('asistenteSession'))||(Session::exists('doctorSession'))) 
+                @if($notificacion->isEmpty())
+                 <li class="nav-item">
+                  <a class="nav-link" href="http://127.0.0.1:8000/notificaciones"><b class="icon-bell">Notificaciones</b><span class="sr-only">(current)</span></a>
+                </li>
+                @else
+                <li class="nav-item Notificaciones" style="background: #081BA8; border-radius: 20px;">
+                  <a class="nav-link" href="http://127.0.0.1:8000/notificaciones" style="color: #FFF;"><b class="icon-bell">Notificaciones *</b><span class="sr-only">(current)</span></a>
+                </li>
+                @endif
+               @else
+                <li class="nav-item">
+                  <a class="nav-link" href="#FinalPagina"><b class="icon-phone">Contacto </b><span class="sr-only">(current)</span></a>
                 </li>
               @endif
                 

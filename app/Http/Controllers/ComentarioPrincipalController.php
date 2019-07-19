@@ -15,6 +15,10 @@ use App\Estado;
 use App\Municipio;
 use App\Especialidad;
 use App\Anuncio;
+use App\Cita;
+use App\Horario;
+use App\Notificacion;
+use App\DoctorConsultorio;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection as Collection;
 use DB;
@@ -42,9 +46,16 @@ class ComentarioPrincipalController extends Controller
             $sesion=$request->session()->get('consultorioSession');
             $usuario=$sesion[0]->Correo;
             $nombres=Consultorio::select('Nombre')->where('Correo', '=', $usuario)->distinct()->get();
+            $usuario=null;
+        }
+        else if ($request->session()->has('administradorSession')) {
+            $sesion=$request->session()->get('administradorSession');
+            $usuario=$sesion[0]->Correo;
+            $nombres=null;
         }
         else
         {
+            $usuario=null;
             $nombres=null;
         }
 
@@ -56,6 +67,41 @@ class ComentarioPrincipalController extends Controller
         else
         {
             $anuncios=Anuncio::select('*')->where('Aceptado', '=', 1)->inRandomOrder()->take(10)->get();
+        }
+
+        if($usuario != null)
+        {
+            $usuario = Usuario::where('Correo', '=', $usuario)->take(1)->get();
+            $usuarioReg = $usuario[0]->Registro;
+            $citas = Cita::where('Usuario', '=', $usuarioReg)->get();
+            
+            foreach ($citas as $cita) {
+                $doct_cons = DoctorConsultorio::where('Registro', '=', $cita->DoctorConsultorio)->take(1)->get();
+                $consultorio = Consultorio::where('Registro', '=', $doct_cons[0]->Consultorio)->take(1)->get();
+                $string = 'Hola '.$usuario[0]->Nombre.' usted visitó recientemente al consultorio '.$consultorio[0]->Nombre.' ¡Ayúdanos a calificarlo!';
+                $horarios = Horario::where('Registro', '=', $cita->Horarios)->take(1)->get();
+
+                $hora = Carbon::createFromDate($cita->Fecha)->format('Y-m-d');
+                $horaHorario = $horarios[0]->Hora_termino;
+                $horaCita = $hora.' '.$horaHorario;
+                $horaCita = Carbon::createFromDate($horaCita);
+                $horaActual = Carbon::now();
+
+                if($horaActual > $horaCita)
+                {
+                    $notificacion = new Notificacion();
+                    $notificacion->Receptor = $usuario[0]->Correo;
+                    $notificacion->Emisor = $consultorio[0]->Correo;
+                    $notificacion->Notificacion = $string;
+                    $notificacion->Hora = $horaActual;
+                    $notificacion->Visto = 0;
+                    $notificacion->UsuarioEmisor = "Calificar";
+                    $notificacion->save();
+
+
+                    Cita::where('Registro', '=', $cita->Registro)->delete();
+                }                                       
+            }
         }
         
     	
@@ -161,17 +207,6 @@ class ComentarioPrincipalController extends Controller
         $estados=Estado::select('Nombre', 'Registro')->where('Nombre', '=', $buscar)->get();
         $municipios=Municipio::select('Nombre', 'Registro')->where('Nombre', '=', $buscar)->get();
 
-        /*if($doctores->isEmpty())
-        {
-            $partes = explode(' ', $buscar);
-            return $partes[0];
-            $fecha = $partes[2].'-'.$partes[1].'-'.$partes[0];
-            $usuario->FechaNacimiento=$fecha;
-        }
-        if($doctores->isEmpty())
-        {
-
-        }*/
 
         if(!$estados->isEmpty())
         {
@@ -194,4 +229,5 @@ class ComentarioPrincipalController extends Controller
 
         return view('resultados', compact('consultorios', $consultorios, 'doctores', $doctores));
     }
+
 }

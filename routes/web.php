@@ -65,6 +65,17 @@ Route::any('ver-informacion-citas', 'CitaController@verInformacionCitas')->name(
 
 
 
+
+Route::any('notificaciones', 'NotificacionController@index')->name('index');
+
+
+Route::any('calificar/{idConsultorio}/{idNotificacion}', 'CalificacionController@index')->name('index');
+Route::any('guardar-calificacion/{idConsultorio}/{idNotificacion}', 'CalificacionController@guardarCalificacion')->name('guardarCalificacion');
+Route::any('mensaje-quejas/{idNotificacion}/{idConsultorio}', 'CalificacionController@mostrarQuejas')->name('mostrarQuejas');
+Route::any('guardar-quejas/{idNotificacion}/{idConsultorio}', 'CalificacionController@guardarQuejas')->name('guardarQuejas');
+
+
+
 Route::get('modificarUsuario', 'UsuariosController@edit');
 
 

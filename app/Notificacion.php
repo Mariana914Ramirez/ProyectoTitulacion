@@ -13,7 +13,9 @@ class Notificacion extends Model
     	'Receptor',
     	'Emisor',
     	'Notificacion',
-    	'Hora'
+    	'Hora',
+    	'Visto',
+        'UsuarioEmisor'
     ];
 
     public $timestamps=false;

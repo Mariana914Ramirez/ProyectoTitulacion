@@ -12,6 +12,7 @@ use App\Usuario;
 use App\Precio;
 use App\Doctor;
 use App\Consultorio;
+use App\Notificacion;
 use App\Mail\CitaCancelada;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Mail;
@@ -157,7 +158,36 @@ class CitaController extends Controller
 
         Cita::where('Registro', '=', $idCita)->update(array('Asistir'=>0,));
 
-        if(Cita::select('*')->where('DoctorConsultorio', '=', $cita[0]->DoctorConsultorio)->where('Fecha', '=', $cita[0]->Fecha)->where('Asistir', '=', 1)->count() == 0)
+        $citados = Cita::where('Registro', '=', $idCita)->get();
+
+
+        //genera la notificación
+        $usuario = Usuario::where('Correo', '=', $destinatario)->take(1)->get();
+        $cita = Cita::where('Registro', '=', $idCita)->get();
+        
+        $consultorio = Consultorio::where('Correo', '=', $consultorio[0]->Correo)->take(1)->get();
+        $string = 'Hola '.$usuario[0]->Nombre.', le informamos que el consultorio '.$consultorio[0]->Nombre.' ha cancelado una cita, puede llamar a su número telefónico para más información: '.$consultorio[0]->Telefono.'.';
+
+        $horaActual = Carbon::now();
+
+
+        $notificacion = new Notificacion();
+        $notificacion->Receptor = $usuario[0]->Correo;
+        $notificacion->Emisor = $consultorio[0]->Correo;
+        $notificacion->Notificacion = $string;
+        $notificacion->Hora = $horaActual;
+        $notificacion->Visto = 0;
+        $notificacion->UsuarioEmisor = "Cancelar";
+        $notificacion->save();
+
+
+        Cita::where('Registro', '=', $cita[0]->Registro)->delete();                                      
+
+
+
+        
+
+        if(Cita::select('*')->where('DoctorConsultorio', '=', $citados[0]->DoctorConsultorio)->where('Fecha', '=', $citados[0]->Fecha)->where('Asistir', '=', 1)->count() == 0)
         {
             return redirect('ver-agenda')->with(['mensaje' => 'Cita eliminada']);
         }

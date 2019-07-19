@@ -98,3 +98,50 @@ main{
 .B:hover{
 	background: #77c172;
 }
+
+
+
+.formulario input[type="radio"]
+{
+	display: none;
+}
+
+.formulario .radio label{
+	color: #0774D9;
+	background: rgba(0,0,0,.1);
+	padding: 5px 15px 5px 51px;
+	display: inline-block;
+	position: relative;
+	font-size: 1em;
+	border-radius: 3px;
+	cursor: pointer;
+}
+
+.formulario .radio label:hover{
+	background: rgba(0,116,217,.1);
+}
+
+.formulario .radio label:before{
+	content: "";
+	width: 20px;
+	height: 20px;
+	display: inline-block;
+	background: none;
+	border: 3px solid #0774D9;
+	border-radius: 50%;
+	position: absolute;
+	left: 20px;
+	top: 10px;
+}
+
+.formulario input[type="radio"]:checked + label{
+	padding: 5px 15px;
+	background: #0774D9;
+	border-radius: 2px;
+	color: #FFF;
+}
+
+
+.formulario input[type="radio"]:checked + label:before{
+	display: none;
+}

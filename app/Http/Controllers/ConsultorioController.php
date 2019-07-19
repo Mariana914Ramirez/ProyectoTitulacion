@@ -35,7 +35,7 @@ class ConsultorioController extends Controller
         ->join('horario', 'horario.DoctorConsultorio', '=', 'doctor_consultorio.Registro')
         ->join('precios', 'precios.DoctorConsultorio', '=', 'doctor_consultorio.Registro')
         ->select('consultorios.Imagen', 'consultorios.Nombre', 'consultorios.Ubicacion', 'consultorios.Registro', 'consultorios.Telefono', 'consultorios.Correo', 'consultorios.C_precio', 'consultorios.C_trato', 'consultorios.C_limpieza', 'consultorios.C_puntualidad')
-        ->distinct()->orderBy('Puntos', 'asc')
+        ->distinct()->orderBy('Puntos', 'desc')
         ->get();
  
         return view('listadoConsultorios')->with('consultorios', $consultorios);
