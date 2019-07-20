@@ -44,6 +44,23 @@
 										@endif
 									@endforeach
 
+
+									@if($notificacion->UsuarioEmisor == "Sistema")
+										<label style="color: #081BA8; font-size: 30px;">{{ $notificacion->Emisor }}</label>
+
+										<br>
+
+										<label>{{ $notificacion->Notificacion }}</label>
+
+										<br>
+
+										<div style="width: 100%; align-content: center; text-align: center;">
+											<a href="http://127.0.0.1:8000/estadisticas/{{ (Session::get('consultorioSession'))[0]->Registro }}"><button class="btn btn-success">Estadísticas</button></a>
+										</div>
+
+										<label style="font-size: 18px; float: right;">{{ Carbon::createFromDate($notificacion->Hora)->format('d-m-Y H:i') }}</label>
+									@endif
+
 								</td>
 							</tr>
 						@endforeach

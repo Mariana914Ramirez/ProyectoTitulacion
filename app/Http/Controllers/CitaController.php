@@ -178,10 +178,7 @@ class CitaController extends Controller
         $notificacion->Hora = $horaActual;
         $notificacion->Visto = 0;
         $notificacion->UsuarioEmisor = "Cancelar";
-        $notificacion->save();
-
-
-        Cita::where('Registro', '=', $cita[0]->Registro)->delete();                                      
+        $notificacion->save();                            
 
 
 

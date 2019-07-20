@@ -15,12 +15,13 @@
 					<br>
 					<br>
 
-					<div>
-						La calificación que usted dio al consultorio fue muy baja, nos gustaría conocer tu experiencia para informarle en qué puede mejorar. Le pedimos que de la manera más respetuosa deje una pequeña crítica constructiva para el consultorio.<br>
-						Este mensaje le llegará al consultorio, pero será de forma anónima, sus datos están completamente seguros
+					<div style="background: #B9E895; padding: 5px;">
+					<h4>La calificación que usted dio al consultorio fue muy baja, nos gustaría conocer su experiencia para informarle en qué puede mejorar. Le pedimos que de la manera más respetuosa deje una pequeña crítica constructiva para el consultorio.<br>
+						Este mensaje le llegará al consultorio, pero será de forma anónima, sus datos están completamente seguros<h4>
 					</div>
+					<br>
 
-					<div class="form-group">
+					<div class="form-group" style="background: #BBB; padding: 20px;">
 	                    <textarea name="Comentarios" rows="5" class="form-control" placeholder="¿Deseas dejar algún comentario?" style="font-size: 20px; width: 90%;" id="Comentarios" required></textarea>
 	                </div>
 

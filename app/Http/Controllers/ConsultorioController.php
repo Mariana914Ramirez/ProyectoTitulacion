@@ -96,13 +96,13 @@ class ConsultorioController extends Controller
         $name = time().$file->getClientOriginalName();
         $file->move(public_path().'/imagenesConsultorio/', $name);
         $consultorio->Imagen=$name;
-        $consultorio->Revisado=0;
 
         $parte1 = Carbon::parse(Carbon::now())->formatLocalized('%B');
         $parte2 = Carbon::parse(Carbon::now())->year;
         $parte3 = $parte1 .' '. $parte2;
         $consultorio->mes = $parte3;
         $consultorio->CantidadPersonas = 10;
+        $consultorio->Aviso = 0;
         $consultorio->save();
 
 

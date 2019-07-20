@@ -8,7 +8,10 @@ use App\Http\Controllers\CalificacionController;
 use App\Usuario;
 use App\Consultorio;
 use App\Notificacion;
+use App\Mail\AdvertenciaCalificacion;
+use App\Mail\EliminarConsultorio;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Mail;
 
 class CalificacionController extends Controller
 {
@@ -79,12 +82,48 @@ class CalificacionController extends Controller
         $notificacion->Notificacion = "Un paciente ha calificado tu consultorio. Te invitamos ver tus estadísticas";
         $notificacion->Hora = $horaActual;
         $notificacion->Visto = 0;
-        $notificacion->UsuarioEmisor = "PacienteCalif";
+        $notificacion->UsuarioEmisor = "Sistema";
         $notificacion->save();
+        $notificaciones = $notificacion->Registro;
+
+
+        $consultorio = Consultorio::where('Registro', '=', $idConsultorio)->take(1)->get();
+        if($promedio < 5 && $consultorio[0]->Aviso == 0)
+        {
+            Consultorio::where('Registro', '=', $idConsultorio)->update(array('Aviso'=>1,));
+            $horaActual = Carbon::now();
+
+            $notificacion = new Notificacion();
+            $notificacion->Receptor = $consultorio[0]->Correo;
+            $notificacion->Emisor = "Advertencia - Salud a un Click";
+            $notificacion->Notificacion = "Tu promedio es muy bajo, te pedimos de la manera más atenta que mejores tu servicio, si tu promedio generar llega a ser menor a 3 se eliminará tu cuenta del sistema";
+            $notificacion->Hora = $horaActual;
+            $notificacion->Visto = 0;
+            $notificacion->UsuarioEmisor = "Sistema";
+            $notificacion->save();
+
+            $destinatario = $consultorio[0]->Correo;
+            Mail::to($destinatario)->send(new AdvertenciaCalificacion($consultorio));
+        }
+
+
+        if($promedio <= 3)
+        {
+            return redirect('eliminar-consultorio/'.$idConsultorio);
+        }
+
 
         if($suma < 5)
         {
-        	return redirect('mensaje-quejas/'.$notificacion->Registro.'/'.$idConsultorio);
+            if($request->input('Comentarios') == null)
+            {
+               return redirect('mensaje-quejas/'.$notificaciones.'/'.$idConsultorio);
+            }
+            else
+            {
+                $comentarios = $request->input('Comentarios');
+                Notificacion::where('Registro', '=', $idNotificacion)->update(array('Notificacion'=>$comentarios,));
+            }
         }
 
         return redirect('/')->with(['mensaje' => 'Gracias por calificar']);
