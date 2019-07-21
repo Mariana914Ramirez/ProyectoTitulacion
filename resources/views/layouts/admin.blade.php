@@ -2,6 +2,7 @@
   use Illuminate\Support\Facades\Request;
   use App\Notificacion;
 
+
   if (Request::session()->has('doctorSession')) {
             $sesion=Request::session()->get('doctorSession');
             $usuario=$sesion[0]->Correo;

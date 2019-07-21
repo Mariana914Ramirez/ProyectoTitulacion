@@ -9,7 +9,6 @@ use App\Usuario;
 use App\Consultorio;
 use App\Notificacion;
 use App\Mail\AdvertenciaCalificacion;
-use App\Mail\EliminarConsultorio;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Mail;
 
@@ -122,7 +121,7 @@ class CalificacionController extends Controller
             else
             {
                 $comentarios = $request->input('Comentarios');
-                Notificacion::where('Registro', '=', $idNotificacion)->update(array('Notificacion'=>$comentarios,));
+                Notificacion::where('Registro', '=', $notificaciones)->update(array('Notificacion'=>$comentarios,));
             }
         }
 

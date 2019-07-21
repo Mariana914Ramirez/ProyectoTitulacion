@@ -39,6 +39,11 @@ Route::any('agregarAnuncio/{id}/{anuncio}', 'CorreosController@AgregarAnuncio')-
 Route::any('especialdadAgregada/{id}', 'CorreosController@EspecialdadAgregada')->name('EspecialdadAgregada');
 
 
+
+Route::any('eliminar-consultorio/{idConsultorio}', 'EliminarController@eliminarConsultorios')->name('eliminarConsultorios');
+
+
+
 Route::resource('imagenes', 'imagenController');
 Route::any('anuncios', 'imagenController@anuncios')->name('anuncios');
 

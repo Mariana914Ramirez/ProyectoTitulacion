@@ -11,14 +11,20 @@ class EliminarConsultorio extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $subject = 'Eliminar consultorio - Salud a un Click';
+
+    public $relacionCitasConsultorio;
+    public $consultorio;
+
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($consultorio, $relacionCitasConsultorio)
     {
-        //
+        $this->relacionCitasConsultorio = $relacionCitasConsultorio;
+        $this->consultorio = $consultorio;
     }
 
     /**
@@ -28,6 +34,6 @@ class EliminarConsultorio extends Mailable
      */
     public function build()
     {
-        return $this->view('view.name');
+        return $this->view('correos.eliminarConsultorio');
     }
 }

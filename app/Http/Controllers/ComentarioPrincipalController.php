@@ -51,6 +51,7 @@ class ComentarioPrincipalController extends Controller
         else if ($request->session()->has('administradorSession')) {
             $sesion=$request->session()->get('administradorSession');
             $usuario=$sesion[0]->Correo;
+            $usuario=null;
             $nombres=null;
         }
         else
