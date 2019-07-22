@@ -344,14 +344,14 @@ class ConsultorioController extends Controller
 
     public function estadisticas($Registro)
     {
-        $estadisticas = Consultorio::select('C_limpieza', 'C_trato', 'C_precio', 'C_puntualidad', 'mes')->where('Registro', '=', $Registro)->take(1)->get();
+        $estadisticas = Consultorio::select('C_limpieza', 'C_trato', 'C_precio', 'C_puntualidad', 'mes', 'Puntos', 'CantidadPersonas')->where('Registro', '=', $Registro)->take(1)->get();
 
-        $primero = Calificacion::select('C_limpieza', 'C_trato', 'C_precio', 'C_puntualidad', 'promedio', 'mes')->where('Consultorio', '=', $Registro)->where('num_mes', '=', 1)->take(1)->get();
-        $segundo = Calificacion::select('C_limpieza', 'C_trato', 'C_precio', 'C_puntualidad', 'promedio', 'mes')->where('Consultorio', '=', $Registro)->where('num_mes', '=', 2)->take(1)->get();
-        $tercero = Calificacion::select('C_limpieza', 'C_trato', 'C_precio', 'C_puntualidad', 'promedio', 'mes')->where('Consultorio', '=', $Registro)->where('num_mes', '=', 3)->take(1)->get();
-        $cuarto = Calificacion::select('C_limpieza', 'C_trato', 'C_precio', 'C_puntualidad', 'promedio', 'mes')->where('Consultorio', '=', $Registro)->where('num_mes', '=', 4)->take(1)->get();
-        $quinto = Calificacion::select('C_limpieza', 'C_trato', 'C_precio', 'C_puntualidad', 'promedio', 'mes')->where('Consultorio', '=', $Registro)->where('num_mes', '=', 5)->take(1)->get();
-        $sexto = Calificacion::select('C_limpieza', 'C_trato', 'C_precio', 'C_puntualidad', 'promedio', 'mes')->where('Consultorio', '=', $Registro)->where('num_mes', '=', 6)->take(1)->get();
+        $primero = Calificacion::select('C_limpieza', 'C_trato', 'C_precio', 'C_puntualidad', 'promedio', 'mes', 'CantidadPersonas')->where('Consultorio', '=', $Registro)->where('num_mes', '=', 1)->take(1)->get();
+        $segundo = Calificacion::select('C_limpieza', 'C_trato', 'C_precio', 'C_puntualidad', 'promedio', 'mes', 'CantidadPersonas')->where('Consultorio', '=', $Registro)->where('num_mes', '=', 2)->take(1)->get();
+        $tercero = Calificacion::select('C_limpieza', 'C_trato', 'C_precio', 'C_puntualidad', 'promedio', 'mes', 'CantidadPersonas')->where('Consultorio', '=', $Registro)->where('num_mes', '=', 3)->take(1)->get();
+        $cuarto = Calificacion::select('C_limpieza', 'C_trato', 'C_precio', 'C_puntualidad', 'promedio', 'mes', 'CantidadPersonas')->where('Consultorio', '=', $Registro)->where('num_mes', '=', 4)->take(1)->get();
+        $quinto = Calificacion::select('C_limpieza', 'C_trato', 'C_precio', 'C_puntualidad', 'promedio', 'mes', 'CantidadPersonas')->where('Consultorio', '=', $Registro)->where('num_mes', '=', 5)->take(1)->get();
+        $sexto = Calificacion::select('C_limpieza', 'C_trato', 'C_precio', 'C_puntualidad', 'promedio', 'mes', 'CantidadPersonas')->where('Consultorio', '=', $Registro)->where('num_mes', '=', 6)->take(1)->get();
 
         return view('graficas', compact('estadisticas', $estadisticas, 'primero', $primero, 'segundo', $segundo, 'tercero', $tercero, 'cuarto', $cuarto, 'quinto', $quinto, 'sexto', $sexto));
         

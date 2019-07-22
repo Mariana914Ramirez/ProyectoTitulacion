@@ -17,6 +17,7 @@ class Calificacion extends Model
     	'C_trato',
     	'C_precio',
     	'mes',
+        'CantidadPersonas',
         'num_mes'
     ];
 

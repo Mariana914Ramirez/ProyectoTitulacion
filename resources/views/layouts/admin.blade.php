@@ -1,7 +1,82 @@
 <?php
   use Illuminate\Support\Facades\Request;
   use App\Notificacion;
+  use App\Calificacion;
+  use App\Consultorio;
+  use App\ComentarioConsultorio;
+  use App\Mail\Estadisticas;
+  use Illuminate\Support\Carbon;
+  setlocale(LC_ALL, 'es_ES');
 
+  $start = Carbon::now()->startOfMonth()->formatLocalized('%B');
+  $year = Carbon::now()->format('Y');
+  $consultorios=Consultorio::select('*')->get();
+  $string = $start.' '.$year;
+
+  foreach ($consultorios as $consultorio) {
+    if($consultorio->mes != $string)
+    {
+      $cantidad = $consultorio->CantidadPersonas;
+      $calificaciones = Calificacion::where('Consultorio', '=', $consultorio->Registro)->where('num_mes', '=', 1)->take(1)->get();
+      if(!$calificaciones->isEmpty())
+      {
+        $calificaciones = Calificacion::where('Consultorio', '=', $consultorio->Registro)->where('num_mes', '=', 2)->take(1)->get();
+        if(!$calificaciones->isEmpty())
+        {
+          $calificaciones = Calificacion::where('Consultorio', '=', $consultorio->Registro)->where('num_mes', '=', 3)->take(1)->get();
+          if(!$calificaciones->isEmpty())
+          {
+            $calificaciones = Calificacion::where('Consultorio', '=', $consultorio->Registro)->where('num_mes', '=', 4)->take(1)->get();
+            if(!$calificaciones->isEmpty())
+            {
+              $calificaciones = Calificacion::where('Consultorio', '=', $consultorio->Registro)->where('num_mes', '=', 5)->take(1)->get();
+              if(!$calificaciones->isEmpty())
+              {
+                $calificaciones = Calificacion::where('Consultorio', '=', $consultorio->Registro)->where('num_mes', '=', 6)->take(1)->get();
+                if(!$calificaciones->isEmpty())
+                {
+                  Calificacion::where('Consultorio', '=', $consultorio->Registro)->where('num_mes', '=', 6)->delete();
+                }
+                Calificacion::where('Consultorio', '=', $consultorio->Registro)->where('num_mes', '=', 5)->update(array('num_mes'=>6,));
+              }
+              Calificacion::where('Consultorio', '=', $consultorio->Registro)->where('num_mes', '=', 4)->update(array('num_mes'=>5,));
+            }
+            Calificacion::where('Consultorio', '=', $consultorio->Registro)->where('num_mes', '=', 3)->update(array('num_mes'=>4,));
+          }
+          Calificacion::where('Consultorio', '=', $consultorio->Registro)->where('num_mes', '=', 2)->update(array('num_mes'=>3,));
+        }
+        Calificacion::where('Consultorio', '=', $consultorio->Registro)->where('num_mes', '=', 1)->update(array('num_mes'=>2,));
+      }
+      else
+      {
+        $cantidad = $cantidad - 10;
+      }
+      
+      $calificacion = new Calificacion;
+      $calificacion->Consultorio = $consultorio->Registro;
+      $calificacion->promedio = $consultorio->Puntos;
+      $calificacion->C_limpieza = $consultorio->C_limpieza;
+      $calificacion->C_puntualidad = $consultorio->C_puntualidad;
+      $calificacion->C_trato = $consultorio->C_trato;
+      $calificacion->C_precio = $consultorio->C_precio;
+      $calificacion->mes = $consultorio->mes;
+      $calificacion->CantidadPersonas = $cantidad;
+      $calificacion->num_mes = 1;
+      $calificacion->save();
+
+      $estadisticas = Calificacion::where('Consultorio', '=', $consultorio->Registro)->where('num_mes', '=', 1)->take(1)->get();
+      $oficinas = Consultorio::select('Nombre', 'mes')->where('Registro', '=', $consultorio->Registro)->take(1)->get();
+      $comentarios = ComentarioConsultorio::where('Consultorio', '=', $consultorio->Registro)->where('Usuario', '!=', null)->orderBy('Hora', 'desc')->paginate(10);
+      if($comentarios->isEmpty()){$comentarios = null;}
+      $destinatario = $consultorio->Correo;
+
+      Mail::to($destinatario)->send(new Estadisticas($oficinas, $estadisticas, $comentarios));
+
+      Consultorio::where('Registro', '=', $consultorio->Registro)->update(array('CantidadPersonas'=>0,));
+      Consultorio::where('Registro', '=', $consultorio->Registro)->update(array('mes'=>$string,));
+
+    }
+  }
 
   if (Request::session()->has('doctorSession')) {
             $sesion=Request::session()->get('doctorSession');
