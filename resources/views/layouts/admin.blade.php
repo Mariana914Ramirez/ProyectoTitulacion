@@ -288,7 +288,7 @@
                 <a  href="/" class="col-md-4 col-sm-12" style="text-align: center;"><p class="icon-heartbeat" style="font-size: 70px; color: #FFF;"></p></a>
                 <div class="col-md-4 col-sm-12" style="font-size: 20px; font-weight: bolder; margin-top: 30px; color: #FFF;">
                     <p style="font-size: 25px;">Contáctanos</p>
-                    <p>mariana914ram@gmail.com</p>
+                    <p>salud.a.un.click.01@gmail.com</p>
                 </div>
                 <div class="col-md-4 col-sm-12" style="font-size: 20px; font-weight: bolder; color: #FFF;">
                     <ul>

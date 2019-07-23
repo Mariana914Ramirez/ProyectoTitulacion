@@ -28,6 +28,11 @@ Route::any('comentarConsultorios/{id}', 'ConsultorioController@comentarConsultor
 Route::any('estadisticas/{id}', 'ConsultorioController@estadisticas')->name('estadisticas');
 
 
+Route::any('cal', 'CalendarioGoogleController@index');
+Route::any('guardar-google/{titulo}/{descripcion}/{inicio}/{fin}', 'CalendarioGoogleController@store');
+Route::get('oauth', 'CalendarioGoogleController@oauth')->name('oauthCallback');
+
+
 
 
 

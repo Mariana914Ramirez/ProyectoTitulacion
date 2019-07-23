@@ -67,8 +67,8 @@ class CitaController extends Controller
 
         if ($request->session()->has('usuarioSession')){
         	$sesion=$request->session()->get('usuarioSession');
-            $usuario=$sesion[0]->Correo;
-            $usuario = Usuario::where('Correo', '=', $usuario)->take(1)->get();
+            $correo=$sesion[0]->Correo;
+            $usuario = Usuario::where('Correo', '=', $correo)->take(1)->get();
             $cita->Usuario=$usuario[0]->Registro;
         }
     
@@ -78,10 +78,31 @@ class CitaController extends Controller
         $cita->Telefono=$telefono;
         $cita->Concepto=$concepto;
         $cita->Asistir=1;
-        
         $cita->save();
 
-        return redirect('/')->with(['mensaje' => 'Cita creada']);
+
+
+        $nombreConsultorio = DoctorConsultorio::where('Registro', '=', $cita->DoctorConsultorio)->take(1)->get();
+        $correoDoctor = $nombreConsultorio[0]->Doctor;
+        $correoDoctor = Doctor::select('Correo')->where('Registro', '=', $correoDoctor)->take(1)->get();
+        $nombreConsultorio = $nombreConsultorio[0]->Consultorio;
+        $nombreConsultorio = Consultorio::select('Nombre')->where('Registro', '=', $nombreConsultorio)->take(1)->get();
+        $nombreConsultorio = $nombreConsultorio[0]->Nombre;
+        $hora = Horario::where('Registro', '=', $cita->Horarios)->take(1)->get();
+        $Fecha = Carbon::createFromDate($cita->Fecha)->format('Y-m-d');
+        $horaString = $hora[0]->Hora_inicio;
+        $horaString = Carbon::createFromDate($horaString)->format('H:i');
+
+        $descripcion = 'Tiene una cita en el consultorio '.$nombreConsultorio.' a las '.$horaString;
+        $titulo = 'Cita';
+        $inicio = $Fecha.'T'.$hora[0]->Hora_inicio;
+        $fin = $Fecha.'T'.$hora[0]->Hora_termino;
+        $correoDoctor = $correoDoctor[0]->Correo;
+        $usuario = $usuario[0]->Correo;
+        $request->session()->put('mexicanada', $correoDoctor);
+        $request->session()->put('mexicanada2', $usuario);
+
+        return redirect('guardar-google/'.$titulo.'/'.$descripcion.'/'.$inicio.'/'.$fin);
     }
 
 

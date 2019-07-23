@@ -356,9 +356,15 @@ use Illuminate\Support\Carbon;
                             @else
 
                             @if ((Session::exists('consultorioSession')) && (((Session::get('consultorioSession'))[0]->Correo) == $consultorio->Correo))
-                            <center>
-                                <button class="icon-camera btn btn-success" data-toggle="modal" data-target="#ModalAgregarFoto" data-dismiss="modal">+ Agregar</button>
-                            </center>
+                                @if($fotos->count() == 30)
+                                    <center>
+                                        <p>Galería llena</p>
+                                    </center>
+                                @else
+                                    <center>
+                                        <button class="icon-camera btn btn-success" data-toggle="modal" data-target="#ModalAgregarFoto" data-dismiss="modal">+ Agregar</button>
+                                    </center>
+                                @endif
                             @endif
                               
                             <div class="tz-gallery">
