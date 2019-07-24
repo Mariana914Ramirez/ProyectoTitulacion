@@ -1,6 +1,13 @@
 @extends ('layouts.admin')
 <?php 
         use Illuminate\Support\Carbon;
+
+    if(Request::session()->has('saludaunclick'))
+    {
+        Request::session()->forget('saludaunclick');
+    }
+    Request::session()->put('saludaunclick', 'http://localhost:8000/');
+
 ?>
 
 
@@ -10,7 +17,7 @@
         <center>
             <h1>Confirmación de datos para cita</h1>
             <div style="width: 60%;" align="left">
-                <form action="http://127.0.0.1:8000/guardar-cita/{{ $horario[0]->Registro }}/{{ $doctorConsultorio[0]->Registro }}/{{ (Session::get('fechaCita')) }}" method="post" enctype="multipart/form-data">
+                <form action="{{ Session::get('saludaunclick') }}guardar-cita/{{ $horario[0]->Registro }}/{{ $doctorConsultorio[0]->Registro }}/{{ (Session::get('fechaCita')) }}" method="post" enctype="multipart/form-data">
                     @csrf
                     @if((Session::exists('doctorSession')) || (Session::exists('asistenteSession')))
                         <p><b>Día: </b>{{ ((Carbon::createFromDate(Session::get('fechaCita')))->format('d-m-Y')) }}</p>

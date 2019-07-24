@@ -1,5 +1,14 @@
 @extends ('layouts.admin')
 @extends ('Formularios')
+<?php
+
+	if(Request::session()->has('saludaunclick'))
+	{
+	    Request::session()->forget('saludaunclick');
+	}
+	Request::session()->put('saludaunclick', 'http://localhost:8000/');
+
+?>
 
 @section ('contenido')
 <section id="content" class="Bienvenida" style="background: #EEE;">

@@ -14,6 +14,7 @@
 /*Route::get('/', function () {
     return view('welcome');
 });*/
+
 Route::resource('/', 'ComentarioPrincipalController');
 Route::post('sugerencias', 'ComentarioPrincipalController@saveSugerencias')->name('saveSugerencias');
 Route::get('buscar', 'ComentarioPrincipalController@buscador')->name('buscador');
@@ -117,6 +118,10 @@ Route::any('accedeOpciones/{Correo}','Auth\LoginController@accederOpciones')->na
 Route::any('salir','Auth\LoginController@logout')->name('logout');
 
 
+
+
+Route::get('/signin', 'AuthController@signin');
+Route::get('/authorize', 'AuthController@gettoken');
 
 
 

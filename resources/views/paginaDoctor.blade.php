@@ -1,6 +1,11 @@
 @extends ('layouts.admin')
 <?php
 use Illuminate\Support\Carbon;
+if(Request::session()->has('saludaunclick'))
+  {
+    Request::session()->forget('saludaunclick');
+  }
+  Request::session()->put('saludaunclick', 'http://localhost:8000/');
 ?>
 @section ('librerias')
     <link rel="stylesheet" type="text/css" href="css/estilos_consultorios.css">
@@ -14,12 +19,12 @@ use Illuminate\Support\Carbon;
 @foreach($doctores as $doctor)
     <section class="FotoPrincipalConsultorio">
         <section class="FondoParallax" style="background: #BBB;">
-            <section class="parallax" style="background-image: url(http://127.0.0.1:8000/img/fondo7.png); height: 400px; margin-bottom: 0px;">
+            <section class="parallax" style="background-image: url(http://localhost:8000/img/fondo7.png); height: 400px; margin-bottom: 0px;">
                 <div align="center" style="margin-top: 0px;">
                     <p style="background: #DDD; width: 100%; color: #333; font-size: 35px;">{{ $doctor->Consultorio }}</p>
                     <p style="background: #5DBA4E; width: 100%; color: #333; font-size: 35px;">{{ $doctor->Nombre }} {{ $doctor->Apellidos }}</p>
 
-                    <img src="http://127.0.0.1:8000/avatar/{{ $doctor->Imagen }}">
+                    <img src="{{ Session::get('saludaunclick') }}avatar/{{ $doctor->Imagen }}">
                 </div>
 
                 <center>
@@ -30,7 +35,7 @@ use Illuminate\Support\Carbon;
                                 Su página aún no es visible para otros usuarios.
                                 Para que todos los usuarios puedan acceder y generar sus citas con usted, se necesita que cumpla lo siguiente: <br>
                                 <ul style="font-size: 18px;">
-                                    <li>Haber escrito los horarios de atención a cliente. Si usted aún no lo ha realizado puede hacerlo <a href="http://127.0.0.1:8000/modificarHorarios">Aquí</a></li>
+                                    <li>Haber escrito los horarios de atención a cliente. Si usted aún no lo ha realizado puede hacerlo <a href="{{ Session::get('saludaunclick') }}modificarHorarios">Aquí</a></li>
                                     <li>Haber agregado los precios de sus consultas. Si usted aún no lo ha realizado puede hacerlo <a href="#" data-toggle="modal" data-target="#preciosModal">Aquí</a></li>
                                 </ul>
                                 
@@ -69,7 +74,7 @@ use Illuminate\Support\Carbon;
 
 
     <section class="FondoParallax" style="background: #FFF;">
-        <section class="parallax" style="background-image: url(http://127.0.0.1:8000/img/fondo6.png); margin-top: 0; margin-bottom: 0; padding-top: 0; padding-bottom: 0;">
+        <section class="parallax" style="background-image: url(http://localhost:8000/img/fondo6.png); margin-top: 0; margin-bottom: 0; padding-top: 0; padding-bottom: 0;">
             @if(!(Session::exists('consultorioSession')))
             <div class="row align-items-center">
                 <button class="btn btn-info Botones col-md-2 offset-md-2  col-sm-12 col-sm-12" data-toggle="modal" data-target="#ModalVisualizarHorarios"><p class="icon-clock" style="font-size: 50px;color: #FFF;"></p><p style="font-weight: bolder; color: #FFF;">Horarios</p></button>
@@ -290,7 +295,7 @@ use Illuminate\Support\Carbon;
                         @foreach($doctores as $doctor)
 
                         @if(((Session::exists('doctorSession')) && (((Session::get('doctorSession'))[0]->Registro) == $doctor->Registro)) || ((Session::exists('asistenteSession')) && (((Session::get('asistenteSession'))[0]->Registro) == $doctor->Registro)))
-                        <form action="http://127.0.0.1:8000/citas/{{ ((Session::get('doctorSession'))[0]->Registro) }}/{{ ((Session::get('doctorSession'))[0]->Consultorio) }}" method="post" enctype="multipart/form-data">
+                        <form action="{{ Session::get('saludaunclick') }}citas/{{ ((Session::get('doctorSession'))[0]->Registro) }}/{{ ((Session::get('doctorSession'))[0]->Consultorio) }}" method="post" enctype="multipart/form-data">
                         @csrf
                             <div class="form-group" style="text-align: center;">
                               <div class='input-group date' data-provide="cuatro" id="cuatro" style="display:inline-block; margin:0 auto;">
@@ -306,7 +311,7 @@ use Illuminate\Support\Carbon;
                             </div>
                         </form>
                         @else
-                        <form action="http://127.0.0.1:8000/citas/{{ $doctor->Registro }}/{{ $doctor->RegConsultorio }}" method="post" enctype="multipart/form-data">
+                        <form action="{{ Session::get('saludaunclick') }}citas/{{ $doctor->Registro }}/{{ $doctor->RegConsultorio }}" method="post" enctype="multipart/form-data">
                         @csrf
                             <div class="form-group" style="text-align: center;">
                               <div class='input-group date' data-provide="cinco" id="cinco" style="display:inline-block; margin:0 auto;">

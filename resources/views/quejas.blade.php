@@ -1,4 +1,13 @@
 @extends ('layouts.admin')
+<?php
+
+	if(Request::session()->has('saludaunclick'))
+	{
+	    Request::session()->forget('saludaunclick');
+	}
+	Request::session()->put('saludaunclick', 'http://localhost:8000/');
+
+?>
 
 
 @section ('contenido')
@@ -9,7 +18,7 @@
 				
 			</div>
 			@foreach($consultorios as $consultorio)
-				<form action="http://127.0.0.1:8000/guardar-quejas/{{ $notificaciones[0]->Registro }}/{{ $consultorio->Registro }}" class="formulario" method="post">
+				<form action="{{ Session::get('saludaunclick') }}guardar-quejas/{{ $notificaciones[0]->Registro }}/{{ $consultorio->Registro }}" class="formulario" method="post">
 					@csrf
 					<h2>Buzón de quejas {{ $consultorio->Nombre }}</h2>
 					<br>

@@ -1,5 +1,15 @@
 @extends ('layouts.admin')
 
+<?php
+
+  if(Request::session()->has('saludaunclick'))
+  {
+      Request::session()->forget('saludaunclick');
+  }
+  Request::session()->put('saludaunclick', 'http://localhost:8000/');
+
+?>
+
 @section ('librerias')
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker3.css" rel="stylesheet" id="bootstrap-css">
@@ -8,6 +18,7 @@
 
 @section ('contenido')
     <section class="contenedor">
+      <a class="btn btn-lg btn-primary" href="/signin" role="button" id="connect-button">Connect to Outlook</a>
         <div class="col-md-12 container" >
             <div id="banner" class="carousel slide" data-ride="carousel">
               
@@ -70,7 +81,7 @@
                 </section>
             </section>
 
-            <section style="background-image: url(http://127.0.0.1:8000/img/fondo6.png); padding: 40px 40px 20px 20px; width: 85%; height: auto; margin-bottom: 40px;">
+            <section style="background-image: url(http://localhost:8000/img/fondo6.png); padding: 40px 40px 20px 20px; width: 85%; height: auto; margin-bottom: 40px;">
               <div style="color: #FFF; width: 80%; background: #222; opacity: 0.75; padding: 20px 20px 20px 20px;">
                 <p style="font-size: 25px;">!Bienvenido a Salud a un Click</p>
                 <p style="font-size: 20px;">Esta página ha sido creada con el propósito de ayudarle a encontrar un consultorio que logre adecuarse a sus necesidades. <br> Después de cada consulta que usted programe, podrá calificar cada uno de los aspectos del consultorio (Limpieza, Puntualidad, Trato al cliente y Precio) Para así ayudar a otros pacientes a conocer de antemano el servicio que ofrece el consultorio. <br> Si usted tiene un consultorio puede registrarlo en la página para que más personas puedan conocerlo y su negocio pueda crecer más rápido.<br></p>

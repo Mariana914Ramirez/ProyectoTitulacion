@@ -1,6 +1,14 @@
 @extends ('layouts.admin')
 <?php
 use Illuminate\Support\Carbon;
+
+	if(Request::session()->has('saludaunclick'))
+	{
+	    Request::session()->forget('saludaunclick');
+	}
+	Request::session()->put('saludaunclick', 'http://localhost:8000/');
+
+
 ?>
 
 @section ('contenido')
@@ -23,7 +31,7 @@ use Illuminate\Support\Carbon;
 								<p><b>Correo:</b> {{ $correo->Correo }}</p>
 								<p><b>Edad:</b> {{ Carbon::parse($correo->FechaNacimiento)->age }} años</p>
 							</td>
-							<td><a href="http://127.0.0.1:8000/accedeAsis/{{$correo->CorreoAsistente}}/{{$correo->Registro}}" class="btn btn-success" style="height: 100%; width: 90%; margin-top: 40%; padding: 20px;">Elegir</a></td>
+							<td><a href="{{ Session::get('saludaunclick') }}accedeAsis/{{$correo->CorreoAsistente}}/{{$correo->Registro}}" class="btn btn-success" style="height: 100%; width: 90%; margin-top: 40%; padding: 20px;">Elegir</a></td>
 						</tr>
 					@endforeach
 				</tbody>

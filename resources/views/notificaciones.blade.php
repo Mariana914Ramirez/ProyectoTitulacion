@@ -1,6 +1,12 @@
 @extends ('layouts.admin')
 <?php
 	use Illuminate\Support\Carbon;
+
+	if(Request::session()->has('saludaunclick'))
+	{
+	    Request::session()->forget('saludaunclick');
+	}
+	Request::session()->put('saludaunclick', 'http://localhost:8000/');
 ?>
 
 
@@ -22,8 +28,8 @@
 									
 									@foreach($consultorios as $consultorio)
 										@if($consultorio->Correo == $notificacion->Emisor)
-											<img src="http://127.0.0.1:8000/imagenesConsultorio/{{ $consultorio->Imagen }}" width="65px" height="50px">
-											<a href="http://127.0.0.1:8000/visitarConsultorio/{{ $consultorio->Registro }}" style="color: #081BA8; font-size: 30px;">{{ $consultorio->Nombre }}</a>
+											<img src="{{ Session::get('saludaunclick') }}imagenesConsultorio/{{ $consultorio->Imagen }}" width="65px" height="50px">
+											<a href="{{ Session::get('saludaunclick') }}visitarConsultorio/{{ $consultorio->Registro }}" style="color: #081BA8; font-size: 30px;">{{ $consultorio->Nombre }}</a>
 
 											<br>
 
@@ -33,9 +39,9 @@
 
 											<div style="width: 100%; align-content: center; text-align: center;">
 												@if($notificacion->UsuarioEmisor == "Calificar")
-													<a href="http://127.0.0.1:8000/calificar/{{ $consultorio->Registro }}/{{ $notificacion->Registro }}"><button class="btn btn-success">Calificar</button></a>
+													<a href="{{ Session::get('saludaunclick') }}calificar/{{ $consultorio->Registro }}/{{ $notificacion->Registro }}"><button class="btn btn-success">Calificar</button></a>
 												@elseif($notificacion->UsuarioEmisor == "Cancelar")
-													<a href="http://127.0.0.1:8000/visitarConsultorio/{{ $consultorio->Registro }}"><button class="btn btn-success">Ver consultorio</button></a>
+													<a href="{{ Session::get('saludaunclick') }}visitarConsultorio/{{ $consultorio->Registro }}"><button class="btn btn-success">Ver consultorio</button></a>
 												@endif
 											</div>
 
@@ -55,7 +61,7 @@
 										<br>
 
 										<div style="width: 100%; align-content: center; text-align: center;">
-											<a href="http://127.0.0.1:8000/estadisticas/{{ (Session::get('consultorioSession'))[0]->Registro }}"><button class="btn btn-success">Estadísticas</button></a>
+											<a href="{{ Session::get('saludaunclick') }}estadisticas/{{ (Session::get('consultorioSession'))[0]->Registro }}"><button class="btn btn-success">Estadísticas</button></a>
 										</div>
 
 										<label style="font-size: 18px; float: right;">{{ Carbon::createFromDate($notificacion->Hora)->format('d-m-Y H:i') }}</label>

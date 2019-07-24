@@ -1,6 +1,12 @@
 @extends ('layouts.admin')
 <?php 
         use Illuminate\Support\Carbon;
+
+    if(Request::session()->has('saludaunclick'))
+    {
+        Request::session()->forget('saludaunclick');
+    }
+    Request::session()->put('saludaunclick', 'http://localhost:8000/');
 ?>
 
 
@@ -28,7 +34,7 @@
                                 <b>Concepto: </b>{{ $dia->Concepto }}
                             </td>
                             <td>
-                                <a href="http://127.0.0.1:8000/cita-cancelada/{{ $dia->Registro }}"><button class="btn btn-danger form-control">Cancelar</button></a>
+                                <a href="{{ Session::get('saludaunclick') }}cita-cancelada/{{ $dia->Registro }}"><button class="btn btn-danger form-control">Cancelar</button></a>
                             </td>
                         </tr>
                     @endforeach

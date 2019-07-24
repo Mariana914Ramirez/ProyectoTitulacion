@@ -5,6 +5,11 @@
         $mensaje = 0;
         use Illuminate\Support\Carbon;
 
+    if(Request::session()->has('saludaunclick'))
+    {
+        Request::session()->forget('saludaunclick');
+    }
+    Request::session()->put('saludaunclick', 'http://localhost:8000/');
 ?>
 
 @section ('contenido')
@@ -61,7 +66,7 @@
                                 </td>
                                 @elseif(((Session::exists('doctorSession')) && (((Session::get('doctorSession'))[0]->Registro) == $doct_cons[0]->Doctor))||((Session::exists('usuarioSession')) && (((Session::get('usuarioSession'))[0]->Correo) != $doctor[0]->Correo))||((Session::exists('asistenteSession')) && (((Session::get('asistenteSession'))[0]->Registro) == $doct_cons[0]->Doctor)))
                                 <td>
-                                    <a href="http://127.0.0.1:8000/registro-cita/{{ $horario->Registro }}/{{ $doct_cons[0]->Registro }}/{{ (Session::get('fechaCita')) }}"><button class="btn btn-success">Reservar</button></a>
+                                    <a href="{{ Session::get('saludaunclick') }}registro-cita/{{ $horario->Registro }}/{{ $doct_cons[0]->Registro }}/{{ (Session::get('fechaCita')) }}"><button class="btn btn-success">Reservar</button></a>
                                 </td>
                                 @elseif((Session::exists('consultorioSession'))||(Session::exists('administradorSession')) || ((Session::exists('doctorSession')) && (((Session::get('doctorSession'))[0]->Registro) != $doct_cons[0]->Doctor)) || ((Session::exists('asistenteSession')) && (((Session::get('asistenteSession'))[0]->Registro) != $doct_cons[0]->Doctor)) || ((Session::exists('usuarioSession')) && (((Session::get('usuarioSession'))[0]->Correo) == $doctor[0]->Correo))) 
                                 <td>

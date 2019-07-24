@@ -1,6 +1,12 @@
 @extends ('layouts.admin')
 <?php
 use Illuminate\Support\Carbon;
+if(Request::session()->has('saludaunclick'))
+  {
+    Request::session()->forget('saludaunclick');
+  }
+  Request::session()->put('saludaunclick', 'http://localhost:8000/');
+
 ?>
 
 @section ('librerias')
@@ -16,10 +22,10 @@ use Illuminate\Support\Carbon;
     @foreach($consultorios as $consultorio)
 	<section class="FotoPrincipalConsultorio">
         <section class="FondoParallax" style="margin-bottom: 0px; background: #DDD;" >
-            <section class="parallax" style="background-image: url(http://127.0.0.1:8000/img/fondo6.png); height: 500px; margin-bottom: 0px; opacity: 0.85;">
+            <section class="parallax" style="background-image: url(http://localhost:8000/img/fondo6.png); height: 500px; margin-bottom: 0px; opacity: 0.85;">
                 <div align="center" style="margin-top: 0px;">
                     <p style="background: #EEE; width: 100%; color: #000; font-size: 35px; margin-bottom: 40px; font-weight: bolder;">{{ $consultorio->Nombre }}</p>
-                    <img src="http://127.0.0.1:8000/imagenesConsultorio/{{ $consultorio->Imagen }}" width="450px" height="350px">
+                    <img src="{{ Session::get('saludaunclick') }}imagenesConsultorio/{{ $consultorio->Imagen }}" width="450px" height="350px">
                 </div>
 
 
@@ -41,7 +47,7 @@ use Illuminate\Support\Carbon;
 
     <center>
         <section class="informacionCons Bienvenida" style=" height: auto; margin: 0px; padding: 0px; background: #000;">
-            <section style="background-image: url(http://127.0.0.1:8000/img/fondo11.png); padding: 40px 40px 20px 20px; width: 100%; height: auto; opacity: 0.85;">
+            <section style="background-image: url(http://localhost:8000/img/fondo11.png); padding: 40px 40px 20px 20px; width: 100%; height: auto; opacity: 0.85;">
 
                 <div style="color: #000; width: 100%; font-size: 20px;">
                     <div style="background: #BFD9FF; opacity: 0.7; width: 80%;">
@@ -94,14 +100,14 @@ use Illuminate\Support\Carbon;
 
        @foreach($consultorios as $consultorio) 
         <section class="FondoParallax">
-            <section class="parallax" style="background-image: url(http://127.0.0.1:8000/img/fondo7.png); margin-bottom: 0px;">
+            <section class="parallax" style="background-image: url(http://localhost:8000/img/fondo7.png); margin-bottom: 0px;">
                 <div class="row align-items-center">
                     @if ((Session::exists('consultorioSession')))
                     <button class="btn btn-info Botones col-md-2 offset-md-2  col-sm-12 col-sm-12" data-toggle="modal" data-target="#ModalCitas"><p class="icon-user-md" style="font-size: 50px;"></p><p style="font-weight: bolder;">Doctores<p></button>
                     @else
                     <button class="btn btn-info Botones col-md-2 offset-md-2  col-sm-12 col-sm-12" data-toggle="modal" data-target="#ModalCitas"><p class="icon-user-md" style="font-size: 50px;"></p><p style="font-weight: bolder;">Citas<p></button>
                     @endif
-                    <button class="btn btn-info Botones col-md-2 offset-md-1 col-sm-12 col-sm-12"><a href="http://127.0.0.1:8000/estadisticas/{{ $consultorio->Registro }}" style="color: #FFF;"><p class="icon-chart-bar-1" style="font-size: 50px;"></p><p style="font-weight: bolder;">Estadísticas<p></a></button>
+                    <button class="btn btn-info Botones col-md-2 offset-md-1 col-sm-12 col-sm-12"><a href="{{ Session::get('saludaunclick') }}estadisticas/{{ $consultorio->Registro }}" style="color: #FFF;"><p class="icon-chart-bar-1" style="font-size: 50px;"></p><p style="font-weight: bolder;">Estadísticas<p></a></button>
 
                     <button class="btn btn-info Botones col-md-2 offset-md-1 col-sm-12 col-sm-12" data-toggle="modal" data-target="#ModalGaleria"><p class="icon-camera" style="font-size: 50px;"></p><p style="font-weight: bolder;">Galería<p></button>
                 </div>
@@ -119,7 +125,7 @@ use Illuminate\Support\Carbon;
                     </thead>
                     @if ((Session::exists('doctorSession'))||(Session::exists('usuarioSession'))||(Session::exists('asistenteSession'))||((Session::exists('consultorioSession'))&&((Session::get('consultorioSession'))[0]->Correo == $consultorios[0]->Correo)))
                     <tr>
-                      <form action="http://127.0.0.1:8000/comentarConsultorios/{{ $consultorio->Registro }}" method="post">
+                      <form action="{{ Session::get('saludaunclick') }}comentarConsultorios/{{ $consultorio->Registro }}" method="post">
                         @csrf
                         <td style="text-align: center;">
                           <p class="icon-heartbeat" style="width: 150px; height: 150px; font-size: 8vw;"></p>
@@ -249,12 +255,12 @@ use Illuminate\Support\Carbon;
                                     @else
 
                                         @if((Session::exists('consultorioSession')))
-                                        <a href="http://127.0.0.1:8000/visitantes/{{ $doctor->Registro }}/{{ $consultorio->Registro }}"><button class="btn btn-primary" style="width: 100%;">Ver más</button></a>
+                                        <a href="{{ Session::get('saludaunclick') }}visitantes/{{ $doctor->Registro }}/{{ $consultorio->Registro }}"><button class="btn btn-primary" style="width: 100%;">Ver más</button></a>
                                         @elseif(((Session::exists('doctorSession')) && (((Session::get('doctorSession'))[0]->Registro) == $doctor->Registro)) || ((Session::exists('asistenteSession')) && (((Session::get('asistenteSession'))[0]->Registro) == $doctor->Registro)))
-                                        <a href="http://127.0.0.1:8000/doctor"><button class="btn btn-primary" style="width: 100%;">Ir a cuenta</button></a>
+                                        <a href="{{ Session::get('saludaunclick') }}doctor"><button class="btn btn-primary" style="width: 100%;">Ir a cuenta</button></a>
                                         @else
                                         <a><button class="btn btn-success" style="width: 49%;" data-toggle="modal" data-target="#citasModal" data-dismiss="modal">Visualizar horarios</button></a>
-                                        <a href="http://127.0.0.1:8000/visitantes/{{ $doctor->Registro }}/{{ $consultorio->Registro }}"><button class="btn btn-primary" style="width: 49%;">Ver más</button></a>
+                                        <a href="{{ Session::get('saludaunclick') }}visitantes/{{ $doctor->Registro }}/{{ $consultorio->Registro }}"><button class="btn btn-primary" style="width: 49%;">Ver más</button></a>
                                         @endif
                                     @endif
                                 </td>
@@ -281,7 +287,7 @@ use Illuminate\Support\Carbon;
                         @foreach($doctores as $doctor)
 
                         @if(((Session::exists('doctorSession')) && (((Session::get('doctorSession'))[0]->Registro) == $doctor->Registro)) || ((Session::exists('asistenteSession')) && (((Session::get('asistenteSession'))[0]->Registro) == $doctor->Registro)))
-                        <form action="http://127.0.0.1:8000/citas/{{ ((Session::get('doctorSession'))[0]->Registro) }}/{{ ((Session::get('doctorSession'))[0]->Consultorio) }}" method="post" enctype="multipart/form-data">
+                        <form action="{{ Session::get('saludaunclick') }}citas/{{ ((Session::get('doctorSession'))[0]->Registro) }}/{{ ((Session::get('doctorSession'))[0]->Consultorio) }}" method="post" enctype="multipart/form-data">
                         @csrf
                             <div class="form-group" style="text-align: center;">
                               <div class='input-group date' data-provide="cuatro" id="cuatro" style="display:inline-block; margin:0 auto;">
@@ -297,7 +303,7 @@ use Illuminate\Support\Carbon;
                             </div>
                         </form>
                         @else
-                        <form action="http://127.0.0.1:8000/citas/{{ $doctor->Registro }}/{{ $consultorios[0]->Registro }}" method="post" enctype="multipart/form-data">
+                        <form action="{{ Session::get('saludaunclick') }}citas/{{ $doctor->Registro }}/{{ $consultorios[0]->Registro }}" method="post" enctype="multipart/form-data">
                         @csrf
                             <div class="form-group" style="text-align: center;">
                               <div class='input-group date' data-provide="cinco" id="cinco" style="display:inline-block; margin:0 auto;">
@@ -372,8 +378,8 @@ use Illuminate\Support\Carbon;
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="card">
-                                            <a class="lightbox" href="http://127.0.0.1:8000/galeriaConsultorio/{{ $foto->Imagen }}">
-                                            <img src="http://127.0.0.1:8000/galeriaConsultorio/{{ $foto->Imagen }}" alt="Park" class="card-img-top" height="250px" style="float: right;">
+                                            <a class="lightbox" href="{{ Session::get('saludaunclick') }}galeriaConsultorio/{{ $foto->Imagen }}">
+                                            <img src="{{ Session::get('saludaunclick') }}galeriaConsultorio/{{ $foto->Imagen }}" alt="Park" class="card-img-top" height="250px" style="float: right;">
                                             </a>
                                             @if ((Session::exists('consultorioSession')) && (((Session::get('consultorioSession'))[0]->Correo) == $consultorio->Correo))
                                             <button class="btn btn-danger" style="float: right; position: absolute;">X Eliminar</button>

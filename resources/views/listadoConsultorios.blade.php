@@ -1,6 +1,16 @@
 @extends ('layouts.admin')
 @extends ('Formularios')
 
+<?php
+
+	if(Request::session()->has('saludaunclick'))
+	{
+	    Request::session()->forget('saludaunclick');
+	}
+	Request::session()->put('saludaunclick', 'http://localhost:8000/');
+
+?>
+
 
 @section ('contenido')
 <section id="content" class="Bienvenida" style="background: #EEE;">
@@ -14,7 +24,7 @@
 					@foreach($consultorios as $consultorio)
 						<tr>
 							<td style="width: auto;" width="auto">
-								<img src="/imagenesConsultorio/{{ $consultorio->Imagen }}" width="250px" height="200px">
+								<img src="{{ Session::get('saludaunclick') }}imagenesConsultorio/{{ $consultorio->Imagen }}" width="250px" height="200px">
 							</td>
 							<td>
 								<p><b>Nombre:</b> {{ $consultorio->Nombre }}</p>
@@ -27,9 +37,9 @@
 							</td>
 							<td>
 								@if((Session::exists('consultorioSession')) && (((Session::get('consultorioSession'))[0]->Correo) == $consultorio->Correo))
-									<a href="http://127.0.0.1:8000/cuentaConsultorio" class="btn btn-success form-control" style="height: 100%; width: 90%; margin-top: 40%;">Visitar Consultorio</a>
+									<a href="{{ Session::get('saludaunclick') }}cuentaConsultorio" class="btn btn-success form-control" style="height: 100%; width: 90%; margin-top: 40%;">Visitar Consultorio</a>
 								@else
-									<a href="http://127.0.0.1:8000/visitarConsultorio/{{ $consultorio->Registro }}" class="btn btn-success form-control" style="height: 100%; width: 90%; margin-top: 40%;">Visitar Consultorio</a>
+									<a href="{{ Session::get('saludaunclick') }}visitarConsultorio/{{ $consultorio->Registro }}" class="btn btn-success form-control" style="height: 100%; width: 90%; margin-top: 40%;">Visitar Consultorio</a>
 								@endif
 							</td>
 						</tr>

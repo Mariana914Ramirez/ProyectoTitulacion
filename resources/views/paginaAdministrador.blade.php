@@ -1,6 +1,14 @@
 @extends ('layouts.admin')
 <?php
 use Intervention\Image\Facades\Image;
+
+    if(Request::session()->has('saludaunclick'))
+    {
+        Request::session()->forget('saludaunclick');
+    }
+    Request::session()->put('saludaunclick', 'http://localhost:8000/');
+
+
 ?>
 
 @section ('librerias')

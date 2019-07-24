@@ -8,6 +8,15 @@
   use Illuminate\Support\Carbon;
   setlocale(LC_ALL, 'es_ES');
 
+
+  if(Request::session()->has('saludaunclick'))
+  {
+    Request::session()->forget('saludaunclick');
+  }
+  Request::session()->put('saludaunclick', 'http://localhost:8000/');
+
+
+
   $start = Carbon::now()->startOfMonth()->formatLocalized('%B');
   $year = Carbon::now()->format('Y');
   $consultorios=Consultorio::select('*')->get();
@@ -116,9 +125,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:8000/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:8000/css/estilos.css">
-    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:8000/css/fontello.css">
+    <link rel="stylesheet" type="text/css" href="{{ Session::get('saludaunclick') }}css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ Session::get('saludaunclick') }}css/estilos.css">
+    <link rel="stylesheet" type="text/css" href="{{ Session::get('saludaunclick') }}css/fontello.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script src="https://code.highcharts.com/highcharts.js"></script>
@@ -137,7 +146,7 @@
 <body>
     <header class="sticky-top">
         <nav class="navbar navbar-expand-lg navbar-light sticky-top">
-          <a class="navbar-brand" href="/"><h1 class="icon-heartbeat">Salud a un click</h1></a>
+          <a class="navbar-brand" href="{{ Session::get('saludaunclick') }}"><h1 class="icon-heartbeat">Salud a un click</h1></a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -147,17 +156,21 @@
 
 
               <li class="nav-item">
-                <a class="nav-link" href="/" aria-haspopup="true" aria-expanded="false"><b class="icon-home">Inicio </b></a>
+                <a class="nav-link" href="{{ Session::get('saludaunclick') }}" aria-haspopup="true" aria-expanded="false"><b class="icon-home">Inicio </b></a>
               </li>
 
 
               <li class="nav-item">
-                <a class="nav-link" href="http://127.0.0.1:8000/consultorios"><b class="icon-user-md">Consultorios </b><span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="{{ Session::get('saludaunclick') }}consultorios"><b class="icon-user-md">Consultorios </b><span class="sr-only">(current)</span></a>
               </li>
+
+              
+              <li class="<?php echo ($_SERVER['REQUEST_URI'] == '/mail' ? 'active' : '');?>"><a href="/mail">Inbox</a></li>
+            
 
 
               <li class="nav-item">
-                <a class="nav-link" href="http://127.0.0.1:8000/especialidades"><b class="icon-stethoscope">Especialidades </b><span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="{{ Session::get('saludaunclick') }}especialidades"><b class="icon-stethoscope">Especialidades </b><span class="sr-only">(current)</span></a>
               </li>
 
 
@@ -167,7 +180,7 @@
                     <b class="icon-cog-alt">Mi cuenta</b>
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="http://127.0.0.1:8000/administrador">Ir a mi cuenta</a>
+                    <a class="dropdown-item" href="{{ Session::get('saludaunclick') }}administrador">Ir a mi cuenta</a>
                     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#administradorRegistroModal">Agregar administrador</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#">Eliminar cuenta</a>
@@ -175,14 +188,14 @@
                 </li>
                 @elseif (Session::exists('consultorioSession'))
                 <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle icon-cog-alt" href="http://127.0.0.1:8000/cuentaConsultorio" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <a class="nav-link dropdown-toggle icon-cog-alt" href="{{ Session::get('saludaunclick') }}cuentaConsultorio" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <b>Mi cuenta</b>
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="http://127.0.0.1:8000/cuentaConsultorio">Ir a mi cuenta</a>
+                    <a class="dropdown-item" href="{{ Session::get('saludaunclick') }}cuentaConsultorio">Ir a mi cuenta</a>
                     <a class="dropdown-item" href="#">Modificar información</a>
                     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#mandarAnuncioModal">Mandar anuncio</a>
-                    <a class="dropdown-item" href="http://127.0.0.1:8000/estadisticas/{{ (Session::get('consultorioSession'))[0]->Registro }}">Estadísticas</a>
+                    <a class="dropdown-item" href="{{ Session::get('saludaunclick') }}estadisticas/{{ (Session::get('consultorioSession'))[0]->Registro }}">Estadísticas</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#">Eliminar cuenta</a>
                   </div>
@@ -193,10 +206,10 @@
                     <b class="icon-cog-alt">Mi cuenta</b>
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="http://127.0.0.1:8000/doctor">Ir a mi cuenta</a>
+                    <a class="dropdown-item" href="{{ Session::get('saludaunclick') }}doctor">Ir a mi cuenta</a>
                     <a class="dropdown-item" href="#">Modificar información</a>
-                    <a class="dropdown-item" href="http://127.0.0.1:8000/modificarHorarios">Modificar horarios</a>
-                    <a class="dropdown-item" href="http://127.0.0.1:8000/ver-agenda">Agenda</a>
+                    <a class="dropdown-item" href="{{ Session::get('saludaunclick') }}modificarHorarios">Modificar horarios</a>
+                    <a class="dropdown-item" href="{{ Session::get('saludaunclick') }}ver-agenda">Agenda</a>
                     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#preciosModal">Modificar precios</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#">Eliminar cuenta</a>
@@ -204,12 +217,12 @@
                 </li>
                 @elseif (Session::exists('usuarioSession'))
                 <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="http://127.0.0.1:8000/administrador" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <a class="nav-link dropdown-toggle" href="{{ Session::get('saludaunclick') }}administrador" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <b class="icon-cog-alt">Mi cuenta</b>
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="http://127.0.0.1:8000/modificarUsuario">Modificar información</a>
-                    <a class="dropdown-item" href="http://127.0.0.1:8000/ver-informacion-citas">Citas</a>
+                    <a class="dropdown-item" href="{{ Session::get('saludaunclick') }}modificarUsuario">Modificar información</a>
+                    <a class="dropdown-item" href="{{ Session::get('saludaunclick') }}ver-informacion-citas">Citas</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#">Eliminar cuenta</a>
                   </div>
@@ -220,11 +233,11 @@
               @if ((Session::exists('consultorioSession'))||(Session::exists('administradorSession'))||(Session::exists('usuarioSession'))||(Session::exists('asistenteSession'))||(Session::exists('doctorSession'))) 
                 @if($notificacion->isEmpty())
                  <li class="nav-item">
-                  <a class="nav-link" href="http://127.0.0.1:8000/notificaciones"><b class="icon-bell">Notificaciones</b><span class="sr-only">(current)</span></a>
+                  <a class="nav-link" href="{{ Session::get('saludaunclick') }}notificaciones"><b class="icon-bell">Notificaciones</b><span class="sr-only">(current)</span></a>
                 </li>
                 @else
                 <li class="nav-item Notificaciones" style="background: #081BA8; border-radius: 20px;">
-                  <a class="nav-link" href="http://127.0.0.1:8000/notificaciones" style="color: #FFF;"><b class="icon-bell">Notificaciones *</b><span class="sr-only">(current)</span></a>
+                  <a class="nav-link" href="{{ Session::get('saludaunclick') }}notificaciones" style="color: #FFF;"><b class="icon-bell">Notificaciones *</b><span class="sr-only">(current)</span></a>
                 </li>
                 @endif
                @else
@@ -236,7 +249,7 @@
 
               @if ((Session::exists('consultorioSession'))||(Session::exists('administradorSession'))||(Session::exists('usuarioSession'))||(Session::exists('asistenteSession'))||(Session::exists('doctorSession'))) 
                   <li class="nav-item">
-                    <a class="nav-link" href="http://127.0.0.1:8000/salir"><b class="icon-user">Cerrar Sesión </b><span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="{{ Session::get('saludaunclick') }}salir"><b class="icon-user">Cerrar Sesión </b><span class="sr-only">(current)</span></a>
                 </li>              
               @else
                 <li class="nav-item">
@@ -246,7 +259,7 @@
 
 
             </ul>
-            <form class="form-inline my-2 my-lg-0" action="http://127.0.0.1:8000/buscar" method="get">
+            <form class="form-inline my-2 my-lg-0" action="{{ Session::get('saludaunclick') }}buscar" method="get">
               @csrf
               <input class="form-control mr-sm-2" type="search" placeholder="Buscar" aria-label="Search" name="buscador">
               <button class="icon-search btn btn-outline-primary my-2 my-sm-0" type="submit"></button>
@@ -311,7 +324,7 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
 
-                <form action="http://127.0.0.1:8000/usuario/login" method="post" >
+                <form action="{{ Session::get('saludaunclick') }}usuario/login" method="post" >
                    @csrf
                     <div class="modal-body">
                         <div class="form-group">
@@ -345,7 +358,7 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 
-                <form action="http://127.0.0.1:8000/usuario" method="post" enctype="multipart/form-data">
+                <form action="{{ Session::get('saludaunclick') }}usuario" method="post" enctype="multipart/form-data">
                   @csrf
                   <div class="modal-body">
 
@@ -413,7 +426,7 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
 
-                <form action="http://127.0.0.1:8000/administrador" method="post" >
+                <form action="{{ Session::get('saludaunclick') }}administrador" method="post" >
                    @csrf
                     <div class="modal-body">
                         <div class="form-group">
@@ -455,7 +468,7 @@
                     </p>
 
                     <p style="margin-left: 10%; margin-right: 10%;">Ingrese la fecha en la que le interesaría empezar a mostrar su anuncio</p>
-                    <form action="http://127.0.0.1:8000/anuncios" method="post" enctype="multipart/form-data">
+                    <form action="{{ Session::get('saludaunclick') }}anuncios" method="post" enctype="multipart/form-data">
                       @csrf
                       <div class="form-group" style="text-align: center;">
                           <div class='input-group date' id='datepickes' style="display:inline-block; margin:0 auto;">
@@ -507,7 +520,7 @@
                       Aquí puede agregar los conceptos que te gustaría darles un precio
                     </p>
 
-                    <form action="http://127.0.0.1:8000/precios" method="post" enctype="multipart/form-data">
+                    <form action="{{ Session::get('saludaunclick') }}precios" method="post" enctype="multipart/form-data">
                         @csrf
                         <center>
                         <table class="table table-dark" style="width: 90%;" id="dynamic_field_precios">
@@ -550,10 +563,10 @@
         @yield('modal')
 
 
-    <script type="text/javascript" src="http://127.0.0.1:8000/js/jquery.js"></script>
-    <script src="http://127.0.0.1:8000/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="{{ Session::get('saludaunclick') }}js/jquery.js"></script>
+    <script src="{{ Session::get('saludaunclick') }}js/bootstrap.min.js"></script>
 
-    <script src="http://127.0.0.1:8000/js/dropdown.js"></script>
+    <script src="{{ Session::get('saludaunclick') }}js/dropdown.js"></script>
     <script type="text/javascript">
         function cambiar(){
         var pdrs = document.getElementById('file-upload').files[0].name;
@@ -569,7 +582,7 @@
     </script>
 
 
-    <script type="text/javascript" src="http://127.0.0.1:8000/js/calendario.js"></script>
+    <script type="text/javascript" src="{{ Session::get('saludaunclick') }}js/calendario.js"></script>
     <script >
         $(function () {
             $('#datepicker').datepicker({

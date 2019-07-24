@@ -1,4 +1,13 @@
 @extends ('layouts.admin')
+<?php
+
+	if(Request::session()->has('saludaunclick'))
+	{
+	    Request::session()->forget('saludaunclick');
+	}
+	Request::session()->put('saludaunclick', 'http://localhost:8000/');
+
+?>
 
 
 @section ('contenido')
@@ -21,7 +30,7 @@
 								<p><b>Teléfono:</b> {{ $contarConsultorio->Telefono }}</p>
 								<p style="max-width: 90%;"><b>Ubicación:</b> {{ $contarConsultorio->Ubicacion }}</p>
 							</td>
-							<td><a href="http://127.0.0.1:8000/accedeDoctorConsultorio/{{$contarConsultorio->Correo}}/{{$contarConsultorio->id_consultorio}}/{{$contarConsultorio->id_doctor}}" class="btn btn-success form-control" style="height: 100%; width: 100%; margin-top: 40%; padding: 20px; align-content: center;">Elegir</a></td>
+							<td><a href="{{ Session::get('saludaunclick') }}accedeDoctorConsultorio/{{$contarConsultorio->Correo}}/{{$contarConsultorio->id_consultorio}}/{{$contarConsultorio->id_doctor}}" class="btn btn-success form-control" style="height: 100%; width: 100%; margin-top: 40%; padding: 20px; align-content: center;">Elegir</a></td>
 						</tr>
 					@endforeach
 				</tbody>

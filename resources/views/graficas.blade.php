@@ -2,6 +2,12 @@
 <?php
 use Illuminate\Support\Carbon;
 setlocale(LC_ALL, 'es_ES');
+
+	if(Request::session()->has('saludaunclick'))
+	{
+	    Request::session()->forget('saludaunclick');
+	}
+	Request::session()->put('saludaunclick', 'http://localhost:8000/');
 ?>
 
 
@@ -36,7 +42,7 @@ setlocale(LC_ALL, 'es_ES');
 		</section>
 
 
-		<img src="http://127.0.0.1:8000/img/separador2.png">
+		<img src="{{ Session::get('saludaunclick') }}img/separador2.png">
 
 
 		@if(!$primero->isEmpty())
@@ -132,7 +138,7 @@ setlocale(LC_ALL, 'es_ES');
 		</section>
 
 
-		<img src="http://127.0.0.1:8000/img/separador2.png">
+		<img src="{{ Session::get('saludaunclick') }}img/separador2.png">
 
 
 		<section id="MesesYGeneral">
@@ -202,7 +208,7 @@ setlocale(LC_ALL, 'es_ES');
 			</table>
 		</section>
 
-		<img src="http://127.0.0.1:8000/img/separador2.png">
+		<img src="{{ Session::get('saludaunclick') }}img/separador2.png">
 
 
 		<section id="Cantidad personas">

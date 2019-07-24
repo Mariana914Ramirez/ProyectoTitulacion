@@ -1,4 +1,13 @@
 @extends ('layouts.admin')
+<?php
+
+    if(Request::session()->has('saludaunclick'))
+    {
+        Request::session()->forget('saludaunclick');
+    }
+    Request::session()->put('saludaunclick', 'http://localhost:8000/');
+
+?>
 
 
 @section ('contenido')

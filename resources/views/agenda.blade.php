@@ -1,6 +1,12 @@
 @extends ('layouts.admin')
 <?php 
         use Illuminate\Support\Carbon;
+
+    if(Request::session()->has('saludaunclick'))
+    {
+        Request::session()->forget('saludaunclick');
+    }
+    Request::session()->put('saludaunclick', 'http://localhost:8000/');
 ?>
 
 
@@ -19,7 +25,7 @@
                         @foreach($dias as $dia)
                             <tr style="text-align: center; font-size: 19px;">
                                 <td>
-                                    <a href="http://127.0.0.1:8000/ver-citas/{{ $dia->Fecha }}" style="color: #000;">Citas del día {{ Carbon::createFromDate($dia->Fecha)->format('d-m-Y') }}</a>
+                                    <a href="{{ Session::get('saludaunclick') }}ver-citas/{{ $dia->Fecha }}" style="color: #000;">Citas del día {{ Carbon::createFromDate($dia->Fecha)->format('d-m-Y') }}</a>
                                 </td>
                             </tr>
                         @endforeach
@@ -47,7 +53,7 @@
                                     @endforeach
                                 </td>
                                 <td>
-                                    <a href="http://127.0.0.1:8000/cancelar-confirmacion/{{ $cancelado->Registro }}"><button class="btn btn-success form-control">Confirmar</button></a>
+                                    <a href="{{ Session::get('saludaunclick') }}cancelar-confirmacion/{{ $cancelado->Registro }}"><button class="btn btn-success form-control">Confirmar</button></a>
                                 </td>
                             </tr>
                         @endforeach

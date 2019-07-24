@@ -1,6 +1,15 @@
 @extends ('layouts.admin')
 <?php
 use Illuminate\Support\Carbon;
+
+
+    if(Request::session()->has('saludaunclick'))
+    {
+        Request::session()->forget('saludaunclick');
+    }
+    Request::session()->put('saludaunclick', 'http://localhost:8000/');
+
+
 ?>
 
 @section ('contenido')

@@ -2,6 +2,12 @@
 <?php 
         $mensaje = 0;
         use Illuminate\Support\Carbon;
+
+    if(Request::session()->has('saludaunclick'))
+    {
+        Request::session()->forget('saludaunclick');
+    }
+    Request::session()->put('saludaunclick', 'http://localhost:8000/');
 ?>
 
 
@@ -65,7 +71,7 @@
                                     @if($mensaje == 1)
                                         Ya no se puede cancelar
                                     @else
-                                        <a href="http://127.0.0.1:8000/cancelar-confirmacion/{{ $cita->Registro }}"><button class="btn btn-success form-control">Cancelar</button></a>
+                                        <a href="{{ Session::get('saludaunclick') }}cancelar-confirmacion/{{ $cita->Registro }}"><button class="btn btn-success form-control">Cancelar</button></a>
                                     @endif
                                 </td>
                             </tr>

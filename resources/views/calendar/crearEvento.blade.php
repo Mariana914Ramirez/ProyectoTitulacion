@@ -7,7 +7,7 @@
             <b>Crear un evento</b>
         </legend>
 		<section style="width: 80%; text-align: left;">
-		    <form action="http://127.0.0.1:8000/cal" method="POST" role="form">
+		    <form action="{{ Session::get('saludaunclick') }}cal" method="POST" role="form">
 		        @csrf
 		        <div class="form-group">
 		            <label for="title">
@@ -41,4 +41,3 @@
     </center>
 </div>
 @endsection
-https://docs.microsoft.com/en-us/outlook/rest/php-tutorial
