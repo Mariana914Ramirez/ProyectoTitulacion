@@ -29,10 +29,10 @@
                         <input type="text" name="Nombre" placeholder="Nombre" class="form-control">
                         <br>
                         <label><b>Teléfono:</b></label>
-                        <input type="text" name="Nombre" placeholder="Telefono" class="form-control">
+                        <input type="text" name="Telefono" placeholder="Telefono" class="form-control">
                         <br>
                         <label><b>Concepto:</b></label>
-                        <select class="form-control" required>
+                        <select class="form-control" required name="Concepto">
                             <option>Elige</option>
                             @foreach($conceptos as $concepto)
                                 <option>{{ $concepto->Descripcion }} ${{ $concepto->Precio }}</option>

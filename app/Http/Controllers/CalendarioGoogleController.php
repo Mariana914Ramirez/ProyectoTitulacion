@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use Carbon\Carbon;
+use App\Cita;
 use Google_Client;
 use Google_Service_Calendar;
 use Google_Service_Calendar_Event;
@@ -70,7 +71,7 @@ class CalendarioGoogleController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store($titulo, $descripcion, $inicio, $fin, Request $request)
+    public function store($titulo, $descripcion, $inicio, $fin, $cita, Request $request)
     {
         session_start();
         $startDateTime = Carbon::parse($inicio)->toRfc3339String();
@@ -78,9 +79,6 @@ class CalendarioGoogleController extends Controller
 
         if ($request->session()->has('mexicanada')){
         	$correo=$request->session()->get('mexicanada');
-        }
-        if ($request->session()->has('mexicanada2')){
-        	$usuario=$request->session()->get('mexicanada2');
         }
 
         if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
@@ -102,12 +100,12 @@ class CalendarioGoogleController extends Controller
             $results->setGuestsCanModify(true);
 
             $updatedEvent = $service->events->update('primary', $results->getId(), $results);
+            $google = $results->getId();
+
+            Cita::where('Registro', '=', $cita)->update(array('Google'=>$google,));
 
             if ($request->session()->has('mexicanada')){
 	        	$request->session()->forget('mexicanada');
-	        }
-	        if ($request->session()->has('mexicanada2')){
-	        	$request->session()->forget('mexicanada2');
 	        }
             if (!$results) {
                 return redirect('/')->with(['mensaje' => 'Cita creada, aunque no se logró la sincronización con Google Calendar']);
@@ -115,6 +113,50 @@ class CalendarioGoogleController extends Controller
             return redirect('/')->with(['mensaje' => 'Cita creada']);
         } else {
             return redirect('/')->with(['mensaje' => 'Cita creada']);
+        }
+    }
+
+
+
+
+    public function destroy($eventId)
+    {
+        session_start();
+        if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
+            $this->client->setAccessToken($_SESSION['access_token']);
+            $service = new Google_Service_Calendar($this->client);
+            $service->events->delete('primary', $eventId);
+            return redirect('ver-informacion-citas')->with(['mensaje' => 'Cita eliminada']);
+        } else {
+            return redirect('ver-informacion-citas');
+        }
+    }
+
+
+
+
+    public function eliminarCitaDoctor($eventId, $doctorConsultorio, $fecha)
+    {
+        session_start();
+        if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
+            $this->client->setAccessToken($_SESSION['access_token']);
+            $service = new Google_Service_Calendar($this->client);
+            $service->events->delete('primary', $eventId);
+            
+            if(Cita::select('*')->where('DoctorConsultorio', '=', $doctorConsultorio)->where('Fecha', '=', $fecha)->where('Asistir', '=', 1)->count() == 0)
+            {
+                return redirect('ver-agenda')->with(['mensaje' => 'Cita eliminada']);
+            }
+            return redirect('ver-citas/'.$fecha)->with(['mensaje' => 'Cita eliminada']);
+
+
+        } else {
+            if(Cita::select('*')->where('DoctorConsultorio', '=', $doctorConsultorio)->where('Fecha', '=', $fecha)->where('Asistir', '=', 1)->count() == 0)
+            {
+                return redirect('ver-agenda')->with(['mensaje' => 'Cita eliminada']);
+            }
+            return redirect('ver-citas/'.$fecha)->with(['mensaje' => 'Cita eliminada']);
+
         }
     }
 

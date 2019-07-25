@@ -30,8 +30,10 @@ Route::any('estadisticas/{id}', 'ConsultorioController@estadisticas')->name('est
 
 
 Route::any('cal', 'CalendarioGoogleController@index');
-Route::any('guardar-google/{titulo}/{descripcion}/{inicio}/{fin}', 'CalendarioGoogleController@store');
+Route::any('guardar-google/{titulo}/{descripcion}/{inicio}/{fin}/{cita}', 'CalendarioGoogleController@store');
 Route::get('oauth', 'CalendarioGoogleController@oauth')->name('oauthCallback');
+Route::get('eliminar-cita-google/{eventId}', 'CalendarioGoogleController@destroy');
+Route::get('google-eliminar-cita/{eventId}/{doctorConsultorio}/{fecha}', 'CalendarioGoogleController@eliminarCitaDoctor');
 
 
 

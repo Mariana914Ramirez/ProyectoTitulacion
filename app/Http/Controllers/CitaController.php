@@ -78,6 +78,7 @@ class CitaController extends Controller
         $cita->Telefono=$telefono;
         $cita->Concepto=$concepto;
         $cita->Asistir=1;
+        $cita->Google=null;
         $cita->save();
 
 
@@ -98,11 +99,10 @@ class CitaController extends Controller
         $inicio = $Fecha.'T'.$hora[0]->Hora_inicio;
         $fin = $Fecha.'T'.$hora[0]->Hora_termino;
         $correoDoctor = $correoDoctor[0]->Correo;
-        $usuario = $usuario[0]->Correo;
         $request->session()->put('mexicanada', $correoDoctor);
-        $request->session()->put('mexicanada2', $usuario);
+        $cita=$cita->Registro;
 
-        return redirect('guardar-google/'.$titulo.'/'.$descripcion.'/'.$inicio.'/'.$fin);
+        return redirect('guardar-google/'.$titulo.'/'.$descripcion.'/'.$inicio.'/'.$fin.'/'.$cita);
     }
 
 
@@ -179,12 +179,11 @@ class CitaController extends Controller
 
         Cita::where('Registro', '=', $idCita)->update(array('Asistir'=>0,));
 
-        $citados = Cita::where('Registro', '=', $idCita)->get();
+        $citados = Cita::where('Registro', '=', $idCita)->take(1)->get();
 
 
         //genera la notificación
         $usuario = Usuario::where('Correo', '=', $destinatario)->take(1)->get();
-        $cita = Cita::where('Registro', '=', $idCita)->get();
         
         $consultorio = Consultorio::where('Correo', '=', $consultorio[0]->Correo)->take(1)->get();
         $string = 'Hola '.$usuario[0]->Nombre.', le informamos que el consultorio '.$consultorio[0]->Nombre.' ha cancelado una cita, puede llamar a su número telefónico para más información: '.$consultorio[0]->Telefono.'.';
@@ -201,23 +200,47 @@ class CitaController extends Controller
         $notificacion->UsuarioEmisor = "Cancelar";
         $notificacion->save();                            
 
+        $idEvent = $citados[0]->Google;
+        $doctorConsultorio = $citados[0]->DoctorConsultorio;
+        $fecha = $citados[0]->DoctorConsultorio;
 
 
-        
-
-        if(Cita::select('*')->where('DoctorConsultorio', '=', $citados[0]->DoctorConsultorio)->where('Fecha', '=', $citados[0]->Fecha)->where('Asistir', '=', 1)->count() == 0)
+        if($idEvent != null)
         {
-            return redirect('ver-agenda')->with(['mensaje' => 'Cita eliminada']);
+            return redirect('google-eliminar-cita/'.$idEvent.'/'.$doctorConsultorio.'/'.$fecha);
         }
-        return back()->with(['mensaje' => 'Cita eliminada']);
+        else
+        {
+            if(Cita::select('*')->where('DoctorConsultorio', '=', $citados[0]->DoctorConsultorio)->where('Fecha', '=', $citados[0]->Fecha)->where('Asistir', '=', 1)->count() == 0)
+            {
+                return redirect('ver-agenda')->with(['mensaje' => 'Cita eliminada']);
+            }
+            return back()->with(['mensaje' => 'Cita eliminada']);
+        }
     }
 
 
 
     public function confirmarCancelacion(Request $request, $idCita)
     {
+        if($request->session()->has('doctorSession') || $request->session()->has('administadorSession'))
+        {
+            Cita::where('Registro', '=', $idCita)->delete();
+            return back()->with(['mensaje' => 'Cita eliminada']);
+
+        }
+        $idEvent = Cita::where('Registro', '=', $idCita)->take(1)->get();
+        $idEvent = $idEvent[0]->Google;
         Cita::where('Registro', '=', $idCita)->delete();
-        return back();
+
+        if($idEvent != null)
+        {
+            return redirect('eliminar-cita-google/'.$idEvent);
+        }
+        else
+        {
+            return back()->with(['mensaje' => 'Cita eliminada']);
+        }
     }
 
 

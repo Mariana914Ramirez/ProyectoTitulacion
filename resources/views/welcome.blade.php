@@ -18,7 +18,6 @@
 
 @section ('contenido')
     <section class="contenedor">
-      <a class="btn btn-lg btn-primary" href="/signin" role="button" id="connect-button">Connect to Outlook</a>
         <div class="col-md-12 container" >
             <div id="banner" class="carousel slide" data-ride="carousel">
               

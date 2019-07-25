@@ -18,6 +18,7 @@ class Cita extends Model
         'Telefono',
         'Concepto',
         'Asistir',
+        'Google'
     ];
 
     public $timestamps=false;

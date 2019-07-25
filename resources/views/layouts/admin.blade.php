@@ -164,10 +164,6 @@
                 <a class="nav-link" href="{{ Session::get('saludaunclick') }}consultorios"><b class="icon-user-md">Consultorios </b><span class="sr-only">(current)</span></a>
               </li>
 
-              
-              <li class="<?php echo ($_SERVER['REQUEST_URI'] == '/mail' ? 'active' : '');?>"><a href="/mail">Inbox</a></li>
-            
-
 
               <li class="nav-item">
                 <a class="nav-link" href="{{ Session::get('saludaunclick') }}especialidades"><b class="icon-stethoscope">Especialidades </b><span class="sr-only">(current)</span></a>
