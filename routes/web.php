@@ -20,13 +20,21 @@ Route::post('sugerencias', 'ComentarioPrincipalController@saveSugerencias')->nam
 Route::get('buscar', 'ComentarioPrincipalController@buscador')->name('buscador');
 
 
+
+
+
 Route::get('cuentaConsultorio', 'ConsultorioController@cuenta')->name('cuenta');
 Route::any('visitarConsultorio/{id}', 'ConsultorioController@PacientesVisitantes')->name('PacientesVisitantes');
-
-
 Route::any('comentarConsultorios/{id}', 'ConsultorioController@comentarConsultorios')->name('comentarConsultorios');
-
 Route::any('estadisticas/{id}', 'ConsultorioController@estadisticas')->name('estadisticas');
+Route::any('modificar-informacion-consultorio', 'ConsultorioController@vistaModificar')->name('vistaModificar');
+Route::any('guardar-cambios-consultorio', 'ConsultorioController@modificarConsultorio')->name('modificarConsultorio');
+Route::any('ver-citas-del-doctor/{idDoctor}', 'ConsultorioController@mostrarCitasDoctor')->name('mostrarCitasDoctor');
+Route::any('editar-comentario-consultorio/{idComentario}', 'ConsultorioController@vistaEditarComentario')->name('vistaEditarComentario');
+Route::any('guardar-comentario-editado/{idComentario}/{idConsultorio}', 'ConsultorioController@editarComentario')->name('editarComentario');
+Route::any('eliminar-comentario-consultorio/{idComentario}', 'ConsultorioController@eliminarComentario')->name('eliminarComentario');
+
+
 
 
 Route::any('cal', 'CalendarioGoogleController@index');
@@ -38,8 +46,10 @@ Route::get('google-eliminar-cita/{eventId}/{doctorConsultorio}/{fecha}', 'Calend
 
 
 
-
 Route::resource('administrador', 'AdministradorController');
+
+
+
 
 
 Route::any('noCumpleRequisitosAnuncio/{id}/{anuncio}', 'CorreosController@NoCumpleRequisitos')->name('NoCumpleRequisitos');
@@ -49,11 +59,14 @@ Route::any('especialdadAgregada/{id}', 'CorreosController@EspecialdadAgregada')-
 
 
 Route::any('eliminar-consultorio/{idConsultorio}', 'EliminarController@eliminarConsultorios')->name('eliminarConsultorios');
+Route::any('eliminar-doctor/{idDoctor}', 'EliminarController@eliminarDoctor')->name('eliminarDoctor');
+Route::any('eliminar-cuenta-consultorio', 'EliminarController@eliminarCuentaConsultorio')->name('eliminarCuentaConsultorio');
 
 
 
 Route::resource('imagenes', 'imagenController');
 Route::any('anuncios', 'imagenController@anuncios')->name('anuncios');
+Route::any('eliminar-foto-galeria/{idFoto}', 'imagenController@eliminarFotoGaleria')->name('eliminarFotoGaleria');
 
 
 
@@ -86,6 +99,10 @@ Route::any('calificar/{idConsultorio}/{idNotificacion}', 'CalificacionController
 Route::any('guardar-calificacion/{idConsultorio}/{idNotificacion}', 'CalificacionController@guardarCalificacion')->name('guardarCalificacion');
 Route::any('mensaje-quejas/{idNotificacion}/{idConsultorio}', 'CalificacionController@mostrarQuejas')->name('mostrarQuejas');
 Route::any('guardar-quejas/{idNotificacion}/{idConsultorio}', 'CalificacionController@guardarQuejas')->name('guardarQuejas');
+
+
+
+Route::any('eliminar-notificacion/{idNotificacion}', 'NotificacionController@eliminarNotificacion')->name('eliminarNotificacion');
 
 
 

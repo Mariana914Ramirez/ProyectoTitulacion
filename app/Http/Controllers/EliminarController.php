@@ -18,6 +18,7 @@ use App\ComentarioConsultorio;
 use App\Cita;
 use App\Calificacion;
 use App\Mail\EliminarConsultorio;
+use App\Mail\EliminarDoctor;
 use Illuminate\Support\Facades\Mail;
 use DB;
 
@@ -58,5 +59,73 @@ class EliminarController extends Controller
     	Consultorio::where('Registro', '=', $idConsultorio)->delete();
 
     	return redirect('/')->with(['mensaje' => 'Gracias por calificar']);
+    }
+
+
+    public function eliminarDoctor($idDoctor)
+    {
+        $relacionCitasConsultorio = DB::table('relacioncitaconsultorio')->where('IdRegistro', '=', $idDoctor)->get();
+
+        $relaciones = DoctorConsultorio::where('Doctor', '=', $idDoctor)->get();
+        if(!$relacionCitasConsultorio->isEmpty())
+        {
+            $consultorio = Consultorio::where('Registro', '=', $relaciones[0]->Consultorio)->get();
+            $destinatario = $consultorio[0]->Correo;
+
+            Mail::to($destinatario)->send(new EliminarDoctor($consultorio, $relacionCitasConsultorio));
+        }
+
+        Cita::where('DoctorConsultorio', '=', $relaciones[0]->Registro)->delete();
+        Precio::where('DoctorConsultorio', '=', $relaciones[0]->Registro)->delete();
+        Horario::where('DoctorConsultorio', '=', $relaciones[0]->Registro)->delete();
+        Estudio::where('Doctor', '=', $relaciones[0]->Doctor)->delete();
+        $doctor = Doctor::where('Registro', '=', $relaciones[0]->Doctor)->get();
+
+        DoctorConsultorio::where('Registro', '=', $relaciones[0]->Registro)->delete();
+        Doctor::where('Registro', '=', $doctor[0]->Registro)->delete();
+
+        return back()->with(['mensaje' => 'Doctor eliminado']);
+    }
+
+
+
+    public function eliminarCuentaConsultorio(Request $request)
+    {
+        if ($request->session()->has('consultorioSession')) {
+            $sesion=$request->session()->get('consultorioSession');
+            $consultorio=$sesion[0]->Correo;
+
+
+            $consultorio = Consultorio::where('Correo', '=', $consultorio)->get();
+            $idConsultorio = $consultorio[0]->Registro;
+            $destinatario = $consultorio[0]->Correo;
+            $relaciones = DoctorConsultorio::where('Consultorio', '=', $idConsultorio)->get();
+        foreach ($relaciones as $relacion) {
+            Cita::where('DoctorConsultorio', '=', $relacion->Registro)->delete();
+            Precio::where('DoctorConsultorio', '=', $relacion->Registro)->delete();
+            Horario::where('DoctorConsultorio', '=', $relacion->Registro)->delete();
+            Estudio::where('Doctor', '=', $relacion->Doctor)->delete();
+            $doctor = Doctor::where('Registro', '=', $relacion->Doctor)->get();
+
+            DoctorConsultorio::where('Registro', '=', $relacion->Registro)->delete();
+            Doctor::where('Registro', '=', $doctor[0]->Registro)->delete();
+        }
+
+            Notificacion::where('Receptor', '=', $destinatario)->delete();
+            Notificacion::where('Emisor', '=', $destinatario)->delete();
+            Anuncio::where('Consultorio', '=', $idConsultorio)->delete();
+            Imagen::where('Consultorio', '=', $idConsultorio)->delete();
+            ComentarioConsultorio::where('Consultorio', '=', $idConsultorio)->delete();
+            Calificacion::where('Consultorio', '=', $idConsultorio)->delete();
+
+            $imagen = $consultorio[0]->Imagen;
+            $file=public_path().'\imagenesConsultorio\\'.$imagen;
+            unlink($file);
+
+            $request->session()->forget('consultorioSession');
+
+            Consultorio::where('Registro', '=', $idConsultorio)->delete();
+            return redirect('/')->with(['mensaje' => 'El consultorio ha sido eliminado']);
+        }
     }
 }

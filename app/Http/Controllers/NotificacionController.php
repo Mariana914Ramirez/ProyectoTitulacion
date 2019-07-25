@@ -47,4 +47,13 @@ class NotificacionController extends Controller
 
         return view('notificaciones', compact('notificaciones', $notificaciones, 'consultorios', $consultorios, 'doctores', $doctores));
     }
+
+
+
+
+    public function eliminarNotificacion($idNotificacion)
+    {
+        Notificacion::where('Registro', '=', $idNotificacion)->delete();
+        return back()->with(['mensaje' => 'Notificación eliminada']);    
+    }
 }

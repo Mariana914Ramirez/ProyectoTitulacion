@@ -92,7 +92,7 @@ if(Request::session()->has('saludaunclick'))
 
                 @if ((Session::exists('consultorioSession')) && (((Session::get('consultorioSession'))[0]->Correo) == $consultorio->Correo))
                 <div align="right" style="margin-bottom: 0px;">
-                    <a href=""><button style="align-content: center;" class="btn btn-light"><q class="icon-pencil"></q></button></a>
+                    <a href="modificar-informacion-consultorio"><button style="align-content: center;" class="btn btn-light"><q class="icon-pencil"></q></button></a>
                 </div>
                 @endif
             </section>
@@ -139,21 +139,21 @@ if(Request::session()->has('saludaunclick'))
                       </form>
                     </tr>
                     @endif
-                    @foreach($mandados as $mandar)
-                    
+
+                @foreach($mandados as $mandar)  
                 @if($mandar->Usuario==null)
                     @foreach($consultorios as $consultorio)
                     <tr>
                       <td style="width: 17%;">
-                        <img src="/imagenesConsultorio/{{ $consultorio->Imagen }}" style="width: 150px; height: 150px;">
+                        <img src="{{ Session::get('saludaunclick') }}imagenesConsultorio/{{ $consultorio->Imagen }}" style="width: 150px; height: 150px;">
                       </td>
                       <td colspan="2">
-                        <p><b style="font-size: 20px;">{{$consultorio->Nombre}}</b></p>
+                        <p><b style="font-size: 20px;">{{ $consultorio->Nombre }}</b></p>
                         <p>{{$mandar->Comentario}}</p>
 
 
                           @if ((Session::exists('consultorioSession'))&& (Session::get('consultorioSession'))[0]->Correo==$consultorio->Correo)
-                              <p style="text-align: right; margin-right: 40px;"><a href="" style="color: #36ABFF;">Modificar</a> / <a href="" style="color: #FF5B5B;">Eliminar</a></p>
+                              <p style="text-align: right; margin-right: 40px;"><a href="editar-comentario-consultorio/{{ $mandar->Registro }}" style="color: #36ABFF;">Editar</a> / <a href="eliminar-comentario-consultorio/{{ $mandar->Registro }}" style="color: #FF5B5B;">Eliminar</a></p>
                           @else
                             <br>
                           @endif
@@ -161,14 +161,14 @@ if(Request::session()->has('saludaunclick'))
                         <i style="font-size: 13px;">Publicado: {{$mandar->Hora}}</i>
                       </td>
                     </tr>
-                      @endforeach
+                    @endforeach
                 @else
 
                         @foreach($pacientesComentarios as $pacienteComentario)
                         @if($pacienteComentario->Registro == $mandar->Usuario)
                         <tr>
                           <td style="width: 17%;">
-                            <img src="/avatar/{{ $pacienteComentario->Imagen }}" style="width: 150px; height: 150px;">
+                            <img src="{{ Session::get('saludaunclick') }}avatar/{{ $pacienteComentario->Imagen }}" style="width: 150px; height: 150px;">
                           </td>
                           <td colspan="2">
                             <p><b style="font-size: 20px;">{{$pacienteComentario->Nombre}} {{$pacienteComentario->Apellidos}}</b></p>
@@ -177,7 +177,7 @@ if(Request::session()->has('saludaunclick'))
 
                               @if (Session::exists('doctorSession'))
                                 @if (((Session::get('doctorSession'))[0]->Correo) == $pacienteComentario->Correo)
-                                  <p style="text-align: right; margin-right: 40px;"><a href="" style="color: #36ABFF;">Modificar</a> / <a href="" style="color: #FF5B5B;">Eliminar</a></p>
+                                  <p style="text-align: right; margin-right: 40px;"><a href="editar-comentario-consultorio/{{ $mandar->Registro }}" style="color: #36ABFF;">Editar</a> / <a href="eliminar-comentario-consultorio/{{ $mandar->Registro }}" style="color: #FF5B5B;">Eliminar</a></p>
                                 @else
                                   <br>
                                 @endif
@@ -250,8 +250,8 @@ if(Request::session()->has('saludaunclick'))
                                         </p>
                                     </p>
                                     @if ((Session::exists('consultorioSession')) && (((Session::get('consultorioSession'))[0]->Correo) == $consultorio->Correo))
-                                    <button class="btn btn-primary" style="width: 49%;">Ver citas</button>
-                                    <button class="btn btn-danger" style="width: 49%;">Eliminar</button>
+                                    <a href="ver-citas-del-doctor/{{ $doctor->Registro }}"><button class="btn btn-primary" style="width: 49%;">Ver citas</button></a>
+                                    <a href="{{ Session::get('saludaunclick') }}eliminar-doctor/{{ $doctor->Registro }}"><button class="btn btn-danger" style="width: 49%;">Eliminar</button></a>
                                     @else
 
                                         @if((Session::exists('consultorioSession')))
@@ -382,7 +382,7 @@ if(Request::session()->has('saludaunclick'))
                                             <img src="{{ Session::get('saludaunclick') }}galeriaConsultorio/{{ $foto->Imagen }}" alt="Park" class="card-img-top" height="250px" style="float: right;">
                                             </a>
                                             @if ((Session::exists('consultorioSession')) && (((Session::get('consultorioSession'))[0]->Correo) == $consultorio->Correo))
-                                            <button class="btn btn-danger" style="float: right; position: absolute;">X Eliminar</button>
+                                            <a href="eliminar-foto-galeria/{{ $foto->Registro }}" style="float: right; position: absolute;"><button class="btn btn-danger" >X Eliminar</button></a>
                                             @endif
                                         </div>
                                     </div>

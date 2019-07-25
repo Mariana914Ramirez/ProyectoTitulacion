@@ -4,6 +4,8 @@
   use App\Calificacion;
   use App\Consultorio;
   use App\ComentarioConsultorio;
+  use App\Usuario;
+  use App\Anuncio;
   use App\Mail\Estadisticas;
   use Illuminate\Support\Carbon;
   setlocale(LC_ALL, 'es_ES');
@@ -117,6 +119,22 @@
   {
     $notificacion = null;
   }
+
+
+  $anuncios = Anuncio::where('Aceptado', '=', 1)->get();
+  foreach ($anuncios as $anuncio) {
+    $hora = Carbon::now()->format('Y-m-d');
+    if($anuncio->FechaFinal < $hora)
+    {
+      $imagen = $anuncio->Imagen;
+      $file=public_path().'\slide\\'.$imagen;
+      unlink($file);
+      Anuncio::where('Registro', '=', $anuncio->Registro)->delete();
+    }
+  }
+
+
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -156,14 +174,8 @@
 
 
               <li class="nav-item">
-                <a class="nav-link" href="{{ Session::get('saludaunclick') }}" aria-haspopup="true" aria-expanded="false"><b class="icon-home">Inicio </b></a>
-              </li>
-
-
-              <li class="nav-item">
                 <a class="nav-link" href="{{ Session::get('saludaunclick') }}consultorios"><b class="icon-user-md">Consultorios </b><span class="sr-only">(current)</span></a>
               </li>
-
 
               <li class="nav-item">
                 <a class="nav-link" href="{{ Session::get('saludaunclick') }}especialidades"><b class="icon-stethoscope">Especialidades </b><span class="sr-only">(current)</span></a>
@@ -185,21 +197,26 @@
                 @elseif (Session::exists('consultorioSession'))
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle icon-cog-alt" href="{{ Session::get('saludaunclick') }}cuentaConsultorio" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <b>Mi cuenta</b>
+                    <b><?php $nom=Request::session()->get('consultorioSession')[0]->Correo; $nom =Consultorio::select('Nombre')->where('Correo', '=', $nom)->take(1)->get(); echo $nom[0]->Nombre;?></b>
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="{{ Session::get('saludaunclick') }}cuentaConsultorio">Ir a mi cuenta</a>
-                    <a class="dropdown-item" href="#">Modificar información</a>
+                    <a class="dropdown-item" href="modificar-informacion-consultorio">Modificar información</a>
                     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#mandarAnuncioModal">Mandar anuncio</a>
                     <a class="dropdown-item" href="{{ Session::get('saludaunclick') }}estadisticas/{{ (Session::get('consultorioSession'))[0]->Registro }}">Estadísticas</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Eliminar cuenta</a>
+                    <a class="dropdown-item" href="eliminar-cuenta-consultorio">Eliminar cuenta</a>
                   </div>
                 </li>
                 @elseif ((Session::exists('asistenteSession'))||(Session::exists('doctorSession'))) 
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <b class="icon-cog-alt">Mi cuenta</b>
+                    @if(Session::exists('doctorSession'))
+                    <b class="icon-cog-alt"><?php $nom=Request::session()->get('doctorSession')[0]->Correo; $nom =Usuario::select('Correo')->where('Correo', '=', $nom)->take(1)->get(); echo $nom[0]->Correo;?></b>
+                    @endif
+                    @if(Session::exists('asistenteSession'))
+                    <b class="icon-cog-alt"><?php $nom=Request::session()->get('asistenteSession')[0]->Correo; $nom =Usuario::select('Nombre')->where('Correo', '=', $nom)->take(1)->get(); echo $nom[0]->Nombre;?></b>
+                    @endif
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="{{ Session::get('saludaunclick') }}doctor">Ir a mi cuenta</a>
@@ -214,7 +231,7 @@
                 @elseif (Session::exists('usuarioSession'))
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="{{ Session::get('saludaunclick') }}administrador" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <b class="icon-cog-alt">Mi cuenta</b>
+                    <b class="icon-cog-alt"><?php $nom=Request::session()->get('usuarioSession')[0]->Correo; $nom =Usuario::select('Nombre')->where('Correo', '=', $nom)->take(1)->get(); echo $nom[0]->Nombre;?></b>
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="{{ Session::get('saludaunclick') }}modificarUsuario">Modificar información</a>
@@ -457,34 +474,13 @@
                    <div style="margin-bottom: 40px; margin-top: 40px;">
                     <p style="margin-left: 10%; margin-right: 10%;">
                       Para mandar un anuncio se deben cumplir con 2 requisitos. <br>
-                      <b>1.</b> La imagen debe medir 1000px de largo y 500px de alto.<br>
+                      <b>1.</b> La imagen debe medir 1050px de largo y 550px de alto.<br>
                       <b>2.</b> No debe tener faltas ortográficas.<br><br>
-                      Se le dará prioridad a los consultorios que tengan mayor calificación, ya que la sección de anuncios sólo soportará 10 anuncios.<br>
-                      En caso de que los requisitos no se cumplan o que no haya espacio en el slide se le intentará mandar un mensaje a la brevedad explicando el motivo.<br><br>
+                      En caso de que los requisitos no se cumplan o que no haya espacio en el slide se le intentará mandar un mensaje a la brevedad explicando el motivo.<br>
+                      Si el anuncio es aceptado, durará 3 días en la sección de auncios.<br>
                     </p>
-
-                    <p style="margin-left: 10%; margin-right: 10%;">Ingrese la fecha en la que le interesaría empezar a mostrar su anuncio</p>
                     <form action="{{ Session::get('saludaunclick') }}anuncios" method="post" enctype="multipart/form-data">
                       @csrf
-                      <div class="form-group" style="text-align: center;">
-                          <div class='input-group date' id='datepickes' style="display:inline-block; margin:0 auto;">
-                              <input type='text' placeholder="Fecha de inicio" style="text-align: center; align-content: center;" id="FechaInicio" name="FechaInicio" required />
-                              <span class="input-group-addon">
-                                  <span class="glyphicon glyphicon-calendar"></span>
-                              </span>
-                          </div>
-                      </div>
-
-                      <div class="form-group" style="text-align: center;">
-                          <div class='input-group date' id='datepicks' style="display:inline-block; margin:0 auto;">
-                              <input type='text' placeholder="Fecha de término" style="text-align: center; align-content: center;" id="FechaTermino" name="FechaTermino" required />
-                              <span class="input-group-addon">
-                                  <span class="glyphicon glyphicon-calendar"></span>
-                              </span>
-                          </div>
-                      </div>
-
-
                         <div class="form-group" align="center">
                             <label for="file-uploadT" class="btn btn-primary">
                                 <i class="fas fa-cloud-upload-alt icon-camera" style="font-size: 20px;"></i> Subir foto de anuncio
@@ -544,7 +540,7 @@
                             </tbody>
                         </table>
                         <div class="modal-final" style="text-align: center; margin-bottom: 10px;">
-                            <button type="submit" class="btn btn-success" style="width: 70%;">Enviar</button>
+                            <button type="submit" class="btn btn-success" style="width: 70%;">Agregar conceptos</button>
                         </div>
                         </center>
                     </form>

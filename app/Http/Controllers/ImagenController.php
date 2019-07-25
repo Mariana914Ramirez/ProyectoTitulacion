@@ -9,6 +9,7 @@ use App\Imagen;
 use App\Anuncio;
 use App\Consultorio;
 use Illuminate\Support\Facades\Hash;
+use Intervention\Image\Facades\Image;
 
 class ImagenController extends Controller
 {
@@ -65,24 +66,45 @@ class ImagenController extends Controller
         $consultorio=$consultorios[0]->Registro;
 
         $file = $request->file('SubirAnuncio');
+        if(Image::make($file)->height() != 550 || Image::make($file)->width() != 1050)
+        {
+            return back()->withErrors(['Anuncio' => 'El tamaño del anuncio no es el requerido']);
+        }
         $imagen = time().$file->getClientOriginalName();
         $file->move(public_path().'/slide/', $imagen);
 
-        
-        $partes = explode('/', $request->input('FechaInicio'));
-        $inicio = $partes[2].'-'.$partes[1].'-'.$partes[0];
-
-        $partes = explode('/', $request->input('FechaTermino'));
-        $termino = $partes[2].'-'.$partes[1].'-'.$partes[0];
 
         $anuncios = new Anuncio();
         $anuncios->Consultorio=$consultorio;
         $anuncios->Imagen=$imagen;
-        $anuncios->FechaInicio=$inicio;
-        $anuncios->FechaFinal=$termino;
+        $anuncios->FechaFinal=null;
         $anuncios->Aceptado=0;
         $anuncios->save();
-        return redirect('/');
+        return back()->with(['mensaje' => 'El anuncio se ha mandado satisfactoriamente']);
+    }
+
+
+
+
+    public function eliminarFotoGaleria($idFoto, Request $request)
+    {
+        if ($request->session()->has('consultorioSession')) {
+            $sesion=$request->session()->get('consultorioSession');
+            $consultorio=$sesion[0]->Correo;
+
+
+            $consultorios=Consultorio::select('Registro')->where('Correo', '=', $consultorio)->get();
+            $imagen = Imagen::where('Registro', '=', $idFoto)->get();
+            $imagen = $imagen[0]->Imagen;
+
+            $file=public_path().'\galeriaConsultorio\\'.$imagen;
+            unlink($file);
+
+            Imagen::where('Registro', '=', $idFoto)->delete();
+
+            return back()->with(['mensaje' => 'La imagen ha sido borrada']);
+        }
+
     }
 
 }

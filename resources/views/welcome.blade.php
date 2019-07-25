@@ -81,8 +81,8 @@
             </section>
 
             <section style="background-image: url(http://localhost:8000/img/fondo6.png); padding: 40px 40px 20px 20px; width: 85%; height: auto; margin-bottom: 40px;">
-              <div style="color: #FFF; width: 80%; background: #222; opacity: 0.75; padding: 20px 20px 20px 20px;">
-                <p style="font-size: 25px;">!Bienvenido a Salud a un Click</p>
+              <div style="color: #FFF; width: 80%; background: #222; opacity: 0.8; padding: 20px 20px 20px 20px;">
+                <p style="font-size: 25px;">!Bienvenido a Salud a un Click!</p>
                 <p style="font-size: 20px;">Esta página ha sido creada con el propósito de ayudarle a encontrar un consultorio que logre adecuarse a sus necesidades. <br> Después de cada consulta que usted programe, podrá calificar cada uno de los aspectos del consultorio (Limpieza, Puntualidad, Trato al cliente y Precio) Para así ayudar a otros pacientes a conocer de antemano el servicio que ofrece el consultorio. <br> Si usted tiene un consultorio puede registrarlo en la página para que más personas puedan conocerlo y su negocio pueda crecer más rápido.<br></p>
                 <p style="font-size: 23px;">¡Nosotros nos preocupamos por usted! <br><br></p>
               </div>

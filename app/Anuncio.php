@@ -12,7 +12,6 @@ class Anuncio extends Model
     protected $fillable =[
     	'Consultorio',
     	'Imagen',
-    	'FechaInicio',
     	'FechaFinal',
     	'Aceptado'
     ];

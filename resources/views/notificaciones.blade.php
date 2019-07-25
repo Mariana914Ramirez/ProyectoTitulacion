@@ -45,7 +45,8 @@
 												@endif
 											</div>
 
-											<label style="font-size: 18px; float: right;">{{ Carbon::createFromDate($notificacion->Hora)->format('d-m-Y H:i') }}</label>
+											<label style="font-size: 18px; float: right;">{{ Carbon::createFromDate($notificacion->Hora)->format('d-m-Y H:i') }}</label><br>
+											<a href="eliminar-notificacion/{{ $notificacion->Registro }}" style="color: #FF5B5B;">Eliminar</a>
 
 										@endif
 									@endforeach
@@ -65,6 +66,7 @@
 										</div>
 
 										<label style="font-size: 18px; float: right;">{{ Carbon::createFromDate($notificacion->Hora)->format('d-m-Y H:i') }}</label>
+										<a href="eliminar-notificacion/{{ $notificacion->Registro }}" style="color: #FF5B5B; font-size: 16px;">Eliminar</a>
 									@endif
 
 								</td>

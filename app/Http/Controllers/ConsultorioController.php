@@ -357,5 +357,169 @@ class ConsultorioController extends Controller
         
     }
 
+
+
+
+    public function modificarConsultorio(Request $request)
+    {
+        if ($request->session()->has('consultorioSession'))
+        {
+            $sesion=$request->session()->get('consultorioSession');
+            $consultorio=$sesion[0]->Correo;
+            $consultorio = Consultorio::where('Correo', '=', $consultorio)->get();
+
+            $nombre = $request->input('Nombre');
+            $ubicacion = $request->input('Ubicacion');
+            $telefono = $request->input('Telefono');
+            $descripcion = $request->input('Descripcion');
+            $correoRecuperacion = $request->input('CorreoRecuperacion');
+            if($request->file('SubirFoto') != null)
+            {
+                $file = $request->file('SubirFoto');
+                $name = time().$file->getClientOriginalName();
+                $file->move(public_path().'/imagenesConsultorio/', $name);
+                $imagen=$name;
+                Consultorio::where('Registro', '=', $consultorio[0]->Registro)->update(array('Imagen'=>$imagen,));
+            }
+            if($request->input('Password') != null)
+            {
+                $password = Hash::make($request->input('Password'));
+                Consultorio::where('Registro', '=', $consultorio[0]->Registro)->update(array('Password'=>$password,));
+            }
+
+            Consultorio::where('Registro', '=', $consultorio[0]->Registro)->update(array('Nombre'=>$nombre,));
+            Consultorio::where('Registro', '=', $consultorio[0]->Registro)->update(array('Telefono'=>$telefono,));
+            Consultorio::where('Registro', '=', $consultorio[0]->Registro)->update(array('Ubicacion'=>$ubicacion,));
+            Consultorio::where('Registro', '=', $consultorio[0]->Registro)->update(array('Descripcion'=>$descripcion,));
+            Consultorio::where('Registro', '=', $consultorio[0]->Registro)->update(array('CorreoRecuperacion'=>$correoRecuperacion,));
+
+
+
+
+
+            //Doctores nuevos
+
+            $partes=$request->input('CorreoDoctor');
+            $experiencia=$request->input('Edad');
+            $Asistente=$request->input('Secretaria');
+
+            if($partes[0] != null){
+                $id_consultorio=$consultorio[0]->Registro;
+
+                $contadorEspecialidades=0;
+
+                for ($i=0; $i < sizeof($partes); $i++) { 
+                    $datos_doctor=Usuario::select('*')->where('Correo', '=', $partes[$i])->take(1)->get();
+                    $id_datos=$datos_doctor[0];
+
+
+                    $doctor = new Doctor();
+                    $doctor->Correo=$partes[$i];
+                    $doctor->Nombre=$id_datos->Nombre;
+                    $doctor->Apellidos=$id_datos->Apellidos;
+                    $doctor->Experiencia=$experiencia[$i];
+                    $doctor->Telefono=$id_datos->Telefono;
+                    $doctor->Sexo=$id_datos->Sexo;
+                    $doctor->Password=$id_datos->Password;
+                    $doctor->CorreoRecuperacion=$id_datos->CorreoRecuperacion;
+                    $doctor->FechaNacimiento=$id_datos->FechaNacimiento;
+                    $doctor->CorreoAsistente=$Asistente[$i];
+                    $doctor->Imagen=$id_datos->Imagen;
+                    $doctor->save();
+
+
+                    //Registro Relación doctor-consultorio
+
+                    $doctorConsultorio = new DoctorConsultorio();
+                    $doctorConsultorio->Consultorio=$consultorio[0]->Registro;
+                    $doctorConsultorio->Doctor=$doctor->Registro;
+                    $doctorConsultorio->save();
+
+
+                    //Registro Estudios del doctor
+
+                    for ($j=0; $j < 3; $j++) { 
+                        $contadorInformacion=$contadorEspecialidades+$j;
+                        $nombre_especialidad=$request->input('Especialidad');
+                        if($nombre_especialidad[$contadorInformacion]!="Especialidades")
+                        {
+                            $estudios = new Estudio();
+                            $estudios->Especialidad=$nombre_especialidad[$contadorInformacion];
+                            $estudios->Doctor=$doctor->Registro;
+                            $estudios->save();
+
+                        }
+                        
+                    }
+                    $contadorEspecialidades=$contadorEspecialidades+3;
+                    
+                }
+            }
+            return back()->with(['mensaje' => 'Cambios guardados']);
+        }
+
+        return redirect('/');
+    }
+
+
+    public function vistaModificar(Request $request)
+    {
+        if ($request->session()->has('consultorioSession'))
+        {
+            $sesion=$request->session()->get('consultorioSession');
+            $consultorio=$sesion[0]->Correo;
+            $consultorios=Consultorio::select('Registro', 'Nombre', 'Telefono', 'Ubicacion', 'Descripcion', 'CorreoRecuperacion', 'Imagen')->where('Correo', '=', $consultorio)->get();
+            $especialidades=Especialidad::select('*')->get();
+            $doct_cons=DoctorConsultorio::where('Consultorio', '=', $consultorios[0]->Registro)->get();
+
+            return view('modificarConsultorios', compact('consultorios', $consultorios, 'especialidades', $especialidades, 'doct_cons'));
+        }
+    }
+
+
+
+
+    public function mostrarCitasDoctor(Request $request, $idDoctor)
+    {
+        if ($request->session()->has('consultorioSession'))
+        {
+            $sesion=$request->session()->get('consultorioSession');
+            $consultorio=$sesion[0]->Correo;
+            $consultorios=Consultorio::select('Registro')->where('Correo', '=', $consultorio)->get();
+            $citas = DB::table('relacioncitaconsultorio')->where('Registro', '=', $consultorios[0]->Registro)->where('IdRegistro', '=', $idDoctor)->get();
+
+            return view('mostrarCitasDoctor', compact('citas', $citas));
+        }
+    }
+
+
+
+    public function vistaEditarComentario($idComentario)
+    {
+        $comentario = ComentarioConsultorio::where('Registro', '=', $idComentario)->get();
+        return view('editarComentarioConsultorio', compact('comentario', $comentario));
+    }
+
+
+
+    public function editarComentario($idComentario, $idConsultorio, Request $request)
+    {
+        $comentario = $request->input('Comentarios');
+        ComentarioConsultorio::where('Registro', '=', $idComentario)->update(array('Comentario'=>$comentario,));
+        if ($request->session()->has('consultorioSession'))
+        {
+            return redirect('cuentaConsultorio')->with(['mensaje' => 'Comentario editado']);
+        }
+        return redirect('visitarConsultorio/'.$idConsultorio)->with(['mensaje' => 'Comentario editado']);
+    }
+
+
+
+    public function eliminarComentario($idComentario)
+    {
+        ComentarioConsultorio::where('Registro', '=', $idComentario)->delete();
+        return back()->with(['mensaje' => 'Comentario eliminado']);
+    }
+
 }
 
