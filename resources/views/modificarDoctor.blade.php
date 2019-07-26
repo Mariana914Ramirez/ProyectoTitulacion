@@ -82,7 +82,7 @@
                         @foreach($doct_especi as $de)
                         <tr>
                             <td style="width: 60%; align-content: center; text-align: center;">{{ $de->Nombre }}</td>
-                            <td style="align-content: center; text-align: center;"><a href="{{ Session::get('saludaunclick') }}eliminar-especialidad-doctor/{{ $de->Registro }}"><button class="btn btn-danger">Eliminar</button></a></td>
+                            <td style="align-content: center; text-align: center;"><button class="btn btn-danger" onclick="alerta('{{ Session::get('saludaunclick') }}eliminar-especialidad-doctor/{{ $de->Registro }}')">Eliminar</button></td>
                         </tr>
                         @endforeach
                     </tbody>

@@ -191,7 +191,7 @@
                     <a class="dropdown-item" href="{{ Session::get('saludaunclick') }}administrador">Ir a mi cuenta</a>
                     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#administradorRegistroModal">Agregar administrador</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="eliminar-cuenta-administrador">Eliminar cuenta</a>
+                    <a class="dropdown-item" onclick="alerta('{{ Session::get('saludaunclick') }}eliminar-cuenta-administrador')">Eliminar cuenta</a>
                   </div>
                 </li>
                 @elseif (Session::exists('consultorioSession'))
@@ -205,7 +205,7 @@
                     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#mandarAnuncioModal">Mandar anuncio</a>
                     <a class="dropdown-item" href="{{ Session::get('saludaunclick') }}estadisticas/{{ (Session::get('consultorioSession'))[0]->Registro }}">Estadísticas</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="eliminar-cuenta-consultorio">Eliminar cuenta</a>
+                    <a class="dropdown-item" onclick="alerta('{{ Session::get('saludaunclick') }}eliminar-cuenta-consultorio')">Eliminar cuenta</a>
                   </div>
                 </li>
                 @elseif ((Session::exists('asistenteSession'))||(Session::exists('doctorSession'))) 
@@ -226,7 +226,7 @@
                     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#preciosModal">Modificar precios</a>
                     <a class="dropdown-item" href="{{ Session::get('saludaunclick') }}cal">Sincronizar calendario de Google</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="{{ Session::get('saludaunclick') }}eliminar-cuenta-doctor">Eliminar cuenta</a>
+                    <a class="dropdown-item" onclick="alerta('{{ Session::get('saludaunclick') }}eliminar-cuenta-doctor')">Eliminar cuenta</a>
                   </div>
                 </li>
                 @elseif (Session::exists('usuarioSession'))
@@ -239,7 +239,7 @@
                     <a class="dropdown-item" href="{{ Session::get('saludaunclick') }}ver-informacion-citas">Citas</a>
                     <a class="dropdown-item" href="{{ Session::get('saludaunclick') }}cal">Sincronizar calendario de Google</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Eliminar cuenta</a>
+                    <a class="dropdown-item" onclick="alerta('{{ Session::get('saludaunclick') }}eliminar-cuenta-usuario')">Eliminar cuenta</a>
                   </div>
                 </li>
               @endif
@@ -680,7 +680,15 @@
     </script>
 
 
-
+    <script type="text/javascript">
+      function alerta($direccion)
+      {
+        if(confirm("¿Está seguro de que desea hacer esto?"))
+        {
+          location.href = $direccion;
+        }
+      }
+    </script>
 
 
 

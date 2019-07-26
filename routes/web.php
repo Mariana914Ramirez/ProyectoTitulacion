@@ -47,6 +47,8 @@ Route::any('guardar-google/{titulo}/{descripcion}/{inicio}/{fin}/{cita}', 'Calen
 Route::get('oauth', 'CalendarioGoogleController@oauth')->name('oauthCallback');
 Route::get('eliminar-cita-google/{eventId}', 'CalendarioGoogleController@destroy');
 Route::get('google-eliminar-cita/{eventId}/{doctorConsultorio}/{fecha}', 'CalendarioGoogleController@eliminarCitaDoctor');
+Route::any('stop', 'CalendarioGoogleController@stop');
+Route::any('salir', 'CalendarioGoogleController@logout');
 
 
 
@@ -77,7 +79,7 @@ Route::any('eliminar-doctor/{idDoctor}', 'EliminarController@eliminarDoctor')->n
 Route::any('eliminar-cuenta-consultorio', 'EliminarController@eliminarCuentaConsultorio')->name('eliminarCuentaConsultorio');
 Route::any('eliminar-cuenta-doctor', 'EliminarController@eliminarCuentaDoctor')->name('eliminarCuentaDoctor');
 Route::any('eliminar-cuenta-administrador', 'EliminarController@eliminarCuentaAdministrador')->name('eliminarCuentaAdministrador');
-
+Route::any('eliminar-cuenta-usuario', 'EliminarController@eliminarCuentaUsuario')->name('eliminarCuentaUsuario');
 
 
 
@@ -177,7 +179,7 @@ Route::any('accedeDoctorConsultorio/{Correo}/{Registro}/{Id}','Auth\LoginControl
 Route::any('accedeAsistente/{Correo}','Auth\LoginController@accederAsistente')->name('accederAsistente');
 Route::any('accedeUsuario/{Correo}','Auth\LoginController@accederUsuario')->name('accederUsuario');
 Route::any('accedeOpciones/{Correo}','Auth\LoginController@accederOpciones')->name('accederOpciones');
-Route::any('salir','Auth\LoginController@logout')->name('logout');
+Route::any('logout','Auth\LoginController@logout')->name('logout');
 
 
 

@@ -117,7 +117,7 @@
                         <?php $doctor=Doctor::select('Nombre', 'Registro', 'Apellidos')->where('Registro', '=', $dc->Doctor)->get(); ?>
                         <tr>
                             <td style="width: 60%; align-content: center; text-align: center;">{{ $doctor[0]->Nombre }} {{ $doctor[0]->Apellidos }}</td>
-                            <td style="align-content: center; text-align: center;"><a href="{{ Session::get('saludaunclick') }}eliminar-doctor/{{ $doctor[0]->Registro }}"><button class="btn btn-danger">Eliminar doctor</button></a></td>
+                            <td style="align-content: center; text-align: center;"><button class="btn btn-danger" onclick="alerta('{{ Session::get('saludaunclick') }}eliminar-doctor/{{ $doctor[0]->Registro }}')">Eliminar doctor</button></td>
                         </tr>
                         @endforeach
                     </tbody>

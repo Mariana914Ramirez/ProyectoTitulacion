@@ -160,4 +160,31 @@ class CalendarioGoogleController extends Controller
         }
     }
 
+
+
+    public function stop()
+    {
+        session_start();
+        if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
+            session_unset();
+            return redirect('/')->with(['mensaje' => 'Se ha detenido la sincronización']);
+        } else {
+            return redirect('/');
+        }
+    }
+
+
+
+    public function logout(Request $request)
+    {
+        if ($request->session()->has('asistenteSession') || $request->session()->has('doctorSession') || $request->session()->has('usuarioSession'))
+        { 
+            session_start();
+            if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
+                session_unset();
+            }
+        } 
+        return redirect('logout');
+    }
+
 }

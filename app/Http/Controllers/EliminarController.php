@@ -19,6 +19,8 @@ use App\Cita;
 use App\Usuario;
 use App\Administrador;
 use App\Calificacion;
+use App\ComentarioPrincipal;
+use App\Sugerencia;
 use App\Mail\EliminarConsultorio;
 use App\Mail\EliminarDoctor;
 use Illuminate\Support\Facades\Mail;
@@ -204,6 +206,31 @@ class EliminarController extends Controller
 
             $request->session()->forget('administradorSession');
             Administrador::where('Correo', '=', $usuario)->delete();
+        }
+
+        
+        return redirect('/')->with(['mensaje' => 'Cuenta eliminada']);
+    }
+
+
+
+    public function eliminarCuentaUsuario(Request $request)
+    {
+        if ($request->session()->has('usuarioSession')) {
+            $sesion=$request->session()->get('usuarioSession');
+            $usuario=$sesion[0]->Correo;   
+
+            $datos = Usuario::where('Correo', '=', $usuario)->get();
+
+            Cita::where('Usuario', '=', $datos[0]->Registro)->delete();
+            ComentarioConsultorio::where('Usuario', '=', $datos[0]->Registro)->delete();
+            ComentarioPrincipal::where('Usuario', '=', $datos[0]->Registro)->delete();
+            Sugerencia::where('Usuario', '=', $datos[0]->Registro)->delete();
+            Notificacion::where('Receptor', '=', $usuario)->delete();
+            Notificacion::where('Emisor', '=', $usuario)->delete();
+
+            $request->session()->forget('usuarioSession');
+            Usuario::where('Correo', '=', $usuario)->delete();
         }
 
         
