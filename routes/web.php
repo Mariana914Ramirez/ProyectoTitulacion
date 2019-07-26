@@ -52,6 +52,7 @@ Route::get('google-eliminar-cita/{eventId}/{doctorConsultorio}/{fecha}', 'Calend
 
 
 
+
 //Administrador
 Route::resource('administrador', 'AdministradorController');
 
@@ -144,8 +145,9 @@ Route::any('guardar-quejas/{idNotificacion}/{idConsultorio}', 'CalificacionContr
 
 
 //Usuarios
-Route::get('modificarUsuario', 'UsuariosController@edit');
+Route::get('modificar-informacion-usuario', 'UsuariosController@edit');
 Route::resource('usuario', 'UsuariosController');
+Route::any('guardar-cambios-usuario', 'UsuariosController@guardarCambios');
 
 
 

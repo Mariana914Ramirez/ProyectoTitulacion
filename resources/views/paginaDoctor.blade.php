@@ -305,7 +305,7 @@ if(Request::session()->has('saludaunclick'))
 
                         @foreach($doctores as $doctor)
 
-                        @if(((Session::exists('doctorSession')) && (((Session::get('doctorSession'))[0]->Registro) == $doctor->Registro)) || ((Session::exists('asistenteSession')) && (((Session::get('asistenteSession'))[0]->Registro) == $doctor->Registro)))
+                        @if((Session::exists('doctorSession')) && (((Session::get('doctorSession'))[0]->Registro) == $doctor->Registro))
                         <form action="{{ Session::get('saludaunclick') }}citas/{{ ((Session::get('doctorSession'))[0]->Registro) }}/{{ ((Session::get('doctorSession'))[0]->Consultorio) }}" method="post" enctype="multipart/form-data">
                         @csrf
                             <div class="form-group" style="text-align: center;">
@@ -321,6 +321,23 @@ if(Request::session()->has('saludaunclick'))
                                 <button class="btn btn-success" type="submit" style="font-size: 20px;">Visualizar horarios disponibles</button>
                             </div>
                         </form>
+                        @elseif((Session::exists('asistenteSession')) && (((Session::get('asistenteSession'))[0]->Registro) == $doctor->Registro))
+                        <form action="{{ Session::get('saludaunclick') }}citas/{{ ((Session::get('asistenteSession'))[0]->Registro) }}/{{ ((Session::get('asistenteSession'))[0]->Consultorio) }}" method="post" enctype="multipart/form-data">
+                        @csrf
+                            <div class="form-group" style="text-align: center;">
+                              <div class='input-group date' data-provide="cuatro" id="cuatro" style="display:inline-block; margin:0 auto;">
+                                  <input type='text' placeholder="Fecha de cita" style="text-align: center; align-content: center;" id="FechaCitas" name="FechaCitas" required />
+                                  <span class="input-group-addon">
+                                      <span class="glyphicon glyphicon-calendar"></span>
+                                  </span>
+                              </div>
+                            </div>
+
+                            <div style="align-content: center;">
+                                <button class="btn btn-success" type="submit" style="font-size: 20px;">Visualizar horarios disponibles</button>
+                            </div>
+                        </form>
+
                         @else
                         <form action="{{ Session::get('saludaunclick') }}citas/{{ $doctor->Registro }}/{{ $doctor->RegConsultorio }}" method="post" enctype="multipart/form-data">
                         @csrf

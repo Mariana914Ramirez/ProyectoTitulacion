@@ -235,7 +235,7 @@
                     <b class="icon-cog-alt"><?php $nom=Request::session()->get('usuarioSession')[0]->Correo; $nom =Usuario::select('Nombre')->where('Correo', '=', $nom)->take(1)->get(); echo $nom[0]->Nombre;?></b>
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="{{ Session::get('saludaunclick') }}modificarUsuario">Modificar información</a>
+                    <a class="dropdown-item" href="{{ Session::get('saludaunclick') }}modificar-informacion-usuario">Modificar información</a>
                     <a class="dropdown-item" href="{{ Session::get('saludaunclick') }}ver-informacion-citas">Citas</a>
                     <a class="dropdown-item" href="{{ Session::get('saludaunclick') }}cal">Sincronizar calendario de Google</a>
                     <div class="dropdown-divider"></div>

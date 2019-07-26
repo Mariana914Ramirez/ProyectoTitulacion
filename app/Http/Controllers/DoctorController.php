@@ -56,7 +56,7 @@ class DoctorController extends Controller
         ->where('doctor_consultorio.Consultorio', '=', $consultorio)
         ->where('doctor_consultorio.Doctor', '=', $doctor)->get();
 
-
+        
         $especialidades=DB::table('doctor_especialidad')->select('*')->where('Correo', '=', $usuario)->where('Doctor', '=', $doctor)->distinct()->get();
 
 
@@ -69,7 +69,7 @@ class DoctorController extends Controller
 
         $precios=Precio::select('Descripcion', 'Precio', 'Registro')->where('DoctorConsultorio', '=', $doct_cons)->get();
  
-
+        
     	return view('paginaDoctor', compact('doctores', $doctores, 'especialidades', $especialidades, 'lunesHorarios', $lunesHorarios, 'martesHorarios', $martesHorarios, 'miercolesHorarios', $miercolesHorarios, 'juevesHorarios', $juevesHorarios, 'viernesHorarios', $viernesHorarios, 'sabadoHorarios', $sabadoHorarios, 'domingoHorarios', $domingoHorarios, 'revisiones', $revisiones, 'precios', $precios));
     }
 
