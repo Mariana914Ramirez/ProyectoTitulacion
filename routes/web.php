@@ -11,10 +11,8 @@
 |
 */
 
-/*Route::get('/', function () {
-    return view('welcome');
-});*/
 
+//Comentario Principal
 Route::resource('/', 'ComentarioPrincipalController');
 Route::post('sugerencias', 'ComentarioPrincipalController@saveSugerencias')->name('saveSugerencias');
 Route::get('buscar', 'ComentarioPrincipalController@buscador')->name('buscador');
@@ -24,7 +22,7 @@ Route::any('eliminar-comentario/{idComentario}', 'ComentarioPrincipalController@
 
 
 
-
+//Consultorio
 Route::get('cuentaConsultorio', 'ConsultorioController@cuenta')->name('cuenta');
 Route::any('visitarConsultorio/{id}', 'ConsultorioController@PacientesVisitantes')->name('PacientesVisitantes');
 Route::any('comentarConsultorios/{id}', 'ConsultorioController@comentarConsultorios')->name('comentarConsultorios');
@@ -35,10 +33,15 @@ Route::any('ver-citas-del-doctor/{idDoctor}', 'ConsultorioController@mostrarCita
 Route::any('editar-comentario-consultorio/{idComentario}', 'ConsultorioController@vistaEditarComentario')->name('vistaEditarComentario');
 Route::any('guardar-comentario-editado/{idComentario}/{idConsultorio}', 'ConsultorioController@editarComentario')->name('editarComentario');
 Route::any('eliminar-comentario-consultorio/{idComentario}', 'ConsultorioController@eliminarComentario')->name('eliminarComentario');
+Route::resource('consultorios', 'ConsultorioController');
+Route::get('especialidad/{Registro}', 'ConsultorioController@getEspecialidad')->name('getEspecialidad');
 
 
 
 
+
+
+//Calendario Google
 Route::any('cal', 'CalendarioGoogleController@index');
 Route::any('guardar-google/{titulo}/{descripcion}/{inicio}/{fin}/{cita}', 'CalendarioGoogleController@store');
 Route::get('oauth', 'CalendarioGoogleController@oauth')->name('oauthCallback');
@@ -48,25 +51,38 @@ Route::get('google-eliminar-cita/{eventId}/{doctorConsultorio}/{fecha}', 'Calend
 
 
 
+
+//Administrador
 Route::resource('administrador', 'AdministradorController');
 
 
 
 
 
+
+//Correos
 Route::any('noCumpleRequisitosAnuncio/{id}/{anuncio}', 'CorreosController@NoCumpleRequisitos')->name('NoCumpleRequisitos');
 Route::any('agregarAnuncio/{id}/{anuncio}', 'CorreosController@AgregarAnuncio')->name('AgregarAnuncio');
 Route::any('especialdadAgregada/{id}', 'CorreosController@EspecialdadAgregada')->name('EspecialdadAgregada');
 
 
 
+
+
+
+//Eliminar
 Route::any('eliminar-consultorio/{idConsultorio}', 'EliminarController@eliminarConsultorios')->name('eliminarConsultorios');
 Route::any('eliminar-doctor/{idDoctor}', 'EliminarController@eliminarDoctor')->name('eliminarDoctor');
 Route::any('eliminar-cuenta-consultorio', 'EliminarController@eliminarCuentaConsultorio')->name('eliminarCuentaConsultorio');
 Route::any('eliminar-cuenta-doctor', 'EliminarController@eliminarCuentaDoctor')->name('eliminarCuentaDoctor');
+Route::any('eliminar-cuenta-administrador', 'EliminarController@eliminarCuentaAdministrador')->name('eliminarCuentaAdministrador');
 
 
 
+
+
+
+//Imagen
 Route::resource('imagenes', 'imagenController');
 Route::any('anuncios', 'imagenController@anuncios')->name('anuncios');
 Route::any('eliminar-foto-galeria/{idFoto}', 'imagenController@eliminarFotoGaleria')->name('eliminarFotoGaleria');
@@ -75,7 +91,7 @@ Route::any('eliminar-foto-galeria/{idFoto}', 'imagenController@eliminarFotoGaler
 
 
 
-
+//Doctor
 Route::resource('doctor', 'DoctorController');
 Route::get('modificarHorarios', 'DoctorController@horario')->name('horario');
 Route::any('precios', 'DoctorController@precios')->name('precios');
@@ -91,6 +107,9 @@ Route::any('eliminar-horario/{idHorario}', 'DoctorController@eliminarHorario')->
 
 
 
+
+
+//Cita
 Route::any('guardar-cita/{horario}/{doctorConsultorio}/{fecha}', 'CitaController@guardarCita')->name('guardarCita');
 Route::get('registro-cita/{horario}/{doctorConsultorio}/{fecha}', 'CitaController@registroCita')->name('registroCita');
 Route::any('ver-agenda', 'CitaController@index')->name('index');
@@ -102,9 +121,18 @@ Route::any('ver-informacion-citas', 'CitaController@verInformacionCitas')->name(
 
 
 
+
+
+//Notificacion
 Route::any('notificaciones', 'NotificacionController@index')->name('index');
+Route::any('eliminar-notificacion/{idNotificacion}', 'NotificacionController@eliminarNotificacion')->name('eliminarNotificacion');
 
 
+
+
+
+
+//Calificacion
 Route::any('calificar/{idConsultorio}/{idNotificacion}', 'CalificacionController@index')->name('index');
 Route::any('guardar-calificacion/{idConsultorio}/{idNotificacion}', 'CalificacionController@guardarCalificacion')->name('guardarCalificacion');
 Route::any('mensaje-quejas/{idNotificacion}/{idConsultorio}', 'CalificacionController@mostrarQuejas')->name('mostrarQuejas');
@@ -112,38 +140,41 @@ Route::any('guardar-quejas/{idNotificacion}/{idConsultorio}', 'CalificacionContr
 
 
 
-Route::any('eliminar-notificacion/{idNotificacion}', 'NotificacionController@eliminarNotificacion')->name('eliminarNotificacion');
 
 
 
+//Usuarios
 Route::get('modificarUsuario', 'UsuariosController@edit');
+Route::resource('usuario', 'UsuariosController');
 
 
 
-Route::get('/hola', function () {
-    dd('holitas');
-});
 
+//Especialidad
 Route::resource('especialidades', 'EspecialidadController');
 
+
+
+
+
+//Formulario
 Route::get('formulario', 'FormularioController@index');
 Route::get('municipio/{Registro}', 'FormularioController@getMunicipio')->name('getMunicipio');
-Route::resource('usuario', 'UsuariosController');
-Route::resource('consultorios', 'ConsultorioController');
-Route::get('especialidad/{Registro}', 'ConsultorioController@getEspecialidad')->name('getEspecialidad');
 
+
+
+
+
+//Login
 Route::post('usuario/login','Auth\LoginController@login')->name('login');
 Route::any('accede/{Correo}','Auth\LoginController@accederComo')->name('accederComo');
 Route::any('accedeA/{Correo}','Auth\LoginController@accederComoA')->name('accederComoA');
 Route::any('accedeAsis/{Correo}/{id}','Auth\LoginController@accedeAsis')->name('accedeAsis');
-
 Route::any('accedeDoctor/{Correo}','Auth\LoginController@accederDoctor')->name('accederDoctor');
 Route::any('accedeDoctorConsultorio/{Correo}/{Registro}/{Id}','Auth\LoginController@volverAccederDoctor')->name('volverAccederDoctor');
 Route::any('accedeAsistente/{Correo}','Auth\LoginController@accederAsistente')->name('accederAsistente');
 Route::any('accedeUsuario/{Correo}','Auth\LoginController@accederUsuario')->name('accederUsuario');
-
 Route::any('accedeOpciones/{Correo}','Auth\LoginController@accederOpciones')->name('accederOpciones');
-
 Route::any('salir','Auth\LoginController@logout')->name('logout');
 
 
@@ -151,13 +182,6 @@ Route::any('salir','Auth\LoginController@logout')->name('logout');
 
 Route::get('/signin', 'AuthController@signin');
 Route::get('/authorize', 'AuthController@gettoken');
-
-
-
-
-
 Route::get('usuarios/area', 'UsuariosController@secret');
-
 Auth::routes();
-
 Route::get('/home', 'HomeController@index')->name('home');

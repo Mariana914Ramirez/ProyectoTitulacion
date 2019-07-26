@@ -17,6 +17,7 @@ use App\Estudio;
 use App\ComentarioConsultorio;
 use App\Cita;
 use App\Usuario;
+use App\Administrador;
 use App\Calificacion;
 use App\Mail\EliminarConsultorio;
 use App\Mail\EliminarDoctor;
@@ -189,5 +190,23 @@ class EliminarController extends Controller
         Doctor::where('Registro', '=', $doctor[0]->Registro)->delete();
 
         return redirect('/')->with(['mensaje' => 'Doctor eliminado']);
+    }
+
+
+
+
+
+    public function eliminarCuentaAdministrador(Request $request)
+    {
+        if ($request->session()->has('administradorSession')) {
+            $sesion=$request->session()->get('administradorSession');
+            $usuario=$sesion[0]->Correo;   
+
+            $request->session()->forget('administradorSession');
+            Administrador::where('Correo', '=', $usuario)->delete();
+        }
+
+        
+        return redirect('/')->with(['mensaje' => 'Cuenta eliminada']);
     }
 }

@@ -191,7 +191,7 @@
                     <a class="dropdown-item" href="{{ Session::get('saludaunclick') }}administrador">Ir a mi cuenta</a>
                     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#administradorRegistroModal">Agregar administrador</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Eliminar cuenta</a>
+                    <a class="dropdown-item" href="eliminar-cuenta-administrador">Eliminar cuenta</a>
                   </div>
                 </li>
                 @elseif (Session::exists('consultorioSession'))
@@ -318,12 +318,10 @@
                     <p style="font-size: 25px;">Contáctanos</p>
                     <p>salud.a.un.click.01@gmail.com</p>
                 </div>
-                <div class="col-md-4 col-sm-12" style="font-size: 20px; font-weight: bolder; color: #FFF;">
+                <div class="col-md-4 col-sm-12" style="font-size: 20px; font-weight: bolder; color: #FFF; margin-top: 20px;">
                     <ul>
-                        <li><a  href="#" style="color: #FFF;">Nosotros</a></li>
-                        <li><a  href="#" style="color: #FFF;">Especialidades</a></li>
-                        <li><a  href="#" style="color: #FFF;">Consultorios</a></li>
-                        <li><a  href="#" style="color: #FFF;">Configuraciones</a></li>
+                        <li><a  href="{{ Session::get('saludaunclick') }}especialidades" style="color: #FFF;">Especialidades</a></li>
+                        <li><a  href="{{ Session::get('saludaunclick') }}consultorios" style="color: #FFF;">Consultorios</a></li>
                     </ul>
                 </div>
             </div>

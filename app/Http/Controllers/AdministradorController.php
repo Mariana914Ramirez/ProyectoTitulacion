@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\AdministradorController;
 use App\Administrador;
 use App\Anuncio;
+use App\Sugerencia;
 use Illuminate\Support\Facades\Hash;
 use DB;
 use Intervention\Image\Facades\Image;
@@ -17,14 +18,20 @@ class AdministradorController extends Controller
     {
         $anuncios=DB::table('slide')
         ->join('consultorios', 'consultorios.Registro', '=', 'slide.Consultorio')
-        ->select('slide.Imagen', 'consultorios.Correo', 'slide.FechaInicio', 'slide.FechaFinal', 'consultorios.Nombre', 'consultorios.Registro', 'slide.Registro as Slide')
+        ->select('slide.Imagen', 'consultorios.Correo', 'slide.FechaFinal', 'consultorios.Nombre', 'consultorios.Registro', 'slide.Registro as Slide')
         ->where('slide.Aceptado', '=', 0)
-        ->orderBy('consultorios.puntos', 'asc')->get();
+        ->orderBy('consultorios.puntos', 'desc')->get();
 
 
-        /*$hola=Image::make('slide/'.$anuncios[0]->Imagen)->height();
-        return $hola;*/
-    	return view('paginaAdministrador', compact('anuncios', $anuncios));
+        $comentarios = DB::table('comentariosprincipal')
+        ->join('usuarios', 'usuarios.Registro', '=', 'comentariosprincipal.Usuario')
+        ->select('usuarios.Nombre', 'usuarios.Apellidos', 'usuarios.Imagen', 'comentariosprincipal.Comentario', 'comentariosprincipal.Hora')
+        ->orderBy('Hora', 'desc')->get();
+
+        $sugerencias = Sugerencia::select('*')->get();
+
+
+    	return view('paginaAdministrador', compact('anuncios', $anuncios, 'comentarios', $comentarios, 'sugerencias', $sugerencias));
     }
 
     public function create()
