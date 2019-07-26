@@ -13,8 +13,30 @@
  <center>
  	<form action="doctor" method="post" enctype="multipart/form-data">
      @csrf
-    <section class="informacionCons" style="background: #FFF; height: auto; padding: 20px;">
-		<table style=" width: 90%; margin-top: 100px;" class="table table-bordered table-dark formular" id="dynamic_field">
+
+    <section class="informacionCons" style="background: #EEE; height: auto; padding: 20px;">
+    	<h1>Modificar horarios</h1>
+    	@if (!$lunesHorarios->isEmpty())
+	        <table style=" width: 90%;" class="table table-striped table-dark">
+	            <thead style="font-size: 30px; text-align: center;">
+	                <th colspan="2">Lunes</th>
+	            </thead>
+	            <tr style="font-size: 25px; text-align: center;">
+	                <th style="background: #5DBA4E; width: 45%;">Hora de inicio</th>
+	                <th style="background: #178FB0; width: 45%;">Hora de término</th>
+	                <th style="width: 10%;">Eliminar</th>
+	            </tr>
+	            @foreach($lunesHorarios as $luneshorario)
+	            <tr style="font-size: 15px; text-align: center;">  
+	                <td>{{$luneshorario->Hora_inicio}}</td>
+	                <td>{{$luneshorario->Hora_termino}}</td>
+	                <td><a href="{{ Session::get('saludaunclick') }}eliminar-horario/{{ $luneshorario->Registro }}" style="color: #FF5B5B;">Eliminar</a></td>
+	            </tr> 
+	            @endforeach
+	              
+	        </table>
+        @endif
+		<table style=" width: 90%; margin-bottom: 100px;" class="table table-bordered table-dark formular" id="dynamic_field">
 	        <thead style="font-size: 30px; text-align: center;">
 	            <th colspan="7">Lunes</th>
 	        </thead>
@@ -131,7 +153,27 @@
 	    </table>
 
 
-	    <table style=" width: 90%; margin-top: 100px;" class="table table-bordered table-dark formular" id="dynamic_field_Martes">
+	    @if (!$martesHorarios->isEmpty())
+	        <table style=" width: 90%; bottom-top: 100px;" class="table table-striped table-dark">
+	            <thead style="font-size: 30px; text-align: center;">
+	                <th colspan="2">Martes</th>
+	            </thead>
+	            <tr style="font-size: 25px; text-align: center;">
+	                <th style="background: #5DBA4E; width: 45%;">Hora de inicio</th>
+	                <th style="background: #178FB0; width: 45%;">Hora de término</th>
+	                <th style="width: 10%;">Eliminar</th>
+	            </tr>
+	            @foreach($martesHorarios as $marteshorario)
+	            <tr style="font-size: 15px; text-align: center;">  
+	                <td>{{$marteshorario->Hora_inicio}}</td>
+	                <td>{{$marteshorario->Hora_termino}}</td>
+	                <td><a href="{{ Session::get('saludaunclick') }}eliminar-horario/{{ $luneshorario->Registro }}" style="color: #FF5B5B;">Eliminar</a></td>
+	            </tr> 
+	            @endforeach
+	              
+	        </table>
+        @endif
+	    <table style=" width: 90%; margin-bottom: 100px;" class="table table-bordered table-dark formular" id="dynamic_field_Martes">
 	        <thead style="font-size: 30px; text-align: center;">
 	            <th colspan="7">Martes</th>
 	        </thead>
@@ -249,7 +291,27 @@
 
 
 
-	    <table style=" width: 90%; margin-top: 100px;" class="table table-bordered table-dark formular" id="dynamic_field_Miercoles">
+	    @if (!$miercolesHorarios->isEmpty())
+	        <table style=" width: 90%; bottom-top: 100px;" class="table table-striped table-dark">
+	            <thead style="font-size: 30px; text-align: center;">
+	                <th colspan="2">Miércoles</th>
+	            </thead>
+	            <tr style="font-size: 25px; text-align: center;">
+	                <th style="background: #5DBA4E; width: 45%;">Hora de inicio</th>
+	                <th style="background: #178FB0; width: 45%;">Hora de término</th>
+	                <th style="width: 10%;">Eliminar</th>
+	            </tr>
+	            @foreach($miercolesHorarios as $miercoleshorario)
+	            <tr style="font-size: 15px; text-align: center;">  
+	                <td>{{$miercoleshorario->Hora_inicio}}</td>
+	                <td>{{$miercoleshorario->Hora_termino}}</td>
+	                <td><a href="{{ Session::get('saludaunclick') }}eliminar-horario/{{ $luneshorario->Registro }}" style="color: #FF5B5B;">Eliminar</a></td>
+	            </tr> 
+	            @endforeach
+	              
+	        </table>
+        @endif
+	    <table style=" width: 90%;  margin-bottom: 100px;" class="table table-bordered table-dark formular" id="dynamic_field_Miercoles">
 	        <thead style="font-size: 30px; text-align: center;">
 	            <th colspan="7">Miércoles</th>
 	        </thead>
@@ -367,8 +429,27 @@
 
 
 
-
-	    <table style=" width: 90%; margin-top: 100px;" class="table table-bordered table-dark formular" id="dynamic_field_Jueves">
+	    @if (!$juevesHorarios->isEmpty())
+	        <table style=" width: 90%; bottom-top: 100px;" class="table table-striped table-dark">
+	            <thead style="font-size: 30px; text-align: center;">
+	                <th colspan="2">Jueves</th>
+	            </thead>
+	            <tr style="font-size: 25px; text-align: center;">
+	                <th style="background: #5DBA4E; width: 45%;">Hora de inicio</th>
+	                <th style="background: #178FB0; width: 45%;">Hora de término</th>
+	                <th style="width: 10%;">Eliminar</th>
+	            </tr>
+	            @foreach($juevesHorarios as $jueveshorario)
+	            <tr style="font-size: 15px; text-align: center;">  
+	                <td>{{$jueveshorario->Hora_inicio}}</td>
+	                <td>{{$jueveshorario->Hora_termino}}</td>
+	                <td><a href="{{ Session::get('saludaunclick') }}eliminar-horario/{{ $luneshorario->Registro }}" style="color: #FF5B5B;">Eliminar</a></td>
+	            </tr> 
+	            @endforeach
+	              
+	        </table>
+        @endif
+	    <table style=" width: 90%; margin-bottom: 100px;" class="table table-bordered table-dark formular" id="dynamic_field_Jueves">
 	        <thead style="font-size: 30px; text-align: center;">
 	            <th colspan="7">Jueves</th>
 	        </thead>
@@ -486,7 +567,27 @@
 
 
 
-	    <table style=" width: 90%; margin-top: 100px;" class="table table-bordered table-dark formular" id="dynamic_field_Viernes">
+	    @if (!$viernesHorarios->isEmpty())
+	        <table style=" width: 90%; bottom-top: 100px;" class="table table-striped table-dark">
+	            <thead style="font-size: 30px; text-align: center;">
+	                <th colspan="2">Viernes</th>
+	            </thead>
+	            <tr style="font-size: 25px; text-align: center;">
+	                <th style="background: #5DBA4E; width: 45%;">Hora de inicio</th>
+	                <th style="background: #178FB0; width: 45%;">Hora de término</th>
+	                <th style="width: 10%;">Eliminar</th>
+	            </tr>
+	            @foreach($viernesHorarios as $vierneshorario)
+	            <tr style="font-size: 15px; text-align: center;">  
+	                <td>{{$vierneshorario->Hora_inicio}}</td>
+	                <td>{{$vierneshorario->Hora_termino}}</td>
+	                <td><a href="{{ Session::get('saludaunclick') }}eliminar-horario/{{ $luneshorario->Registro }}" style="color: #FF5B5B;">Eliminar</a></td>
+	            </tr> 
+	            @endforeach
+	              
+	        </table>
+        @endif
+	    <table style=" width: 90%; margin-bottom: 100px;" class="table table-bordered table-dark formular" id="dynamic_field_Viernes">
 	        <thead style="font-size: 30px; text-align: center;">
 	            <th colspan="7">Viernes</th>
 	        </thead>
@@ -604,7 +705,27 @@
 
 
 
-	    <table style=" width: 90%; margin-top: 100px;" class="table table-bordered table-dark formular" id="dynamic_field_Sabado">
+	    @if (!$sabadoHorarios->isEmpty())
+	        <table style=" width: 90%; bottom-top: 100px;" class="table table-striped table-dark">
+	            <thead style="font-size: 30px; text-align: center;">
+	                <th colspan="2">Sabado</th>
+	            </thead>
+	            <tr style="font-size: 25px; text-align: center;">
+	                <th style="background: #5DBA4E; width: 45%;">Hora de inicio</th>
+	                <th style="background: #178FB0; width: 45%;">Hora de término</th>
+	                <th style="width: 10%;">Eliminar</th>
+	            </tr>
+	            @foreach($sabadoHorarios as $sabadohorario)
+	            <tr style="font-size: 15px; text-align: center;">  
+	                <td>{{$sabadohorario->Hora_inicio}}</td>
+	                <td>{{$sabadohorario->Hora_termino}}</td>
+	                <td><a href="{{ Session::get('saludaunclick') }}eliminar-horario/{{ $luneshorario->Registro }}" style="color: #FF5B5B;">Eliminar</a></td>
+	            </tr> 
+	            @endforeach
+	              
+	        </table>
+        @endif
+	    <table style=" width: 90%; margin-bottom: 100px;" class="table table-bordered table-dark formular" id="dynamic_field_Sabado">
 	        <thead style="font-size: 30px; text-align: center;">
 	            <th colspan="7">Sábado</th>
 	        </thead>
@@ -722,7 +843,27 @@
 
 
 
-	    <table style=" width: 90%; margin-top: 100px;" class="table table-bordered table-dark formular" id="dynamic_field_Domingo">
+	    @if (!$domingoHorarios->isEmpty())
+	        <table style=" width: 90%; bottom-top: 100px;" class="table table-striped table-dark">
+	            <thead style="font-size: 30px; text-align: center;">
+	                <th colspan="2">Domingo</th>
+	            </thead>
+	            <tr style="font-size: 25px; text-align: center;">
+	                <th style="background: #5DBA4E; width: 45%;">Hora de inicio</th>
+	                <th style="background: #178FB0; width: 45%;">Hora de término</th>
+	                <th style="width: 10%;">Eliminar</th>
+	            </tr>
+	            @foreach($domingoHorarios as $domingohorario)
+	            <tr style="font-size: 15px; text-align: center;">  
+	                <td>{{$domingohorario->Hora_inicio}}</td>
+	                <td>{{$domingohorario->Hora_termino}}</td>
+	                <td><a href="{{ Session::get('saludaunclick') }}eliminar-horario/{{ $luneshorario->Registro }}" style="color: #FF5B5B;">Eliminar</a></td>
+	            </tr> 
+	            @endforeach
+	              
+	        </table>
+        @endif
+	    <table style=" width: 90%; margin-bottom: 100px;" class="table table-bordered table-dark formular" id="dynamic_field_Domingo">
 	        <thead style="font-size: 30px; text-align: center;">
 	            <th colspan="7">Domingo</th>
 	        </thead>

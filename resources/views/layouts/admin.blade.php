@@ -212,7 +212,7 @@
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     @if(Session::exists('doctorSession'))
-                    <b class="icon-cog-alt"><?php $nom=Request::session()->get('doctorSession')[0]->Correo; $nom =Usuario::select('Correo')->where('Correo', '=', $nom)->take(1)->get(); echo $nom[0]->Correo;?></b>
+                    <b class="icon-cog-alt"><?php $nom=Request::session()->get('doctorSession')[0]->Correo; $nom =Usuario::select('Nombre')->where('Correo', '=', $nom)->take(1)->get(); echo $nom[0]->Nombre;?></b>
                     @endif
                     @if(Session::exists('asistenteSession'))
                     <b class="icon-cog-alt"><?php $nom=Request::session()->get('asistenteSession')[0]->Correo; $nom =Usuario::select('Nombre')->where('Correo', '=', $nom)->take(1)->get(); echo $nom[0]->Nombre;?></b>
@@ -220,12 +220,13 @@
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="{{ Session::get('saludaunclick') }}doctor">Ir a mi cuenta</a>
-                    <a class="dropdown-item" href="#">Modificar información</a>
+                    <a class="dropdown-item" href="{{ Session::get('saludaunclick') }}modificar-informacion-doctor">Modificar información</a>
                     <a class="dropdown-item" href="{{ Session::get('saludaunclick') }}modificarHorarios">Modificar horarios</a>
                     <a class="dropdown-item" href="{{ Session::get('saludaunclick') }}ver-agenda">Agenda</a>
                     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#preciosModal">Modificar precios</a>
+                    <a class="dropdown-item" href="{{ Session::get('saludaunclick') }}cal">Sincronizar calendario de Google</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Eliminar cuenta</a>
+                    <a class="dropdown-item" href="{{ Session::get('saludaunclick') }}eliminar-cuenta-doctor">Eliminar cuenta</a>
                   </div>
                 </li>
                 @elseif (Session::exists('usuarioSession'))
@@ -236,6 +237,7 @@
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="{{ Session::get('saludaunclick') }}modificarUsuario">Modificar información</a>
                     <a class="dropdown-item" href="{{ Session::get('saludaunclick') }}ver-informacion-citas">Citas</a>
+                    <a class="dropdown-item" href="{{ Session::get('saludaunclick') }}cal">Sincronizar calendario de Google</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#">Eliminar cuenta</a>
                   </div>

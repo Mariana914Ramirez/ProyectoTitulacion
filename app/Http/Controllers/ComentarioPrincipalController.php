@@ -231,4 +231,29 @@ class ComentarioPrincipalController extends Controller
         return view('resultados', compact('consultorios', $consultorios, 'doctores', $doctores));
     }
 
+
+
+
+    public function vistaEditarComentario($idComentario)
+    {
+        $comentario = ComentarioPrincipal::where('Registro', '=', $idComentario)->get();
+        return view('editarComentarioPrincipal', compact('comentario', $comentario));
+    }
+
+
+
+    public function editarComentario($idComentario, Request $request)
+    {
+        $comentario = $request->input('Comentarios');
+        ComentarioPrincipal::where('Registro', '=', $idComentario)->update(array('Comentario'=>$comentario,));
+        return redirect('/')->with(['mensaje' => 'Comentario editado']);
+    }
+
+
+    public function eliminarComentario($idComentario)
+    {
+        ComentarioPrincipal::where('Registro', '=', $idComentario)->delete();
+        return back()->with(['mensaje' => 'Comentario eliminado']);
+    }
+
 }

@@ -11,6 +11,7 @@ use App\Horario;
 use App\Precio;
 use App\Sugerencia;
 use App\Especialidad;
+use App\Estudio;
 use App\Mail\EspecialidadAgregada;
 use App\Cita;
 use DB;
@@ -66,7 +67,7 @@ class DoctorController extends Controller
         ->select('doctores.Nombre', 'doctores.Apellidos', 'doctores.FechaNacimiento', 'doctores.Correo', 'doctores.Registro')
         ->where('doctor_consultorio.Doctor', '=', $doctor)->get();
 
-        $precios=Precio::select('Descripcion', 'Precio')->where('DoctorConsultorio', '=', $doct_cons)->get();
+        $precios=Precio::select('Descripcion', 'Precio', 'Registro')->where('DoctorConsultorio', '=', $doct_cons)->get();
  
 
     	return view('paginaDoctor', compact('doctores', $doctores, 'especialidades', $especialidades, 'lunesHorarios', $lunesHorarios, 'martesHorarios', $martesHorarios, 'miercolesHorarios', $miercolesHorarios, 'juevesHorarios', $juevesHorarios, 'viernesHorarios', $viernesHorarios, 'sabadoHorarios', $sabadoHorarios, 'domingoHorarios', $domingoHorarios, 'revisiones', $revisiones, 'precios', $precios));
@@ -296,9 +297,32 @@ class DoctorController extends Controller
 
 
 
-    public function horario()
+    public function horario(Request $request)
     {
-        return view('modificarHorarios');
+        if ($request->session()->has('doctorSession')) {
+            $sesion=$request->session()->get('doctorSession');
+            $usuario=$sesion[0]->Correo;
+            $consultorio=$sesion[0]->Consultorio;
+            $doctor=$sesion[0]->Registro;
+        }
+        else if ($request->session()->has('asistenteSession')) {
+            $sesion=$request->session()->get('asistenteSession');
+            $usuario=$sesion[0]->Correo;
+            $consultorio=$sesion[0]->Consultorio;
+            $doctor=$sesion[0]->Registro;
+        }
+
+        $doct_cons=DoctorConsultorio::where('Doctor', '=', $doctor)->where('Consultorio', '=', $consultorio)->get();
+        $doct_cons=$doct_cons[0]->Registro;
+
+        $lunesHorarios=Horario::select('*')->where('DoctorConsultorio', '=', $doct_cons)->where('Dia', '=', 'L')->orderBy('Hora_inicio', 'asc')->get();
+        $martesHorarios=Horario::select('*')->where('DoctorConsultorio', '=', $doct_cons)->where('Dia', '=', 'M')->orderBy('Hora_inicio', 'asc')->get();
+        $miercolesHorarios=Horario::select('*')->where('DoctorConsultorio', '=', $doct_cons)->where('Dia', '=', 'X')->orderBy('Hora_inicio', 'asc')->get();
+        $juevesHorarios=Horario::select('*')->where('DoctorConsultorio', '=', $doct_cons)->where('Dia', '=', 'J')->orderBy('Hora_inicio', 'asc')->get();
+        $viernesHorarios=Horario::select('*')->where('DoctorConsultorio', '=', $doct_cons)->where('Dia', '=', 'V')->orderBy('Hora_inicio', 'asc')->get();
+        $sabadoHorarios=Horario::select('*')->where('DoctorConsultorio', '=', $doct_cons)->where('Dia', '=', 'S')->orderBy('Hora_inicio', 'asc')->get();
+        $domingoHorarios=Horario::select('*')->where('DoctorConsultorio', '=', $doct_cons)->where('Dia', '=', 'D')->orderBy('Hora_inicio', 'asc')->get();
+        return view('modificarHorarios', compact('lunesHorarios', $lunesHorarios, 'martesHorarios', $martesHorarios, 'miercolesHorarios', $miercolesHorarios, 'juevesHorarios', $juevesHorarios, 'viernesHorarios', $viernesHorarios, 'sabadoHorarios', $sabadoHorarios, 'domingoHorarios', $domingoHorarios));
     }
 
 
@@ -423,7 +447,7 @@ class DoctorController extends Controller
         ->select('doctores.Nombre', 'doctores.Apellidos', 'doctores.FechaNacimiento', 'doctores.Correo', 'doctores.Registro')
         ->where('doctor_consultorio.Doctor', '=', $doctor)->get();
 
-        $precios=Precio::select('Descripcion', 'Precio')->where('DoctorConsultorio', '=', $doct_cons)->get();
+        $precios=Precio::select('Descripcion', 'Precio', 'Registro')->where('DoctorConsultorio', '=', $doct_cons)->get();
  
 
         return view('paginaDoctor', compact('doctores', $doctores, 'especialidades', $especialidades, 'lunesHorarios', $lunesHorarios, 'martesHorarios', $martesHorarios, 'miercolesHorarios', $miercolesHorarios, 'juevesHorarios', $juevesHorarios, 'viernesHorarios', $viernesHorarios, 'sabadoHorarios', $sabadoHorarios, 'domingoHorarios', $domingoHorarios, 'revisiones', $revisiones, 'precios', $precios));
@@ -508,9 +532,123 @@ class DoctorController extends Controller
     }
 
 
-    public function generarCitas(Request $request) //Doctor
+    public function vistaModificarInformacion(Request $request)
     {
-        return "Hola";
-        return view();
+        if ($request->session()->has('doctorSession')) {
+            $sesion=$request->session()->get('doctorSession');
+            $usuario=$sesion[0]->Correo;
+            $consultorio=$sesion[0]->Consultorio;
+            $doctor=$sesion[0]->Registro;
+        }
+        else if ($request->session()->has('asistenteSession')) {
+            $sesion=$request->session()->get('asistenteSession');
+            $usuario=$sesion[0]->Correo;
+            $consultorio=$sesion[0]->Consultorio;
+            $doctor=$sesion[0]->Registro;
+        }
+        $doctores = Doctor::select('Correo', 'Telefono', 'Imagen', 'CorreoAsistente', 'CorreoRecuperacion')->where('Registro', '=', $doctor)->get();
+        $especialidades = Especialidad::select('*')->get();
+        $doct_especi = DB::table('doctor_especialidad')->where('Doctor', '=', $doctor)->get();
+        return view('modificarDoctor', compact('doctores', $doctores, 'especialidades', $especialidades, 'doct_especi', $doct_especi));
+    }
+
+
+
+
+    public function eliminarEspecialidad(Request $request, $idEspecialidad)
+    {
+        if ($request->session()->has('doctorSession')) {
+            $sesion=$request->session()->get('doctorSession');
+            $usuario=$sesion[0]->Correo;
+            $consultorio=$sesion[0]->Consultorio;
+            $doctor=$sesion[0]->Registro;
+        }
+        else if ($request->session()->has('asistenteSession')) {
+            $sesion=$request->session()->get('asistenteSession');
+            $usuario=$sesion[0]->Correo;
+            $consultorio=$sesion[0]->Consultorio;
+            $doctor=$sesion[0]->Registro;
+        }
+        
+        Estudio::where('Doctor', '=', $doctor)->where('Especialidad', '=', $idEspecialidad)->delete();
+        return back()->with(['mensaje' => 'Especialidad eliminada']);
+    }
+
+
+
+
+    public function modificarDoctor(Request $request)
+    {
+        if ($request->session()->has('doctorSession')) {
+            $sesion=$request->session()->get('doctorSession');
+            $usuario=$sesion[0]->Correo;
+            $consultorio=$sesion[0]->Consultorio;
+            $doctor=$sesion[0]->Registro;
+        }
+        else if ($request->session()->has('asistenteSession')) {
+            $sesion=$request->session()->get('asistenteSession');
+            $usuario=$sesion[0]->Correo;
+            $consultorio=$sesion[0]->Consultorio;
+            $doctor=$sesion[0]->Registro;
+        }
+        $datosDoctor = Doctor::where('Registro', '=', $doctor)->get();
+        
+        $telefono = $request->input('Telefono');
+        $correoRecuperacion = $request->input('CorreoRecuperacion');
+        $correoAsistente = $request->input('CorreoAsistente');
+        if($request->file('SubirFoto') != null)
+        {
+            $file = $request->file('SubirFoto');
+            $name = time().$file->getClientOriginalName();
+            $file->move(public_path().'/avatar/', $name);
+            $imagen=$name;
+            Doctor::where('Registro', '=', $doctor)->update(array('Imagen'=>$imagen,));
+            $imagenUsuario = Usuario::where('Correo', '=', $usuario)->get();
+
+            $imagen = $datosDoctor[0]->Imagen;
+            if($imagen != "mujer.png" && $imagen != "hombre.jpg" && $imagen != $imagenUsuario[0]->Imagen)
+            {
+                $file=public_path().'\avatar\\'.$imagen;
+                unlink($file);
+            }
+        }
+        if($request->input('Password') != null)
+        {
+            $password = Hash::make($request->input('Password'));
+            Doctor::where('Registro', '=', $doctor)->update(array('Password'=>$password,));
+        }
+
+        Doctor::where('Registro', '=', $doctor)->update(array('Telefono'=>$telefono,));
+        Doctor::where('Registro', '=', $doctor)->update(array('CorreoRecuperacion'=>$correoRecuperacion,));
+        Doctor::where('Registro', '=', $doctor)->update(array('CorreoAsistente'=>$correoAsistente,));
+
+        $partes=$request->input('Especialidad');
+
+        if($partes[0] != "Especialidades"){
+            for ($i=0; $i < sizeof($partes); $i++) { 
+                $estudios = new Estudio();
+                $estudios->Especialidad=$partes[$i];
+                $estudios->Doctor=$doctor;
+                $estudios->save();
+            }
+        }
+
+        return back()->with(['mensaje' => 'Los cambios se han guardado']);
+    }
+
+
+
+
+    public function eliminarConcepto($idPrecio)
+    {
+        Precio::where('Registro', '=', $idPrecio)->delete();
+        return back()->with(['mensaje' => 'Concepto eliminado']);
+    }
+
+
+    public function eliminarHorario($idHorario)
+    {
+        Horario::where('Registro', '=', $idHorario)->delete();
+        return back()->with(['mensaje' => 'Hora eliminada']);
     }
 }

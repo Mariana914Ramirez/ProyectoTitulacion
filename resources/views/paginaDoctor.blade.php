@@ -24,7 +24,7 @@ if(Request::session()->has('saludaunclick'))
                     <p style="background: #DDD; width: 100%; color: #333; font-size: 35px;">{{ $doctor->Consultorio }}</p>
                     <p style="background: #5DBA4E; width: 100%; color: #333; font-size: 35px;">{{ $doctor->Nombre }} {{ $doctor->Apellidos }}</p>
 
-                    <img src="{{ Session::get('saludaunclick') }}avatar/{{ $doctor->Imagen }}">
+                    <img src="{{ Session::get('saludaunclick') }}avatar/{{ $doctor->Imagen }}" style="width: 325px; height: 300px;">
                 </div>
 
                 <center>
@@ -66,7 +66,7 @@ if(Request::session()->has('saludaunclick'))
 
                     @if(((Session::exists('doctorSession')) && (((Session::get('doctorSession'))[0]->Registro) == $doctor->Registro)) || ((Session::exists('asistenteSession')) && (((Session::get('asistenteSession'))[0]->Registro) == $doctor->Registro)))
                     <div style="padding: 5px;">
-                    <button style="float: right; background: #1A9E25; color: #FFF; border: none; border-radius: 15px; font-size: 20px; padding: 5px;"><b class="icon-pencil"></b></button></div>
+                    <a href="modificar-informacion-doctor"><button style="float: right; background: #1A9E25; color: #FFF; border: none; border-radius: 15px; font-size: 20px; padding: 5px;"><b class="icon-pencil"></b></button></a></div>
                     @endif
                 </div>
         </section>
@@ -104,6 +104,9 @@ if(Request::session()->has('saludaunclick'))
                 </div>
                 <div class="modal-horarios" style="padding: 10px;">
                     <center>
+                        @if(((Session::exists('doctorSession')) && (((Session::get('doctorSession'))[0]->Registro) == $doctor->Registro)) || ((Session::exists('asistenteSession')) && (((Session::get('asistenteSession'))[0]->Registro) == $doctor->Registro)))
+                            <a href="{{ Session::get('saludaunclick') }}modificarHorarios"><button class="btn btn-success" style="width: 90%;">Modificar horarios</button></a>
+                        @endif
                         @if (!$lunesHorarios->isEmpty())
                         <table style=" width: 90%;" class="table table-striped table-dark">
                             <thead style="font-size: 30px; text-align: center;">
@@ -258,6 +261,9 @@ if(Request::session()->has('saludaunclick'))
                 </div>
                 <div class="modal-horarios" style="padding: 10px;">
                     <center>
+                        @if(((Session::exists('doctorSession')) && (((Session::get('doctorSession'))[0]->Registro) == $doctor->Registro)) || ((Session::exists('asistenteSession')) && (((Session::get('asistenteSession'))[0]->Registro) == $doctor->Registro)))
+                            <button class="btn btn-success" style="width: 100%;" data-toggle="modal" data-target="#preciosModal" data-dismiss="modal">Agregar precios</button>
+                        @endif
                         <table class="table table-striped" cellspacing="20px" >
                             <tr>
                                 <th scope="col" style="width: 80%;">Concepto</th>
@@ -271,6 +277,11 @@ if(Request::session()->has('saludaunclick'))
                                     <td>
                                         ${{ $precio->Precio }}
                                     </td>
+                                    @if(((Session::exists('doctorSession')) && (((Session::get('doctorSession'))[0]->Registro) == $doctor->Registro)) || ((Session::exists('asistenteSession')) && (((Session::get('asistenteSession'))[0]->Registro) == $doctor->Registro)))
+                                    <td>
+                                        <a href="{{ Session::get('saludaunclick') }}eliminar-concepto/{{ $precio->Registro }}"><button class="btn btn-danger">Eliminar</button></a>
+                                    </td>
+                                    @endif
                                 </tr>
                             @endforeach
                         </table>

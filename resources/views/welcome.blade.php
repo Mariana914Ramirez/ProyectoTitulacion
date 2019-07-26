@@ -76,7 +76,6 @@
                         <button class="btn btn-success Botones col-md-2 offset-md-1 col-sm-12 col-sm-12" ><a href="especialidades"><p class="icon-stethoscope" style="font-size: 50px;color: #FFF;"></p><p style="font-weight: bolder;color: #FFF;">Especialidades</p></a></button>
                         <button class="btn btn-success Botones col-md-2 offset-md-1 col-sm-12 col-sm-12" ><a href="#FinalPagina"><p class="icon-phone" style="font-size: 50px;color: #FFF;"></p><p style="font-weight: bolder; color: #FFF;">Contacto</p></a></button>
                     </div>
-
                 </section>
             </section>
 
@@ -122,19 +121,19 @@
 
                       @if (Session::exists('doctorSession'))
                         @if (((Session::get('doctorSession'))[0]->Correo) == $mandar->Correo)
-                          <p style="text-align: right; margin-right: 40px;"><a href="" style="color: #36ABFF;">Modificar</a> / <a href="" style="color: #FF5B5B;">Eliminar</a></p>
+                          <p style="text-align: right; margin-right: 40px;"><a href="editar-comentario/{{ $mandar->Registro }}" style="color: #36ABFF;">Editar</a> / <a href="eliminar-comentario/{{ $mandar->Registro }}" style="color: #FF5B5B;">Eliminar</a></p>
                         @else
                           <br>
                         @endif
                       @elseif (Session::exists('usuarioSession'))
                         @if (((Session::get('usuarioSession'))[0]->Correo) == $mandar->Correo)
-                          <p style="text-align: right; margin-right: 40px;"><a href="" style="color: #36ABFF;">Modificar</a> / <a href="" style="color: #FF5B5B;">Eliminar</a></p>
+                          <p style="text-align: right; margin-right: 40px;"><a href="" style="color: #36ABFF;">Editar</a> / <a href="" style="color: #FF5B5B;">Eliminar</a></p>
                         @else
                           <br>
                         @endif
                       @elseif (Session::exists('asistenteSession'))
                         @if (((Session::get('asistenteSession'))[0]->CorreoAsistente) == $mandar->Correo)
-                          <p style="text-align: right; margin-right: 40px;"><a href="" style="color: #36ABFF;">Modificar</a> / <a href="" style="color: #FF5B5B;">Eliminar</a></p>
+                          <p style="text-align: right; margin-right: 40px;"><a href="" style="color: #36ABFF;">Editar</a> / <a href="" style="color: #FF5B5B;">Eliminar</a></p>
                         @else
                           <br>
                         @endif
