@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-//use App\Http\Request as HttpRequest;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\UsuariosController;
 use App\Usuario;
@@ -13,18 +12,6 @@ use Illuminate\Support\Facades\Hash;
 
 class UsuariosController extends Controller
 {
-
-    public function index()
-    {
-    	
-        dd('holitas');
-    }
-
-    public function create()
-    {
-        dd('holitas');
-    	//require_once 'resources/views/usuario/registro.php'; //ve al formulario
-    }
 
     public function store(Request $request)
     {
@@ -58,13 +45,13 @@ class UsuariosController extends Controller
         $usuario->FechaNacimiento=$fecha;
         $usuario->Imagen=$imagen;
         $usuario->save();
+
+        $sessionRegistrada = Usuario::select('Correo', 'Registro')->where('Registro', '=', $usuario->Registro)->get();
+        $request->session()->put('usuarioSession', $sessionRegistrada);
+
     	return redirect('/')->with(['mensaje' => 'Registro agregado']);
     }
 
-    public function show()
-    {
-
-    }
     public function edit(Request $request)
     {
         if ($request->session()->has('usuarioSession')) {
@@ -75,14 +62,6 @@ class UsuariosController extends Controller
 
             return view('modificarUsuario', compact('usuarios', $usuarios));
         }
-    }
-    public function update()
-    {
-
-    }
-    public function destroy()
-    {
-
     }
 
 

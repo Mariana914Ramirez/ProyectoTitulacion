@@ -9,7 +9,7 @@
 	  Nos ha llegado una solicitud de publicación de anuncio por parte de su consultorio.</p>
     <p>Se le informa que no se podrá publicar su anuncio porque no cumple con los requisitos necesarios. Le sugerimos de la manera más atenta y respetuosa posible que revise los requisitos de nuevo para publicar su anuncio</p>
     <ul>
-        <li>El anuncio debe medir 500px de alto y 1000px de ancho</li>
+        <li>El anuncio debe medir 550px de alto y 1050px de ancho</li>
         <li>No debe tener faltas ortográficas</li>
     </ul>
     <p>Recuerde que el anuncio sólo será visible 3 días después de ser aceptado.</p>

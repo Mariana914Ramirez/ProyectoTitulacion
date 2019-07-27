@@ -1,5 +1,4 @@
 @extends ('layouts.admin')
-@extends ('Formularios')
 <?php
 
 	if(Request::session()->has('saludaunclick'))
@@ -16,7 +15,11 @@
 		<div style="width: 80%;">
 			<table class="table table-hover table-striped" style="width: 100%; background: #EEE;">
 				<thead style="font-size: 40px; text-align: center;">
-					<th>Especialidades</th>
+					@if($especialidades->isEmpty())
+						<th>No hay especialidades disponibles</th>
+					@else
+					<th colspan="4">Especialidades</th>
+					@endif
 				</thead>
 				<tbody style="font-size: 30px; text-align: center;">
 					@foreach($especialidades as $especialidad)

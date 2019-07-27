@@ -147,8 +147,8 @@ Route::any('guardar-quejas/{idNotificacion}/{idConsultorio}', 'CalificacionContr
 
 
 //Usuarios
-Route::get('modificar-informacion-usuario', 'UsuariosController@edit');
-Route::resource('usuario', 'UsuariosController');
+Route::any('modificar-informacion-usuario', 'UsuariosController@edit');
+Route::any('usuario', 'UsuariosController@store');
 Route::any('guardar-cambios-usuario', 'UsuariosController@guardarCambios');
 
 
@@ -181,11 +181,3 @@ Route::any('accedeUsuario/{Correo}','Auth\LoginController@accederUsuario')->name
 Route::any('accedeOpciones/{Correo}','Auth\LoginController@accederOpciones')->name('accederOpciones');
 Route::any('logout','Auth\LoginController@logout')->name('logout');
 
-
-
-
-Route::get('/signin', 'AuthController@signin');
-Route::get('/authorize', 'AuthController@gettoken');
-Route::get('usuarios/area', 'UsuariosController@secret');
-Auth::routes();
-Route::get('/home', 'HomeController@index')->name('home');

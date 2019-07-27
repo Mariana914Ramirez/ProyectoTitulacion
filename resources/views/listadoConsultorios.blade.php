@@ -1,5 +1,4 @@
 @extends ('layouts.admin')
-@extends ('Formularios')
 
 <?php
 
@@ -16,9 +15,14 @@
 <section id="content" class="Bienvenida" style="background: #EEE;">
 	<center>
 		<div style="width: 90%;">
+			
 			<table class="table table-striped" style="width: 100%; background: #EEE;">
 				<thead style="font-size: 40px; text-align: center;">
+					@if($consultorios->isEmpty())
+						<th>No hay consultorios</th>
+					@else
 					<th colspan="4">Consultorios</th>
+					@endif
 				</thead>
 				<tbody style="font-size: 25px;">
 					@foreach($consultorios as $consultorio)
